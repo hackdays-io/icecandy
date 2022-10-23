@@ -1,15 +1,19 @@
 import { Box, Button, Grid, GridItem, useDisclosure } from '@chakra-ui/react'
 import { useAddress } from '@thirdweb-dev/react'
-import { AssetTransfersCategory } from 'alchemy-sdk'
-import { unionBy } from 'lodash'
 import { FC, useEffect, useState } from 'react'
 import { useAlchemyClient } from '../../hooks/useAlchemy'
 import ModalBase from '../atoms/ModalBase'
 
-const Erc20TokenListModal: FC = () => {
+const NFTListModal: FC = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const [tokens, setTokens] = useState<
-    { asset: string | null; address: string | null }[]
+    {
+      collectionName?: string
+      tokenId: string
+      name: string | null
+      address: string | null
+      image?: string
+    }[]
   >([])
 
   const address = useAddress()
@@ -18,17 +22,17 @@ const Erc20TokenListModal: FC = () => {
   useEffect(() => {
     const fetch = async () => {
       if (!address) return
-      const balances = await alchemy.core.getAssetTransfers({
-        toAddress: address,
-        category: [AssetTransfersCategory.ERC20],
-      })
+      const nfts = await alchemy.nft.getNftsForOwner(address)
       setTokens(
-        unionBy(
-          balances.transfers.map((t) => {
-            return { asset: t.asset, address: t.rawContract.address }
-          }),
-          'address'
-        )
+        nfts.ownedNfts.map((nft) => {
+          return {
+            collectionName: nft.contract.name,
+            tokenId: nft.tokenId,
+            name: nft.title,
+            address: nft.contract.address,
+            image: nft.rawMetadata?.image,
+          }
+        })
       )
     }
     fetch()
@@ -37,18 +41,19 @@ const Erc20TokenListModal: FC = () => {
   return (
     <>
       <Button colorScheme="blue" onClick={() => onOpen()}>
-        保有ERC20トークンリスト
+        保有NFTリスト
       </Button>
       <ModalBase isOpen={isOpen} onClose={onClose}>
         <Box>
           <Grid gridTemplateColumns="150px 1fr">
-            <GridItem>トークン名</GridItem>
+            <GridItem>コレクション名</GridItem>
             <GridItem>アドレス</GridItem>
+            <GridItem>名前</GridItem>
           </Grid>
           {tokens?.map((t) => (
             <Grid gridTemplateColumns="150px 1fr">
-              <GridItem>{t.asset || '不明'}</GridItem>
-              <GridItem>{t.address}</GridItem>
+              <GridItem>{t.collectionName || '不明'}</GridItem>
+              <GridItem>{t.name}</GridItem>
             </Grid>
           ))}
         </Box>
@@ -57,4 +62,4 @@ const Erc20TokenListModal: FC = () => {
   )
 }
 
-export default Erc20TokenListModal
+export default NFTListModal
