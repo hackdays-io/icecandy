@@ -1,5 +1,5 @@
 {
-  "name": "icecandy protocol",
+  "name": "icecandy",
   "scripts": {
     "compile": "run-s compile:clean compile:build",
     "compile:clean": "hardhat clean",
