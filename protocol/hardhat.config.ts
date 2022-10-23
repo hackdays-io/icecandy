@@ -21,7 +21,7 @@ module.exports = {
     goerli: {
       url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
       accounts: [`${PRIVATE_KEY}`],
-    }
+    },
   },
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,
