@@ -1,0 +1,8 @@
+.husky
+artifacts
+cache
+coverage
+node_modules
+scripts
+test
+typechain-types
