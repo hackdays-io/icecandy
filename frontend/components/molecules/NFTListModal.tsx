@@ -50,8 +50,8 @@ const NFTListModal: FC = () => {
             <GridItem>アドレス</GridItem>
             <GridItem>名前</GridItem>
           </Grid>
-          {tokens?.map((t) => (
-            <Grid gridTemplateColumns="150px 1fr">
+          {tokens?.map((t, index) => (
+            <Grid gridTemplateColumns="150px 1fr" key={index}>
               <GridItem>{t.collectionName || '不明'}</GridItem>
               <GridItem>{t.name}</GridItem>
             </Grid>
