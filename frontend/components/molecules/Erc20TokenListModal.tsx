@@ -45,8 +45,8 @@ const Erc20TokenListModal: FC = () => {
             <GridItem>トークン名</GridItem>
             <GridItem>アドレス</GridItem>
           </Grid>
-          {tokens?.map((t) => (
-            <Grid gridTemplateColumns="150px 1fr">
+          {tokens?.map((t, index) => (
+            <Grid gridTemplateColumns="150px 1fr" key={index}>
               <GridItem>{t.asset || '不明'}</GridItem>
               <GridItem>{t.address}</GridItem>
             </Grid>
