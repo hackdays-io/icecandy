@@ -49,6 +49,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
+      name: "IceCandy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IceCandy__factory>;
+    getContractFactory(
       name: "NFTCollectionModule",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.NFTCollectionModule__factory>;
@@ -56,6 +60,10 @@ declare module "hardhat/types/runtime" {
       name: "Profile",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Profile__factory>;
+    getContractFactory(
+      name: "IIceCandy",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IIceCandy__factory>;
     getContractFactory(
       name: "INFTCollectionModule",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -111,6 +119,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
     getContractAt(
+      name: "IceCandy",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IceCandy>;
+    getContractAt(
       name: "NFTCollectionModule",
       address: string,
       signer?: ethers.Signer
@@ -120,6 +133,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Profile>;
+    getContractAt(
+      name: "IIceCandy",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IIceCandy>;
     getContractAt(
       name: "INFTCollectionModule",
       address: string,
