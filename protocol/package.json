@@ -8,9 +8,8 @@
     "lint:solhint": "solhint 'contracts/**/*.sol' && prettier -c 'contracts/**/*.sol'",
     "lint:eslint": "eslint --fix --ext .js,.ts",
     "lint:prettier": "prettier --write './**/*.{js,ts,json,md,sol}'",
-    "test": "run-s test:unit test:coverage",
-    "test:unit": "hardhat test",
-    "test:coverage": "hardhat coverage",
+    "test": "hardhat test",
+    "coverage": "hardhat coverage",
     "deploy": "hardhat run scripts/deploy.ts --network goerli",
     "verify": "hardhat verify --network goerli",
     "uml": "sol2uml class ./contracts"
