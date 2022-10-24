@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import WalletConnectButton from '../components/atoms/WalletConnectButton'
+import CreateProfileNFT from '../components/molecules/CreateProfileNFT'
 import Erc20TokenCurveChart from '../components/molecules/Erc20TokenCurveChart'
 import Erc20TokenListModal from '../components/molecules/Erc20TokenListModal'
 import NFTListModal from '../components/molecules/NFTListModal'
@@ -10,6 +11,7 @@ const Home: NextPage = () => {
       <WalletConnectButton />
       <Erc20TokenListModal />
       <NFTListModal />
+      <CreateProfileNFT />
 
       {/* 自分のアドレスと、みたいトークンアドレスをいれるとチャート表示 */}
       <Erc20TokenCurveChart ownerAddr={undefined} tokenAddr={undefined} />
