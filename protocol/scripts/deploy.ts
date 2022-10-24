@@ -8,10 +8,18 @@ async function main() {
   console.log('deploying contract with the account:', deployer.address)
   console.log('account balance:', balance)
 
-  // profile
+  // Profile
   const fProfile = await ethers.getContractFactory('Profile')
-  const profile = await fProfile.deploy()
+  const profile = await fProfile.deploy(deployer.address)
   console.log('Profile address:', profile.address)
+
+  // NFTCollectionModule
+  const fNFTModule = await ethers.getContractFactory('NFTCollectionModule')
+  const nftModule = await fNFTModule.deploy(profile.address)
+  console.log('NFTCollectionModule address:', nftModule.address)
+
+  // setup
+  await profile.setNFTCollectionModule(nftModule.address)
 }
 
 main()
