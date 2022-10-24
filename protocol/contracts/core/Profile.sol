@@ -14,7 +14,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     uint256 internal _profileCounter;
     address internal _nftCollectionModule;
 
-    constructor(address owner) ERC721("Icecandy", "AME") {
+    constructor(address owner) ERC721("Profile", "PROFILE") {
         _transferOwnership(owner);
     }
 
