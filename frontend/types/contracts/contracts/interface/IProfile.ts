@@ -47,11 +47,17 @@ export declare namespace IProfile {
   export type CreateProfileStructDataStruct = {
     handle: PromiseOrValue<string>;
     imageURI: PromiseOrValue<string>;
+    nfts: INFTCollectionModule.NFTStructStruct[];
   };
 
-  export type CreateProfileStructDataStructOutput = [string, string] & {
+  export type CreateProfileStructDataStructOutput = [
+    string,
+    string,
+    INFTCollectionModule.NFTStructStructOutput[]
+  ] & {
     handle: string;
     imageURI: string;
+    nfts: INFTCollectionModule.NFTStructStructOutput[];
   };
 
   export type ProfileStructStruct = {
@@ -76,8 +82,8 @@ export declare namespace IProfile {
 
 export interface IProfileInterface extends utils.Interface {
   functions: {
-    "createNFTCollection(uint256,uint256,(uint256,address,uint256,string)[])": FunctionFragment;
-    "createProfile((string,string))": FunctionFragment;
+    "createNFTCollection(uint256,(uint256,address,uint256,string)[])": FunctionFragment;
+    "createProfile((string,string,(uint256,address,uint256,string)[]))": FunctionFragment;
     "getNFTCollection(uint256,uint256)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
   };
@@ -93,7 +99,6 @@ export interface IProfileInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "createNFTCollection",
     values: [
-      PromiseOrValue<BigNumberish>,
       PromiseOrValue<BigNumberish>,
       INFTCollectionModule.NFTStructStruct[]
     ]
@@ -196,7 +201,6 @@ export interface IProfile extends BaseContract {
   functions: {
     createNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -220,7 +224,6 @@ export interface IProfile extends BaseContract {
 
   createNFTCollection(
     profileId: PromiseOrValue<BigNumberish>,
-    pubId: PromiseOrValue<BigNumberish>,
     nfts: INFTCollectionModule.NFTStructStruct[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -244,7 +247,6 @@ export interface IProfile extends BaseContract {
   callStatic: {
     createNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
@@ -299,7 +301,6 @@ export interface IProfile extends BaseContract {
   estimateGas: {
     createNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -324,7 +325,6 @@ export interface IProfile extends BaseContract {
   populateTransaction: {
     createNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

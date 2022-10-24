@@ -108,11 +108,6 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
-        name: "pubId",
-        type: "uint256",
-      },
-      {
         components: [
           {
             internalType: "uint256",
@@ -158,6 +153,33 @@ const _abi = [
             internalType: "string",
             name: "imageURI",
             type: "string",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "chainId",
+                type: "uint256",
+              },
+              {
+                internalType: "address",
+                name: "contractAddress",
+                type: "address",
+              },
+              {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+              },
+              {
+                internalType: "string",
+                name: "tokenURI",
+                type: "string",
+              },
+            ],
+            internalType: "struct INFTCollectionModule.NFTStruct[]",
+            name: "nfts",
+            type: "tuple[]",
           },
         ],
         internalType: "struct IProfile.CreateProfileStructData",

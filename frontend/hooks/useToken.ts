@@ -1,5 +1,5 @@
 import { useAddress } from '@thirdweb-dev/react'
-import { AssetTransfersCategory } from 'alchemy-sdk'
+import { AssetTransfersCategory, TokenUri } from 'alchemy-sdk'
 import { unionBy } from 'lodash'
 import { useEffect, useState } from 'react'
 import { useAlchemyClient } from './useAlchemy'
@@ -40,8 +40,9 @@ export const useHoldingNFTs = () => {
       collectionName?: string
       tokenId: string
       name: string | null
-      address: string | null
+      contractAddress: string | null
       image?: string
+      tokenURI: TokenUri | undefined
     }[]
   >([])
 
@@ -58,8 +59,9 @@ export const useHoldingNFTs = () => {
             collectionName: nft.contract.name,
             tokenId: nft.tokenId,
             name: nft.title,
-            address: nft.contract.address,
+            contractAddress: nft.contract.address,
             image: nft.rawMetadata?.image,
+            tokenURI: nft.tokenUri,
           }
         })
       )
