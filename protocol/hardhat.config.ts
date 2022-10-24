@@ -22,6 +22,11 @@ module.exports = {
       url: `https://eth-goerli.alchemyapi.io/v2/${ALCHEMY_API_KEY}`,
       accounts: [`${PRIVATE_KEY}`],
     },
+    local: {
+      url: 'http://localhost:8545',
+      accounts: [String(process.env.LOCAL_PRIVATE_KEY)],
+      allowUnlimitedContractSize: true,
+    },
   },
   etherscan: {
     apiKey: ETHERSCAN_API_KEY,

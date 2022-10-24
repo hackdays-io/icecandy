@@ -11,6 +11,7 @@
     "test": "hardhat test",
     "coverage": "hardhat coverage",
     "deploy": "hardhat run scripts/deploy.ts --network goerli",
+    "deploy:local": "hardhat run scripts/deploy.ts --network local",
     "verify": "hardhat verify --network goerli",
     "uml": "sol2uml class ./contracts"
   },
