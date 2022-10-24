@@ -37,6 +37,20 @@ describe('profile test', () => {
     const _profile = {
       handle: 'hogehoge',
       imageURI: 'https://image.com',
+      nfts: [
+        {
+          chainId: 1,
+          contractAddress: '0x1111111111111111111111111111111111111111',
+          tokenId: 1,
+          tokenURI: '',
+        },
+        {
+          chainId: 137,
+          contractAddress: '0x2222222222222222222222222222222222222222',
+          tokenId: 1,
+          tokenURI: 'https://polygon.com/1',
+        },
+      ],
     }
 
     // send transaction
@@ -44,13 +58,25 @@ describe('profile test', () => {
     await expect(_tx)
       .to.emit(profile, 'ProfileCreated')
       .withArgs(1, user.address, _profile.handle, _profile.imageURI, await ethers.provider.getBlockNumber())
+      .to.emit(profile, 'NFTCollectionCreated')
 
     // get profile struct
     const profile_ = await profile.connect(user).getProfile(1)
     expect(profile_.owner).to.equal(user.address)
     expect(profile_.handle).to.equal(_profile.handle)
     expect(profile_.imageURI).to.equal(_profile.imageURI)
-    expect(profile_.nftCollectionPubId).to.equal(0)
+    expect(profile_.nftCollectionPubId).to.equal(1)
+
+    // get nft struct
+    const nfts_ = await profile.connect(user).getNFTCollection(1, 1)
+    expect(nfts_[0]?.chainId).to.equal(BigNumber.from(_profile.nfts[0]?.chainId))
+    expect(nfts_[0]?.contractAddress).to.equal(_profile.nfts[0]?.contractAddress)
+    expect(nfts_[0]?.tokenId).to.equal(BigNumber.from(_profile.nfts[0]?.tokenId))
+    expect(nfts_[0]?.tokenURI).to.equal(_profile.nfts[0]?.tokenURI)
+    expect(nfts_[1]?.chainId).to.equal(BigNumber.from(_profile.nfts[1]?.chainId))
+    expect(nfts_[1]?.contractAddress).to.equal(_profile.nfts[1]?.contractAddress)
+    expect(nfts_[1]?.tokenId).to.equal(BigNumber.from(_profile.nfts[1]?.tokenId))
+    expect(nfts_[1]?.tokenURI).to.equal(_profile.nfts[1]?.tokenURI)
 
     // get profile token
     expect(await profile.connect(user).balanceOf(user.address)).to.be.equals(1)
@@ -62,23 +88,23 @@ describe('profile test', () => {
     const _nfts = [
       {
         chainId: 1,
-        contractAddress: '0x1111111111111111111111111111111111111111',
-        tokenId: 1,
+        contractAddress: '0x3333333333333333333333333333333333333333',
+        tokenId: 2,
         tokenURI: '',
       },
       {
         chainId: 137,
-        contractAddress: '0x2222222222222222222222222222222222222222',
-        tokenId: 1,
-        tokenURI: 'https://polygon.com/1',
+        contractAddress: '0x4444444444444444444444444444444444444444',
+        tokenId: 2,
+        tokenURI: 'https://polygon.com/2',
       },
     ]
     // send transaction
-    const _tx = await profile.connect(user).createNFTCollection(1, 1, _nfts)
+    const _tx = await profile.connect(user).createNFTCollection(1, _nfts)
     await expect(_tx).to.emit(profile, 'NFTCollectionCreated')
 
     // get nft struct
-    const nfts_ = await profile.connect(user).getNFTCollection(1, 1)
+    const nfts_ = await profile.connect(user).getNFTCollection(1, 2)
     expect(nfts_[0]?.chainId).to.equal(BigNumber.from(_nfts[0]?.chainId))
     expect(nfts_[0]?.contractAddress).to.equal(_nfts[0]?.contractAddress)
     expect(nfts_[0]?.tokenId).to.equal(BigNumber.from(_nfts[0]?.tokenId))
@@ -90,6 +116,6 @@ describe('profile test', () => {
 
     // get profile struct
     const profile_ = await profile.connect(user).getProfile(1)
-    expect(profile_.nftCollectionPubId).to.equal(1)
+    expect(profile_.nftCollectionPubId).to.equal(2)
   })
 })

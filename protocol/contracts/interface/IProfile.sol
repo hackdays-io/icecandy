@@ -14,13 +14,13 @@ interface IProfile {
     struct CreateProfileStructData {
         string handle;
         string imageURI;
+        INFTCollectionModule.NFTStruct[] nfts;
     }
 
     function createProfile(CreateProfileStructData calldata vars) external returns (uint256);
 
     function createNFTCollection(
         uint256 profileId,
-        uint256 pubId,
         INFTCollectionModule.NFTStruct[] calldata nfts
     ) external;
 
