@@ -9,6 +9,7 @@ describe('profile test', () => {
   let alice: SignerWithAddress
   let bob: SignerWithAddress
   let carol: SignerWithAddress
+  let daniel: SignerWithAddress
   let profile: Profile
   let nftCollection: NFTCollectionModule
 
@@ -19,6 +20,7 @@ describe('profile test', () => {
     alice = signers[1] as SignerWithAddress
     bob = signers[2] as SignerWithAddress
     carol = signers[3] as SignerWithAddress
+    daniel = signers[4] as SignerWithAddress
 
     // deploy contracts
     const fProfile = await ethers.getContractFactory('Profile')
@@ -47,12 +49,14 @@ describe('profile test', () => {
           contractAddress: '0x1111111111111111111111111111111111111111',
           tokenId: 1,
           tokenURI: '',
+          wallet: alice.address,
         },
         {
           chainId: 137,
           contractAddress: '0x2222222222222222222222222222222222222222',
           tokenId: 1,
           tokenURI: 'https://polygon.com/1',
+          wallet: alice.address,
         },
       ],
     }
@@ -66,7 +70,7 @@ describe('profile test', () => {
 
     // get profile struct
     const profile_ = await profile.connect(alice).getProfile(1)
-    expect(profile_.owner).to.equal(alice.address)
+    expect(profile_.wallets[0]).to.equal(alice.address)
     expect(profile_.handle).to.equal(_profile.handle)
     expect(profile_.imageURI).to.equal(_profile.imageURI)
     expect(profile_.nftCollectionPubId).to.equal(1)
@@ -95,12 +99,14 @@ describe('profile test', () => {
         contractAddress: '0x3333333333333333333333333333333333333333',
         tokenId: 2,
         tokenURI: '',
+        wallet: alice.address,
       },
       {
         chainId: 137,
         contractAddress: '0x4444444444444444444444444444444444444444',
         tokenId: 2,
         tokenURI: 'https://polygon.com/2',
+        wallet: alice.address,
       },
     ]
     // send transaction
@@ -122,24 +128,40 @@ describe('profile test', () => {
     expect(profile_.nftCollectionPubId).to.equal(2)
   })
 
-  it('createNFTCollection() approve pattern', async () => {
+  it('addWallet()', async () => {
+    // send transaction
+    await expect(profile.connect(alice).addWallet(1, bob.address)).to.emit(profile, 'WalletAdded')
+
+    // get profile struct
+    const profile_ = await profile.connect(alice).getProfile(1)
+    expect(profile_.wallets[0]).to.equal(alice.address)
+    expect(profile_.wallets[1]).to.equal(bob.address)
+  })
+
+  it('approve', async () => {
     const _nfts = [
       {
         chainId: 1,
         contractAddress: '0x3333333333333333333333333333333333333333',
         tokenId: 2,
         tokenURI: '',
+        wallet: alice.address,
       },
       {
         chainId: 137,
         contractAddress: '0x4444444444444444444444444444444444444444',
         tokenId: 2,
         tokenURI: 'https://polygon.com/2',
+        wallet: alice.address,
       },
     ]
 
-    // before approval transaction is reverted
+    // [before approval]createNFTCollection
     await expect(profile.connect(bob).createNFTCollection(1, _nfts)).to.be.revertedWith(
+      'Profile: caller is not owner or approved'
+    )
+    // [before approval]addWallet
+    await expect(profile.connect(bob).addWallet(1, carol.address)).to.be.revertedWith(
       'Profile: caller is not owner or approved'
     )
 
@@ -148,28 +170,36 @@ describe('profile test', () => {
       .to.emit(profile, 'Approval')
       .withArgs(alice.address, bob.address, 1)
 
-    // after approval transaction is success
+    // [after approval]createNFTCollection
     await expect(profile.connect(bob).createNFTCollection(1, _nfts)).to.emit(profile, 'NFTCollectionCreated')
+    // [after approval]addWallet
+    await expect(profile.connect(bob).addWallet(1, carol.address)).to.emit(profile, 'WalletAdded')
   })
 
-  it('createNFTCollection() setApprovalForAll pattern', async () => {
+  it('setApprovalForAll', async () => {
     const _nfts = [
       {
         chainId: 1,
         contractAddress: '0x5555555555555555555555555555555555555555',
         tokenId: 3,
         tokenURI: '',
+        wallet: alice.address,
       },
       {
         chainId: 137,
         contractAddress: '0x6666666666666666666666666666666666666666',
         tokenId: 3,
         tokenURI: 'https://polygon.com/3',
+        wallet: alice.address,
       },
     ]
 
-    // before approval transaction is reverted
+    // [before approval]createNFTCollection
     await expect(profile.connect(carol).createNFTCollection(1, _nfts)).to.be.revertedWith(
+      'Profile: caller is not owner or approved'
+    )
+    // [before approval]addWallet
+    await expect(profile.connect(carol).addWallet(1, daniel.address)).to.be.revertedWith(
       'Profile: caller is not owner or approved'
     )
 
@@ -178,7 +208,9 @@ describe('profile test', () => {
       .to.emit(profile, 'ApprovalForAll')
       .withArgs(alice.address, carol.address, true)
 
-    // after approval transaction is success
+    // [after approval]createNFTCollection
     await expect(profile.connect(carol).createNFTCollection(1, _nfts)).to.emit(profile, 'NFTCollectionCreated')
+    // [after approval]addWallet
+    await expect(profile.connect(carol).addWallet(1, daniel.address)).to.emit(profile, 'WalletAdded')
   })
 })
