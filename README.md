@@ -30,6 +30,7 @@ $ yarn dev
 | --------------------------------------- | ------------------------------------- | --------------------- |
 | NEXT_PUBLIC_PROVIDER_RPC                | RPC エンドポイント                    | http://127.0.0.1:8545 |
 | NEXT_PUBLIC_CHAIN_ID                    | チェーン ID                           | 31337                 |
-| NEXT_PUBLIC_CHAIN_NAME                  | チェーン名                            | local                 |
-| NEXT_PUBLIC_ALCHEMY_API_KEY             | AlchemyAPIKey                         |                       |
+| NEXT_PUBLIC_ALCHEMY_API_KEY_ETH         | AlchemyAPIKey for ethereum            |                       |
+| NEXT_PUBLIC_ALCHEMY_API_KEY_POLYGON     | AlchemyAPIKey for polygon             |                       |
+| NEXT_PUBLIC_ALCHEMY_API_KEY_ARBITRUM    | AlchemyAPIKey for arbitrum            |                       |
 | NEXT_PUBLIC_CONTRACT_PROFILENFT_ADDRESS | プロフィール NFT コントラクトアドレス |                       |
