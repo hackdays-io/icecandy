@@ -5,6 +5,7 @@ import '@nomiclabs/hardhat-waffle'
 import '@nomiclabs/hardhat-solhint'
 import 'solidity-coverage'
 import 'hardhat-gas-reporter'
+import 'hardhat-interface-generator'
 import * as dotenv from 'dotenv'
 
 const PATH_TO_HARDHAT_ENV = `${__dirname}/.env`
