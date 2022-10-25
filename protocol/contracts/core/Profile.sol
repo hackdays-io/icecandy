@@ -40,7 +40,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     }
 
     function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) public override {
-        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner nor approved");
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _createNFTCollection(profileId, ++_profile[profileId].nftCollectionPubId, nfts);
     }
 

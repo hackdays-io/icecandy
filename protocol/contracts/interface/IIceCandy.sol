@@ -6,6 +6,8 @@ interface IIceCandy {
         bool isEaten;
     }
 
+    function setProfile(address profile) external;
+
     function eat(uint256 tokenId) external;
 
     function mint(address to) external;
