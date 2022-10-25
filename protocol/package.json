@@ -10,9 +10,9 @@
     "lint:prettier": "prettier --write './**/*.{js,ts,json,md,sol}'",
     "test": "hardhat test",
     "coverage": "hardhat coverage",
-    "deploy": "hardhat run scripts/deploy.ts --network goerli",
+    "deploy": "hardhat run scripts/deploy.ts --network mumbai",
     "deploy:local": "hardhat run scripts/deploy.ts --network local",
-    "verify": "hardhat verify --network goerli",
+    "verify": "hardhat verify --network mumbai",
     "uml": "sol2uml class ./contracts"
   },
   "dependencies": {
