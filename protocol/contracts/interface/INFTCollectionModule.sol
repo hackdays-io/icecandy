@@ -7,6 +7,7 @@ interface INFTCollectionModule {
         address contractAddress;
         uint256 tokenId;
         string tokenURI; // for cross chain
+        address wallet;
     }
 
     function processCollect(

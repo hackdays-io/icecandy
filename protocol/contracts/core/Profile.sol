@@ -27,7 +27,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
         _mint(msg.sender, profileId);
 
-        _profile[profileId].owner = msg.sender;
+        _profile[profileId].wallets.push(msg.sender);
         _profile[profileId].handle = vars.handle;
         _profile[profileId].imageURI = vars.imageURI;
         _profile[profileId].nftCollectionPubId = 0;
@@ -40,8 +40,15 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     }
 
     function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) public override {
-        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner nor approved");
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _createNFTCollection(profileId, ++_profile[profileId].nftCollectionPubId, nfts);
+    }
+
+    function addWallet(uint256 profileId, address wallet) external override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _profile[profileId].wallets.push(wallet);
+
+        emit WalletAdded(profileId, wallet);
     }
 
     function getProfile(uint256 profileId) external view override returns (IProfile.ProfileStruct memory) {

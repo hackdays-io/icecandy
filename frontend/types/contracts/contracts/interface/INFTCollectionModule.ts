@@ -29,20 +29,28 @@ export declare namespace INFTCollectionModule {
     contractAddress: PromiseOrValue<string>;
     tokenId: PromiseOrValue<BigNumberish>;
     tokenURI: PromiseOrValue<string>;
+    wallet: PromiseOrValue<string>;
   };
 
-  export type NFTStructStructOutput = [BigNumber, string, BigNumber, string] & {
+  export type NFTStructStructOutput = [
+    BigNumber,
+    string,
+    BigNumber,
+    string,
+    string
+  ] & {
     chainId: BigNumber;
     contractAddress: string;
     tokenId: BigNumber;
     tokenURI: string;
+    wallet: string;
   };
 }
 
 export interface INFTCollectionModuleInterface extends utils.Interface {
   functions: {
     "getNFTs(uint256,uint256)": FunctionFragment;
-    "processCollect(uint256,uint256,(uint256,address,uint256,string)[])": FunctionFragment;
+    "processCollect(uint256,uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
   };
 
   getFunction(

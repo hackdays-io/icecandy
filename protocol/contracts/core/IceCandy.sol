@@ -9,17 +9,18 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
     uint256 internal _tokenCounter;
     mapping(uint256 => IIceCandy.IceCandyStruct) internal _iceCandy;
+    address internal _profile;
 
     constructor(address owner) ERC721("IceCandy", "ICE") {
         _transferOwnership(owner);
     }
 
-    modifier onlyTokenHolder(uint256 tokenId) {
-        require(ownerOf(tokenId) == msg.sender, "IceCandy: only token holder");
-        _;
+    function setProfile(address profile) external override onlyOwner {
+        _profile = profile;
     }
 
-    function eat(uint256 tokenId) external override onlyTokenHolder(tokenId) {
+    function eat(uint256 tokenId) external override {
+        require(_isApprovedOrOwner(msg.sender, tokenId), "IceCandy: caller is not owner or approved");
         require(_iceCandy[tokenId].isEaten == false, "IceCandy: already eaten");
         _iceCandy[tokenId].isEaten = true;
         emit Eaten(tokenId, msg.sender, block.number);
@@ -30,8 +31,15 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         _mint(to, tokenId);
     }
 
-    function isEaten(uint256 tokenId) external view override onlyTokenHolder(tokenId) returns (bool) {
+    function isEaten(uint256 tokenId) external view override returns (bool) {
         return _iceCandy[tokenId].isEaten;
+    }
+
+    function isApprovedForAll(address owner, address operator) public view override returns (bool) {
+        if (operator == _profile) {
+            return true;
+        }
+        return super.isApprovedForAll(owner, operator);
     }
 
     function _baseURI() internal pure override returns (string memory) {

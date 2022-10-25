@@ -47,6 +47,11 @@ const _abi = [
             name: "tokenURI",
             type: "string",
           },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
         ],
         internalType: "struct INFTCollectionModule.NFTStruct[]",
         name: "",
@@ -89,6 +94,11 @@ const _abi = [
             internalType: "string",
             name: "tokenURI",
             type: "string",
+          },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
           },
         ],
         internalType: "struct INFTCollectionModule.NFTStruct[]",

@@ -18,8 +18,14 @@ async function main() {
   const nftModule = await fNFTModule.deploy(profile.address)
   console.log('NFTCollectionModule address:', nftModule.address)
 
+  // IceCandy
+  const fIceCandy = await ethers.getContractFactory('IceCandy')
+  const icecandy = await fIceCandy.deploy(deployer.address)
+  console.log('IceCandy address:', icecandy.address)
+
   // setup
   await profile.setNFTCollectionModule(nftModule.address)
+  await icecandy.setProfile(profile.address)
 }
 
 main()
