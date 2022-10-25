@@ -32,10 +32,11 @@ export interface IIceCandyInterface extends utils.Interface {
     "eat(uint256)": FunctionFragment;
     "isEaten(uint256)": FunctionFragment;
     "mint(address)": FunctionFragment;
+    "setProfile(address)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "eat" | "isEaten" | "mint"
+    nameOrSignatureOrTopic: "eat" | "isEaten" | "mint" | "setProfile"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -50,10 +51,15 @@ export interface IIceCandyInterface extends utils.Interface {
     functionFragment: "mint",
     values: [PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setProfile",
+    values: [PromiseOrValue<string>]
+  ): string;
 
   decodeFunctionResult(functionFragment: "eat", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isEaten", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
 
   events: {
     "Eaten(uint256,address,uint256)": EventFragment;
@@ -115,6 +121,11 @@ export interface IIceCandy extends BaseContract {
       to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    setProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   eat(
@@ -132,6 +143,11 @@ export interface IIceCandy extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setProfile(
+    profile: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     eat(
       tokenId: PromiseOrValue<BigNumberish>,
@@ -144,6 +160,11 @@ export interface IIceCandy extends BaseContract {
     ): Promise<boolean>;
 
     mint(to: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
+
+    setProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
@@ -174,6 +195,11 @@ export interface IIceCandy extends BaseContract {
       to: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
+
+    setProfile(
+      profile: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -189,6 +215,11 @@ export interface IIceCandy extends BaseContract {
 
     mint(
       to: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setProfile(
+      profile: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
