@@ -33,13 +33,21 @@ export declare namespace INFTCollectionModule {
     contractAddress: PromiseOrValue<string>;
     tokenId: PromiseOrValue<BigNumberish>;
     tokenURI: PromiseOrValue<string>;
+    wallet: PromiseOrValue<string>;
   };
 
-  export type NFTStructStructOutput = [BigNumber, string, BigNumber, string] & {
+  export type NFTStructStructOutput = [
+    BigNumber,
+    string,
+    BigNumber,
+    string,
+    string
+  ] & {
     chainId: BigNumber;
     contractAddress: string;
     tokenId: BigNumber;
     tokenURI: string;
+    wallet: string;
   };
 }
 
@@ -61,19 +69,19 @@ export declare namespace IProfile {
   };
 
   export type ProfileStructStruct = {
-    owner: PromiseOrValue<string>;
+    wallets: PromiseOrValue<string>[];
     handle: PromiseOrValue<string>;
     imageURI: PromiseOrValue<string>;
     nftCollectionPubId: PromiseOrValue<BigNumberish>;
   };
 
   export type ProfileStructStructOutput = [
-    string,
+    string[],
     string,
     string,
     BigNumber
   ] & {
-    owner: string;
+    wallets: string[];
     handle: string;
     imageURI: string;
     nftCollectionPubId: BigNumber;
@@ -82,20 +90,26 @@ export declare namespace IProfile {
 
 export interface IProfileInterface extends utils.Interface {
   functions: {
-    "createNFTCollection(uint256,(uint256,address,uint256,string)[])": FunctionFragment;
-    "createProfile((string,string,(uint256,address,uint256,string)[]))": FunctionFragment;
+    "addWallet(uint256,address)": FunctionFragment;
+    "createNFTCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
+    "createProfile((string,string,(uint256,address,uint256,string,address)[]))": FunctionFragment;
     "getNFTCollection(uint256,uint256)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "addWallet"
       | "createNFTCollection"
       | "createProfile"
       | "getNFTCollection"
       | "getProfile"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "addWallet",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
     functionFragment: "createNFTCollection",
     values: [
@@ -116,6 +130,7 @@ export interface IProfileInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
 
+  decodeFunctionResult(functionFragment: "addWallet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createNFTCollection",
     data: BytesLike
@@ -133,10 +148,12 @@ export interface IProfileInterface extends utils.Interface {
   events: {
     "NFTCollectionCreated(uint256,uint256,tuple[],uint256)": EventFragment;
     "ProfileCreated(address,uint256,string,string,uint256)": EventFragment;
+    "WalletAdded(uint256,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "NFTCollectionCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "WalletAdded"): EventFragment;
 }
 
 export interface NFTCollectionCreatedEventObject {
@@ -159,7 +176,7 @@ export type NFTCollectionCreatedEventFilter =
   TypedEventFilter<NFTCollectionCreatedEvent>;
 
 export interface ProfileCreatedEventObject {
-  owner: string;
+  wallet: string;
   profileId: BigNumber;
   handle: string;
   imageURI: string;
@@ -171,6 +188,17 @@ export type ProfileCreatedEvent = TypedEvent<
 >;
 
 export type ProfileCreatedEventFilter = TypedEventFilter<ProfileCreatedEvent>;
+
+export interface WalletAddedEventObject {
+  profileId: BigNumber;
+  wallet: string;
+}
+export type WalletAddedEvent = TypedEvent<
+  [BigNumber, string],
+  WalletAddedEventObject
+>;
+
+export type WalletAddedEventFilter = TypedEventFilter<WalletAddedEvent>;
 
 export interface IProfile extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -199,6 +227,12 @@ export interface IProfile extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    addWallet(
+      profileId: PromiseOrValue<BigNumberish>,
+      wallet: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     createNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
@@ -221,6 +255,12 @@ export interface IProfile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[IProfile.ProfileStructStructOutput]>;
   };
+
+  addWallet(
+    profileId: PromiseOrValue<BigNumberish>,
+    wallet: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   createNFTCollection(
     profileId: PromiseOrValue<BigNumberish>,
@@ -245,6 +285,12 @@ export interface IProfile extends BaseContract {
   ): Promise<IProfile.ProfileStructStructOutput>;
 
   callStatic: {
+    addWallet(
+      profileId: PromiseOrValue<BigNumberish>,
+      wallet: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     createNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
@@ -283,22 +329,34 @@ export interface IProfile extends BaseContract {
     ): NFTCollectionCreatedEventFilter;
 
     "ProfileCreated(address,uint256,string,string,uint256)"(
-      owner?: PromiseOrValue<string> | null,
+      wallet?: PromiseOrValue<string> | null,
       profileId?: null,
       handle?: null,
       imageURI?: null,
       blockNumber?: null
     ): ProfileCreatedEventFilter;
     ProfileCreated(
-      owner?: PromiseOrValue<string> | null,
+      wallet?: PromiseOrValue<string> | null,
       profileId?: null,
       handle?: null,
       imageURI?: null,
       blockNumber?: null
     ): ProfileCreatedEventFilter;
+
+    "WalletAdded(uint256,address)"(
+      profileId?: null,
+      wallet?: null
+    ): WalletAddedEventFilter;
+    WalletAdded(profileId?: null, wallet?: null): WalletAddedEventFilter;
   };
 
   estimateGas: {
+    addWallet(
+      profileId: PromiseOrValue<BigNumberish>,
+      wallet: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     createNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
@@ -323,6 +381,12 @@ export interface IProfile extends BaseContract {
   };
 
   populateTransaction: {
+    addWallet(
+      profileId: PromiseOrValue<BigNumberish>,
+      wallet: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     createNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
