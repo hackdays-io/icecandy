@@ -68,15 +68,15 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
         internalType: "address",
         name: "owner",
         type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
       },
       {
         indexed: false,

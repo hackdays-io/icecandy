@@ -34,7 +34,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
         _createNFTCollection(profileId, 1, vars.nfts);
 
-        emit ProfileCreated(profileId, msg.sender, vars.handle, vars.imageURI, block.number);
+        emit ProfileCreated(msg.sender, profileId, vars.handle, vars.imageURI, block.number);
 
         return profileId;
     }

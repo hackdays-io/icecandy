@@ -1,10 +1,41 @@
-import { useEffect, useState } from 'react'
+import { useAddress } from '@thirdweb-dev/react'
+import { useEffect, useRef, useState } from 'react'
 import { INFTCollectionModule, IProfile } from '../types/contracts'
-import { profileNFTContractClient } from '../utils/contractClient'
+import { TypedListener } from '../types/contracts/common'
+import { ProfileCreatedEvent } from '../types/contracts/contracts/core/Profile'
+import { ProfileCreatedEventObject } from '../types/contracts/contracts/interface/IProfile'
+import { useProfileNFTContractClient } from './useContractClient'
 
 export const useCreateProfileNFT = () => {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>(null)
+  const [result, setResult] = useState<ProfileCreatedEventObject>()
+  const success = useRef(false)
+  const address = useAddress()
+
+  const profileNFTContract = useProfileNFTContractClient({
+    config: { requireWalletConnection: true },
+  })
+
+  useEffect(() => {
+    const transitionCreatedProfilePage: TypedListener<ProfileCreatedEvent> = (
+      owner,
+      profileId,
+      handle,
+      imageURI,
+      blockNumber
+    ) => {
+      if (success.current) {
+        setLoading(false)
+        setResult({ owner, profileId, handle, imageURI, blockNumber })
+      }
+    }
+
+    if (!profileNFTContract || !address) return
+
+    const filter = profileNFTContract.filters.ProfileCreated(address)
+    profileNFTContract.on(filter, transitionCreatedProfilePage)
+  }, [profileNFTContract, address])
 
   const mintProfileNFT = async (
     handle: string,
@@ -13,32 +44,32 @@ export const useCreateProfileNFT = () => {
   ) => {
     try {
       setErrors(null)
-      const profileNFTContract = profileNFTContractClient({
-        config: { requireWalletConnection: true },
-      })
-      if (!profileNFTContract) throw new Error('Cannot find contract')
+      if (!profileNFTContract) {
+        setErrors('You need to connect wallet')
+        return
+      }
       setLoading(true)
       await profileNFTContract.createProfile({ handle, imageURI, nfts })
-      setLoading(false)
+      success.current = true
     } catch (error) {
       setLoading(false)
       setErrors(error)
     }
   }
 
-  return { mintProfileNFT, loading, errors }
+  return { mintProfileNFT, loading, errors, result }
 }
 
 export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
   const [profile, setProfile] = useState<IProfile.ProfileStructStructOutput>()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>(null)
+  const profileNFTContract = useProfileNFTContractClient()
 
   useEffect(() => {
     const fetch = async () => {
       try {
         if (tokenId) {
-          const profileNFTContract = profileNFTContractClient()
           if (!profileNFTContract) throw new Error('Cannot find contract')
 
           setLoading(true)
