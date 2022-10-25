@@ -318,7 +318,7 @@ export interface ProfileInterface extends utils.Interface {
     "ApprovalForAll(address,address,bool)": EventFragment;
     "NFTCollectionCreated(uint256,uint256,tuple[],uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "ProfileCreated(uint256,address,string,string,uint256)": EventFragment;
+    "ProfileCreated(address,uint256,string,string,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
@@ -386,14 +386,14 @@ export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface ProfileCreatedEventObject {
-  profileId: BigNumber;
   owner: string;
+  profileId: BigNumber;
   handle: string;
   imageURI: string;
   blockNumber: BigNumber;
 }
 export type ProfileCreatedEvent = TypedEvent<
-  [BigNumber, string, string, string, BigNumber],
+  [string, BigNumber, string, string, BigNumber],
   ProfileCreatedEventObject
 >;
 
@@ -844,16 +844,16 @@ export interface Profile extends BaseContract {
       newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
 
-    "ProfileCreated(uint256,address,string,string,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
+    "ProfileCreated(address,uint256,string,string,uint256)"(
       owner?: PromiseOrValue<string> | null,
+      profileId?: null,
       handle?: null,
       imageURI?: null,
       blockNumber?: null
     ): ProfileCreatedEventFilter;
     ProfileCreated(
-      profileId?: PromiseOrValue<BigNumberish> | null,
       owner?: PromiseOrValue<string> | null,
+      profileId?: null,
       handle?: null,
       imageURI?: null,
       blockNumber?: null

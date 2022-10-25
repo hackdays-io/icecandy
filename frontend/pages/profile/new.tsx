@@ -10,6 +10,8 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { NextPage } from 'next'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import ModalBase from '../../components/atoms/ModalBase'
 import NFTImage from '../../components/atoms/NFTImage'
@@ -25,7 +27,14 @@ type FormData = {
 
 const ProfileNewPage: NextPage = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
-  const { mintProfileNFT, loading, errors } = useCreateProfileNFT()
+  const { mintProfileNFT, loading, errors, result } = useCreateProfileNFT()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (result) {
+      router.push(`/profile/${result.profileId.toNumber()}`)
+    }
+  }, [result])
 
   const { handleSubmit, control, getValues, watch, formState } =
     useForm<FormData>({
