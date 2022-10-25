@@ -132,7 +132,7 @@ export interface IProfileInterface extends utils.Interface {
 
   events: {
     "NFTCollectionCreated(uint256,uint256,tuple[],uint256)": EventFragment;
-    "ProfileCreated(uint256,address,string,string,uint256)": EventFragment;
+    "ProfileCreated(address,uint256,string,string,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "NFTCollectionCreated"): EventFragment;
@@ -159,14 +159,14 @@ export type NFTCollectionCreatedEventFilter =
   TypedEventFilter<NFTCollectionCreatedEvent>;
 
 export interface ProfileCreatedEventObject {
-  profileId: BigNumber;
   owner: string;
+  profileId: BigNumber;
   handle: string;
   imageURI: string;
   blockNumber: BigNumber;
 }
 export type ProfileCreatedEvent = TypedEvent<
-  [BigNumber, string, string, string, BigNumber],
+  [string, BigNumber, string, string, BigNumber],
   ProfileCreatedEventObject
 >;
 
@@ -282,16 +282,16 @@ export interface IProfile extends BaseContract {
       blockNumber?: null
     ): NFTCollectionCreatedEventFilter;
 
-    "ProfileCreated(uint256,address,string,string,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
+    "ProfileCreated(address,uint256,string,string,uint256)"(
       owner?: PromiseOrValue<string> | null,
+      profileId?: null,
       handle?: null,
       imageURI?: null,
       blockNumber?: null
     ): ProfileCreatedEventFilter;
     ProfileCreated(
-      profileId?: PromiseOrValue<BigNumberish> | null,
       owner?: PromiseOrValue<string> | null,
+      profileId?: null,
       handle?: null,
       imageURI?: null,
       blockNumber?: null

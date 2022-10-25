@@ -32,8 +32,8 @@ interface IProfile {
         returns (INFTCollectionModule.NFTStruct[] memory);
 
     event ProfileCreated(
-        uint256 indexed profileId,
         address indexed owner,
+        uint256 profileId,
         string handle,
         string imageURI,
         uint256 blockNumber
