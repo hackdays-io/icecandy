@@ -9,15 +9,23 @@ $ cd protocol
 $ docker-compose up -d
 ```
 
+### ローカルネットの設定
+
+[こちら](https://github.com/hackdays-io/mint-rally/blob/main/docs/localnode.md#2-setup-localnetwork-in-metamask-and-add-a-local-wallet-address)を参照しながら 2 と 3 をやる。もうすでにやってる場合は必要なし。
+
+ローカルネットでテストする場合は、./protocol/.env に LOCAL_PRIVATE_KEY だけセットしておいたら大丈夫。
+
 ### ローカルネットにコントラクトデプロイ
 
 ```
 $ yarn deploy:local
 ```
 
-デプロイ後表示される Profile address をフロントの環境変数 `NEXT_PUBLIC_CONTRACT_PROFILENFT_ADDRESS` に入力
+デプロイ後表示される Profile address をフロントの環境変数 `NEXT_PUBLIC_CONTRACT_PROFILENFT_ADDRESS` に入力。
 
 ### フロントエンド立ち上げ
+
+環境変数は./frontend.env.example を参照しながら、./frontend/.env.local にいれる。
 
 ```
 $ cd frontend
