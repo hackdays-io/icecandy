@@ -1,7 +1,7 @@
 {
   "name": "icecandy",
   "scripts": {
-    "compile": "run-s compile:clean compile:build",
+    "compile": "run-s compile:clean compile:build copy",
     "compile:clean": "hardhat clean",
     "compile:build": "hardhat compile",
     "lint": "run-s lint:solhint lint:eslint lint:prettier",
@@ -13,7 +13,13 @@
     "deploy": "hardhat run scripts/deploy.ts --network mumbai",
     "deploy:local": "hardhat run scripts/deploy.ts --network local",
     "verify": "hardhat verify --network mumbai",
-    "uml": "sol2uml class ./contracts"
+    "uml": "sol2uml class ./contracts",
+    "copy": "run-s copy:rm-abi copy:cp-abi copy:rm-type copy:cp-type copy:mv-type",
+    "copy:rm-abi": "find ../frontend/abi -name \"*.json\" -exec rm {} \\;",
+    "copy:cp-abi": "find ./artifacts/contracts -name \"*.json\" -not -name \"*.dbg.json\" -exec cp -rf {} ../frontend/abi \\;",
+    "copy:rm-type": "rm -rf ../frontend/types/contracts",
+    "copy:cp-type": "cp -rf ./typechain-types ../frontend/types",
+    "copy:mv-type": "mv ../frontend/types/typechain-types/ ../frontend/types/contracts/"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.6.0"
