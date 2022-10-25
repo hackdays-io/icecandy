@@ -33,13 +33,21 @@ export declare namespace INFTCollectionModule {
     contractAddress: PromiseOrValue<string>;
     tokenId: PromiseOrValue<BigNumberish>;
     tokenURI: PromiseOrValue<string>;
+    wallet: PromiseOrValue<string>;
   };
 
-  export type NFTStructStructOutput = [BigNumber, string, BigNumber, string] & {
+  export type NFTStructStructOutput = [
+    BigNumber,
+    string,
+    BigNumber,
+    string,
+    string
+  ] & {
     chainId: BigNumber;
     contractAddress: string;
     tokenId: BigNumber;
     tokenURI: string;
+    wallet: string;
   };
 }
 
@@ -61,19 +69,19 @@ export declare namespace IProfile {
   };
 
   export type ProfileStructStruct = {
-    owner: PromiseOrValue<string>;
+    wallets: PromiseOrValue<string>[];
     handle: PromiseOrValue<string>;
     imageURI: PromiseOrValue<string>;
     nftCollectionPubId: PromiseOrValue<BigNumberish>;
   };
 
   export type ProfileStructStructOutput = [
-    string,
+    string[],
     string,
     string,
     BigNumber
   ] & {
-    owner: string;
+    wallets: string[];
     handle: string;
     imageURI: string;
     nftCollectionPubId: BigNumber;
@@ -82,10 +90,11 @@ export declare namespace IProfile {
 
 export interface ProfileInterface extends utils.Interface {
   functions: {
+    "addWallet(uint256,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "createNFTCollection(uint256,(uint256,address,uint256,string)[])": FunctionFragment;
-    "createProfile((string,string,(uint256,address,uint256,string)[]))": FunctionFragment;
+    "createNFTCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
+    "createProfile((string,string,(uint256,address,uint256,string,address)[]))": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getNFTCollection(uint256,uint256)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
@@ -110,6 +119,7 @@ export interface ProfileInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "addWallet"
       | "approve"
       | "balanceOf"
       | "createNFTCollection"
@@ -136,6 +146,10 @@ export interface ProfileInterface extends utils.Interface {
       | "transferOwnership"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "addWallet",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
   encodeFunctionData(
     functionFragment: "approve",
     values: [PromiseOrValue<string>, PromiseOrValue<BigNumberish>]
@@ -240,6 +254,7 @@ export interface ProfileInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
+  decodeFunctionResult(functionFragment: "addWallet", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(
@@ -320,6 +335,7 @@ export interface ProfileInterface extends utils.Interface {
     "OwnershipTransferred(address,address)": EventFragment;
     "ProfileCreated(address,uint256,string,string,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
+    "WalletAdded(uint256,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
@@ -328,6 +344,7 @@ export interface ProfileInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "WalletAdded"): EventFragment;
 }
 
 export interface ApprovalEventObject {
@@ -386,7 +403,7 @@ export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface ProfileCreatedEventObject {
-  owner: string;
+  wallet: string;
   profileId: BigNumber;
   handle: string;
   imageURI: string;
@@ -410,6 +427,17 @@ export type TransferEvent = TypedEvent<
 >;
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
+
+export interface WalletAddedEventObject {
+  profileId: BigNumber;
+  wallet: string;
+}
+export type WalletAddedEvent = TypedEvent<
+  [BigNumber, string],
+  WalletAddedEventObject
+>;
+
+export type WalletAddedEventFilter = TypedEventFilter<WalletAddedEvent>;
 
 export interface Profile extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -438,6 +466,12 @@ export interface Profile extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    addWallet(
+      profileId: PromiseOrValue<BigNumberish>,
+      wallet: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -558,6 +592,12 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
+
+  addWallet(
+    profileId: PromiseOrValue<BigNumberish>,
+    wallet: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   approve(
     to: PromiseOrValue<string>,
@@ -680,6 +720,12 @@ export interface Profile extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    addWallet(
+      profileId: PromiseOrValue<BigNumberish>,
+      wallet: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -845,14 +891,14 @@ export interface Profile extends BaseContract {
     ): OwnershipTransferredEventFilter;
 
     "ProfileCreated(address,uint256,string,string,uint256)"(
-      owner?: PromiseOrValue<string> | null,
+      wallet?: PromiseOrValue<string> | null,
       profileId?: null,
       handle?: null,
       imageURI?: null,
       blockNumber?: null
     ): ProfileCreatedEventFilter;
     ProfileCreated(
-      owner?: PromiseOrValue<string> | null,
+      wallet?: PromiseOrValue<string> | null,
       profileId?: null,
       handle?: null,
       imageURI?: null,
@@ -869,9 +915,21 @@ export interface Profile extends BaseContract {
       to?: PromiseOrValue<string> | null,
       tokenId?: PromiseOrValue<BigNumberish> | null
     ): TransferEventFilter;
+
+    "WalletAdded(uint256,address)"(
+      profileId?: null,
+      wallet?: null
+    ): WalletAddedEventFilter;
+    WalletAdded(profileId?: null, wallet?: null): WalletAddedEventFilter;
   };
 
   estimateGas: {
+    addWallet(
+      profileId: PromiseOrValue<BigNumberish>,
+      wallet: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,
@@ -994,6 +1052,12 @@ export interface Profile extends BaseContract {
   };
 
   populateTransaction: {
+    addWallet(
+      profileId: PromiseOrValue<BigNumberish>,
+      wallet: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     approve(
       to: PromiseOrValue<string>,
       tokenId: PromiseOrValue<BigNumberish>,

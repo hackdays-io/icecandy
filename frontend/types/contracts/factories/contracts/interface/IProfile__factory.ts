@@ -47,6 +47,11 @@ const _abi = [
             name: "tokenURI",
             type: "string",
           },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
         ],
         indexed: false,
         internalType: "struct INFTCollectionModule.NFTStruct[]",
@@ -69,7 +74,7 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
-        name: "owner",
+        name: "wallet",
         type: "address",
       },
       {
@@ -101,6 +106,43 @@ const _abi = [
     type: "event",
   },
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "wallet",
+        type: "address",
+      },
+    ],
+    name: "WalletAdded",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "wallet",
+        type: "address",
+      },
+    ],
+    name: "addWallet",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -128,6 +170,11 @@ const _abi = [
             internalType: "string",
             name: "tokenURI",
             type: "string",
+          },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
           },
         ],
         internalType: "struct INFTCollectionModule.NFTStruct[]",
@@ -175,6 +222,11 @@ const _abi = [
                 internalType: "string",
                 name: "tokenURI",
                 type: "string",
+              },
+              {
+                internalType: "address",
+                name: "wallet",
+                type: "address",
               },
             ],
             internalType: "struct INFTCollectionModule.NFTStruct[]",
@@ -235,6 +287,11 @@ const _abi = [
             name: "tokenURI",
             type: "string",
           },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
         ],
         internalType: "struct INFTCollectionModule.NFTStruct[]",
         name: "",
@@ -257,9 +314,9 @@ const _abi = [
       {
         components: [
           {
-            internalType: "address",
-            name: "owner",
-            type: "address",
+            internalType: "address[]",
+            name: "wallets",
+            type: "address[]",
           },
           {
             internalType: "string",

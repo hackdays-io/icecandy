@@ -5,7 +5,7 @@ import {INFTCollectionModule} from "../interface/INFTCollectionModule.sol";
 
 interface IProfile {
     struct ProfileStruct {
-        address owner;
+        address[] wallets;
         string handle;
         string imageURI;
         uint256 nftCollectionPubId; // 0 means no collection
@@ -21,6 +21,8 @@ interface IProfile {
 
     function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) external;
 
+    function addWallet(uint256 profileId, address wallet) external;
+
     function getProfile(uint256 profileId) external view returns (ProfileStruct memory);
 
     function getNFTCollection(uint256 profileId, uint256 nftCollectionPubId)
@@ -29,7 +31,7 @@ interface IProfile {
         returns (INFTCollectionModule.NFTStruct[] memory);
 
     event ProfileCreated(
-        address indexed owner,
+        address indexed wallet,
         uint256 profileId,
         string handle,
         string imageURI,
@@ -42,4 +44,6 @@ interface IProfile {
         INFTCollectionModule.NFTStruct[] nfts,
         uint256 blockNumber
     );
+
+    event WalletAdded(uint256 profileId, address wallet);
 }
