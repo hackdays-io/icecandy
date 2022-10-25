@@ -2,8 +2,8 @@ version: '3'
 services:
   icecandy_localchain:
     build:
-      context: .
-      dockerfile: ./Dockerfile
+      context: ./docker
+      dockerfile: ./docker/Dockerfile
     container_name: icecandy_localchain
     ports:
       - 8545:8545
