@@ -19,10 +19,7 @@ interface IProfile {
 
     function createProfile(CreateProfileStructData calldata vars) external returns (uint256);
 
-    function createNFTCollection(
-        uint256 profileId,
-        INFTCollectionModule.NFTStruct[] calldata nfts
-    ) external;
+    function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) external;
 
     function getProfile(uint256 profileId) external view returns (ProfileStruct memory);
 
