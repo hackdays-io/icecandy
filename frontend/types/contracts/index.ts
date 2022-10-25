@@ -24,10 +24,14 @@ export type { ERC165 } from "./@openzeppelin/contracts/utils/introspection/ERC16
 export { ERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/ERC165__factory";
 export type { IERC165 } from "./@openzeppelin/contracts/utils/introspection/IERC165";
 export { IERC165__factory } from "./factories/@openzeppelin/contracts/utils/introspection/IERC165__factory";
+export type { IceCandy } from "./contracts/core/IceCandy";
+export { IceCandy__factory } from "./factories/contracts/core/IceCandy__factory";
 export type { NFTCollectionModule } from "./contracts/core/NFTCollectionModule";
 export { NFTCollectionModule__factory } from "./factories/contracts/core/NFTCollectionModule__factory";
 export type { Profile } from "./contracts/core/Profile";
 export { Profile__factory } from "./factories/contracts/core/Profile__factory";
+export type { IIceCandy } from "./contracts/interface/IIceCandy";
+export { IIceCandy__factory } from "./factories/contracts/interface/IIceCandy__factory";
 export type { INFTCollectionModule } from "./contracts/interface/INFTCollectionModule";
 export { INFTCollectionModule__factory } from "./factories/contracts/interface/INFTCollectionModule__factory";
 export type { IProfile } from "./contracts/interface/IProfile";

@@ -27,69 +27,15 @@ import type {
   PromiseOrValue,
 } from "../../common";
 
-export declare namespace INFTCollectionModule {
-  export type NFTStructStruct = {
-    chainId: PromiseOrValue<BigNumberish>;
-    contractAddress: PromiseOrValue<string>;
-    tokenId: PromiseOrValue<BigNumberish>;
-    tokenURI: PromiseOrValue<string>;
-  };
-
-  export type NFTStructStructOutput = [BigNumber, string, BigNumber, string] & {
-    chainId: BigNumber;
-    contractAddress: string;
-    tokenId: BigNumber;
-    tokenURI: string;
-  };
-}
-
-export declare namespace IProfile {
-  export type CreateProfileStructDataStruct = {
-    handle: PromiseOrValue<string>;
-    imageURI: PromiseOrValue<string>;
-    nfts: INFTCollectionModule.NFTStructStruct[];
-  };
-
-  export type CreateProfileStructDataStructOutput = [
-    string,
-    string,
-    INFTCollectionModule.NFTStructStructOutput[]
-  ] & {
-    handle: string;
-    imageURI: string;
-    nfts: INFTCollectionModule.NFTStructStructOutput[];
-  };
-
-  export type ProfileStructStruct = {
-    owner: PromiseOrValue<string>;
-    handle: PromiseOrValue<string>;
-    imageURI: PromiseOrValue<string>;
-    nftCollectionPubId: PromiseOrValue<BigNumberish>;
-  };
-
-  export type ProfileStructStructOutput = [
-    string,
-    string,
-    string,
-    BigNumber
-  ] & {
-    owner: string;
-    handle: string;
-    imageURI: string;
-    nftCollectionPubId: BigNumber;
-  };
-}
-
-export interface ProfileInterface extends utils.Interface {
+export interface IceCandyInterface extends utils.Interface {
   functions: {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
-    "createNFTCollection(uint256,(uint256,address,uint256,string)[])": FunctionFragment;
-    "createProfile((string,string,(uint256,address,uint256,string)[]))": FunctionFragment;
+    "eat(uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "getNFTCollection(uint256,uint256)": FunctionFragment;
-    "getProfile(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
+    "isEaten(uint256)": FunctionFragment;
+    "mint(address)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
@@ -97,7 +43,6 @@ export interface ProfileInterface extends utils.Interface {
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
-    "setNFTCollectionModule(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
@@ -112,12 +57,11 @@ export interface ProfileInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "approve"
       | "balanceOf"
-      | "createNFTCollection"
-      | "createProfile"
+      | "eat"
       | "getApproved"
-      | "getNFTCollection"
-      | "getProfile"
       | "isApprovedForAll"
+      | "isEaten"
+      | "mint"
       | "name"
       | "owner"
       | "ownerOf"
@@ -125,7 +69,6 @@ export interface ProfileInterface extends utils.Interface {
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
-      | "setNFTCollectionModule"
       | "supportsInterface"
       | "symbol"
       | "tokenByIndex"
@@ -145,31 +88,24 @@ export interface ProfileInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "createNFTCollection",
-    values: [
-      PromiseOrValue<BigNumberish>,
-      INFTCollectionModule.NFTStructStruct[]
-    ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "createProfile",
-    values: [IProfile.CreateProfileStructDataStruct]
+    functionFragment: "eat",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getApproved",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getNFTCollection",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    functionFragment: "isApprovedForAll",
+    values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getProfile",
+    functionFragment: "isEaten",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "isApprovedForAll",
-    values: [PromiseOrValue<string>, PromiseOrValue<string>]
+    functionFragment: "mint",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -201,10 +137,6 @@ export interface ProfileInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "setApprovalForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setNFTCollectionModule",
-    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -242,27 +174,17 @@ export interface ProfileInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "createNFTCollection",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "createProfile",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "eat", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "getNFTCollection",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "getProfile", data: BytesLike): Result;
-  decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "isEaten", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "ownerOf", data: BytesLike): Result;
@@ -280,10 +202,6 @@ export interface ProfileInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setApprovalForAll",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setNFTCollectionModule",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -316,17 +234,15 @@ export interface ProfileInterface extends utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
-    "NFTCollectionCreated(uint256,uint256,tuple[],uint256)": EventFragment;
+    "Eaten(uint256,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "ProfileCreated(uint256,address,string,string,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "NFTCollectionCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Eaten"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
@@ -354,24 +270,17 @@ export type ApprovalForAllEvent = TypedEvent<
 
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
-export interface NFTCollectionCreatedEventObject {
-  profileId: BigNumber;
-  pubId: BigNumber;
-  nfts: INFTCollectionModule.NFTStructStructOutput[];
+export interface EatenEventObject {
+  tokenId: BigNumber;
+  owner: string;
   blockNumber: BigNumber;
 }
-export type NFTCollectionCreatedEvent = TypedEvent<
-  [
-    BigNumber,
-    BigNumber,
-    INFTCollectionModule.NFTStructStructOutput[],
-    BigNumber
-  ],
-  NFTCollectionCreatedEventObject
+export type EatenEvent = TypedEvent<
+  [BigNumber, string, BigNumber],
+  EatenEventObject
 >;
 
-export type NFTCollectionCreatedEventFilter =
-  TypedEventFilter<NFTCollectionCreatedEvent>;
+export type EatenEventFilter = TypedEventFilter<EatenEvent>;
 
 export interface OwnershipTransferredEventObject {
   previousOwner: string;
@@ -385,20 +294,6 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
-export interface ProfileCreatedEventObject {
-  profileId: BigNumber;
-  owner: string;
-  handle: string;
-  imageURI: string;
-  blockNumber: BigNumber;
-}
-export type ProfileCreatedEvent = TypedEvent<
-  [BigNumber, string, string, string, BigNumber],
-  ProfileCreatedEventObject
->;
-
-export type ProfileCreatedEventFilter = TypedEventFilter<ProfileCreatedEvent>;
-
 export interface TransferEventObject {
   from: string;
   to: string;
@@ -411,12 +306,12 @@ export type TransferEvent = TypedEvent<
 
 export type TransferEventFilter = TypedEventFilter<TransferEvent>;
 
-export interface Profile extends BaseContract {
+export interface IceCandy extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: ProfileInterface;
+  interface: IceCandyInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -449,14 +344,8 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    createNFTCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      nfts: INFTCollectionModule.NFTStructStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    createProfile(
-      vars: IProfile.CreateProfileStructDataStruct,
+    eat(
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -465,22 +354,21 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getNFTCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      nftCollectionPubId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[INFTCollectionModule.NFTStructStructOutput[]]>;
-
-    getProfile(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[IProfile.ProfileStructStructOutput]>;
-
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[boolean]>;
+
+    isEaten(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    mint(
+      to: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
@@ -513,11 +401,6 @@ export interface Profile extends BaseContract {
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -570,14 +453,8 @@ export interface Profile extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  createNFTCollection(
-    profileId: PromiseOrValue<BigNumberish>,
-    nfts: INFTCollectionModule.NFTStructStruct[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  createProfile(
-    vars: IProfile.CreateProfileStructDataStruct,
+  eat(
+    tokenId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -586,22 +463,21 @@ export interface Profile extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getNFTCollection(
-    profileId: PromiseOrValue<BigNumberish>,
-    nftCollectionPubId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
-
-  getProfile(
-    profileId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<IProfile.ProfileStructStructOutput>;
-
   isApprovedForAll(
     owner: PromiseOrValue<string>,
     operator: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<boolean>;
+
+  isEaten(
+    tokenId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
+  mint(
+    to: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   name(overrides?: CallOverrides): Promise<string>;
 
@@ -634,11 +510,6 @@ export interface Profile extends BaseContract {
   setApprovalForAll(
     operator: PromiseOrValue<string>,
     approved: PromiseOrValue<boolean>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setNFTCollectionModule(
-    nftCollectionModule: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -691,38 +562,28 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    createNFTCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      nfts: INFTCollectionModule.NFTStructStruct[],
+    eat(
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    createProfile(
-      vars: IProfile.CreateProfileStructDataStruct,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
 
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getNFTCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      nftCollectionPubId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
-
-    getProfile(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<IProfile.ProfileStructStructOutput>;
-
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    isEaten(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    mint(to: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
 
     name(overrides?: CallOverrides): Promise<string>;
 
@@ -753,11 +614,6 @@ export interface Profile extends BaseContract {
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -822,18 +678,16 @@ export interface Profile extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
-    "NFTCollectionCreated(uint256,uint256,tuple[],uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      pubId?: PromiseOrValue<BigNumberish> | null,
-      nfts?: null,
+    "Eaten(uint256,address,uint256)"(
+      tokenId?: PromiseOrValue<BigNumberish> | null,
+      owner?: PromiseOrValue<string> | null,
       blockNumber?: null
-    ): NFTCollectionCreatedEventFilter;
-    NFTCollectionCreated(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      pubId?: PromiseOrValue<BigNumberish> | null,
-      nfts?: null,
+    ): EatenEventFilter;
+    Eaten(
+      tokenId?: PromiseOrValue<BigNumberish> | null,
+      owner?: PromiseOrValue<string> | null,
       blockNumber?: null
-    ): NFTCollectionCreatedEventFilter;
+    ): EatenEventFilter;
 
     "OwnershipTransferred(address,address)"(
       previousOwner?: PromiseOrValue<string> | null,
@@ -843,21 +697,6 @@ export interface Profile extends BaseContract {
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
-
-    "ProfileCreated(uint256,address,string,string,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      owner?: PromiseOrValue<string> | null,
-      handle?: null,
-      imageURI?: null,
-      blockNumber?: null
-    ): ProfileCreatedEventFilter;
-    ProfileCreated(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      owner?: PromiseOrValue<string> | null,
-      handle?: null,
-      imageURI?: null,
-      blockNumber?: null
-    ): ProfileCreatedEventFilter;
 
     "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
@@ -883,14 +722,8 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    createNFTCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      nfts: INFTCollectionModule.NFTStructStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    createProfile(
-      vars: IProfile.CreateProfileStructDataStruct,
+    eat(
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -899,21 +732,20 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getNFTCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      nftCollectionPubId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    getProfile(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    isEaten(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    mint(
+      to: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
@@ -947,11 +779,6 @@ export interface Profile extends BaseContract {
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1005,14 +832,8 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    createNFTCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      nfts: INFTCollectionModule.NFTStructStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    createProfile(
-      vars: IProfile.CreateProfileStructDataStruct,
+    eat(
+      tokenId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1021,21 +842,20 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getNFTCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      nftCollectionPubId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    getProfile(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    isEaten(
+      tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    mint(
+      to: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
@@ -1069,11 +889,6 @@ export interface Profile extends BaseContract {
     setApprovalForAll(
       operator: PromiseOrValue<string>,
       approved: PromiseOrValue<boolean>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

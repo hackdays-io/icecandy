@@ -32,16 +32,20 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _profile[profileId].imageURI = vars.imageURI;
         _profile[profileId].nftCollectionPubId = 0;
 
-        _createNFTCollection(profileId, 1, vars.nfts);
-
         emit ProfileCreated(profileId, msg.sender, vars.handle, vars.imageURI, block.number);
 
         return profileId;
     }
 
-    function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) public override {
-        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        _createNFTCollection(profileId, ++_profile[profileId].nftCollectionPubId, nfts);
+    function createNFTCollection(
+        uint256 profileId,
+        uint256 pubId,
+        INFTCollectionModule.NFTStruct[] calldata nfts
+    ) external override {
+        require(pubId != 0, "Profile: pubId cannot specify 0");
+        NFTCollectionModule(_nftCollectionModule).processCollect(profileId, pubId, nfts);
+        _profile[profileId].nftCollectionPubId = pubId;
+        emit NFTCollectionCreated(profileId, pubId, nfts, block.number);
     }
 
     function getProfile(uint256 profileId) external view override returns (IProfile.ProfileStruct memory) {
@@ -55,16 +59,6 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         returns (INFTCollectionModule.NFTStruct[] memory)
     {
         return NFTCollectionModule(_nftCollectionModule).getNFTs(profileId, nftCollectionPubId);
-    }
-
-    function _createNFTCollection(
-        uint256 profileId,
-        uint256 pubId,
-        INFTCollectionModule.NFTStruct[] calldata nfts
-    ) internal {
-        NFTCollectionModule(_nftCollectionModule).processCollect(profileId, pubId, nfts);
-        _profile[profileId].nftCollectionPubId = pubId;
-        emit NFTCollectionCreated(profileId, pubId, nfts, block.number);
     }
 
     function _baseURI() internal pure override returns (string memory) {
