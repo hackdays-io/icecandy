@@ -3,18 +3,28 @@ import {
   Button,
   Checkbox,
   Container,
+  FormLabel,
   Input,
   List,
   ListItem,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
+import { ChainId } from '@thirdweb-dev/sdk'
+import { OwnedNft } from 'alchemy-sdk'
+import { find } from 'lodash'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { FC, useEffect } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import ModalBase from '../../components/atoms/ModalBase'
 import NFTImage from '../../components/atoms/NFTImage'
+import NFTCard from '../../components/atoms/tokens/NFTCard'
 import { useCreateProfileNFT } from '../../hooks/useProfileContract'
 import { useHoldingNFTs } from '../../hooks/useToken'
 import { INFTCollectionModule } from '../../types/contracts'
@@ -22,7 +32,7 @@ import { INFTCollectionModule } from '../../types/contracts'
 type FormData = {
   handle: string
   imageURI: string
-  nfts: number[]
+  nfts: { chain: ChainId; index: number }[]
 }
 
 const ProfileNewPage: NextPage = () => {
@@ -45,29 +55,72 @@ const ProfileNewPage: NextPage = () => {
       },
     })
 
-  const { holdingNFTs } = useHoldingNFTs()
+  const { holdingNFTsOnEth, holdingNFTsOnPolygon, holdingNFTsOnArb } =
+    useHoldingNFTs()
 
-  const handleCheck = (index: number) => {
+  const handleCheck = (index: number, chain: ChainId) => {
     const { nfts } = getValues()
-    const newIds = nfts?.includes(index)
-      ? nfts?.filter((id) => id !== index)
-      : [...(nfts ?? []), index]
+
+    const newIds = find(nfts, { index, chain })
+      ? nfts?.filter(
+          (nft) => JSON.stringify(nft) !== JSON.stringify({ chain, index })
+        )
+      : [...(nfts ?? []), { chain, index }]
     return newIds
   }
 
   const execute = async (data: FormData) => {
     const nfts: INFTCollectionModule.NFTStructStruct[] = data.nfts.map(
-      (index) => {
-        const nft = holdingNFTs[index]
+      ({ chain, index }) => {
+        let nft!: OwnedNft | undefined
+        switch (chain) {
+          case ChainId.Goerli:
+            nft = holdingNFTsOnEth?.ownedNfts[index]
+            break
+          case ChainId.Mumbai:
+            nft = holdingNFTsOnPolygon?.ownedNfts[index]
+            break
+          case ChainId.ArbitrumGoerli:
+            nft = holdingNFTsOnArb?.ownedNfts[index]
+            break
+        }
+
         return {
-          chainId: 0,
-          contractAddress: String(nft.contractAddress),
-          tokenId: Number(nft.tokenId),
-          tokenURI: String(nft.tokenURI),
+          chainId: ChainId.Goerli,
+          contractAddress: String(nft?.contract.address),
+          tokenId: Number(nft?.tokenId),
+          tokenURI: String(nft?.rawMetadata?.tokenURI),
+          wallet: '',
         }
       }
     )
+
     await mintProfileNFT(data.handle, data.imageURI, nfts)
+  }
+
+  const SelectedNft: FC<{ chain: ChainId; index: number }> = ({
+    chain,
+    index,
+  }) => {
+    let nft!: OwnedNft | undefined
+    switch (chain) {
+      case ChainId.Goerli:
+        nft = holdingNFTsOnEth?.ownedNfts[index]
+        break
+      case ChainId.Mumbai:
+        nft = holdingNFTsOnPolygon?.ownedNfts[index]
+        break
+      case ChainId.ArbitrumGoerli:
+        nft = holdingNFTsOnArb?.ownedNfts[index]
+        break
+    }
+    return (
+      <NFTCard
+        collectionName={nft?.contract.name}
+        title={nft?.title}
+        imageURI={nft?.rawMetadata?.image}
+      />
+    )
   }
 
   return (
@@ -97,36 +150,150 @@ const ProfileNewPage: NextPage = () => {
           <Text>NFTs</Text>
           <Button onClick={onOpen}>NFT選択</Button>
           <ModalBase isOpen={isOpen} onClose={onClose} maxWidth="800">
-            <List display="grid" gridTemplateColumns="1fr 1fr 1fr" gridGap={3}>
-              {holdingNFTs.map((nft, index) => (
-                <ListItem mb={3} p={3} border="1px solid grey" key={index}>
-                  <label>
-                    <Controller
-                      name="nfts"
-                      control={control}
-                      render={({ field: { value, onChange } }) => (
-                        <Checkbox
-                          defaultChecked={value.includes(index)}
-                          onChange={() => onChange(handleCheck(index))}
-                        />
-                      )}
-                    />
-                    <Text>{nft.collectionName}</Text>
-                    <Text>{nft.name}</Text>
-                    <NFTImage url={nft.image} />
-                  </label>
-                </ListItem>
-              ))}
-            </List>
+            <Tabs variant="soft-rounded" colorScheme="blue">
+              <TabList>
+                <Tab>Ethreum</Tab>
+                <Tab>Polygon</Tab>
+                <Tab>Arbitrum</Tab>
+              </TabList>
+              <TabPanels>
+                <TabPanel>
+                  <List
+                    display="grid"
+                    gridTemplateColumns="1fr 1fr 1fr"
+                    gridGap={3}
+                  >
+                    {holdingNFTsOnEth?.ownedNfts.map((nft, index) => (
+                      <ListItem
+                        mb={3}
+                        p={3}
+                        border="1px solid grey"
+                        key={`eth${index}`}
+                      >
+                        <FormLabel>
+                          <Controller
+                            name="nfts"
+                            control={control}
+                            render={({ field: { value, onChange } }) => (
+                              <Checkbox
+                                defaultChecked={
+                                  !!find(value, {
+                                    index,
+                                    chain: ChainId.Goerli,
+                                  })
+                                }
+                                onChange={() =>
+                                  onChange(handleCheck(index, ChainId.Goerli))
+                                }
+                              />
+                            )}
+                          />
+                          <NFTCard
+                            collectionName={nft.contract.name}
+                            title={nft.title}
+                            imageURI={nft.rawMetadata?.image}
+                          />
+                        </FormLabel>
+                      </ListItem>
+                    ))}
+                  </List>
+                </TabPanel>
+                <TabPanel>
+                  <List
+                    display="grid"
+                    gridTemplateColumns="1fr 1fr 1fr"
+                    gridGap={3}
+                  >
+                    {holdingNFTsOnPolygon?.ownedNfts.map((nft, index) => (
+                      <ListItem
+                        mb={3}
+                        p={3}
+                        border="1px solid grey"
+                        key={`polygon${index}`}
+                      >
+                        <FormLabel>
+                          <Controller
+                            name="nfts"
+                            control={control}
+                            render={({ field: { value, onChange } }) => (
+                              <Checkbox
+                                defaultChecked={
+                                  !!find(value, {
+                                    index,
+                                    chain: ChainId.Mumbai,
+                                  })
+                                }
+                                onChange={() =>
+                                  onChange(handleCheck(index, ChainId.Mumbai))
+                                }
+                              />
+                            )}
+                          />
+                          <NFTCard
+                            collectionName={nft.contract.name}
+                            title={nft.title}
+                            imageURI={nft.rawMetadata?.image}
+                          />
+                        </FormLabel>
+                      </ListItem>
+                    ))}
+                  </List>
+                </TabPanel>
+                <TabPanel>
+                  <List
+                    display="grid"
+                    gridTemplateColumns="1fr 1fr 1fr"
+                    gridGap={3}
+                  >
+                    {holdingNFTsOnArb?.ownedNfts.map((nft, index) => (
+                      <ListItem
+                        mb={3}
+                        p={3}
+                        border="1px solid grey"
+                        key={`arb${index}`}
+                      >
+                        <FormLabel>
+                          <Controller
+                            name="nfts"
+                            control={control}
+                            render={({ field: { value, onChange } }) => (
+                              <Checkbox
+                                defaultChecked={
+                                  !!find(value, {
+                                    index,
+                                    chain: ChainId.ArbitrumGoerli,
+                                  })
+                                }
+                                onChange={() =>
+                                  onChange(
+                                    handleCheck(index, ChainId.ArbitrumGoerli)
+                                  )
+                                }
+                              />
+                            )}
+                          />
+                          <NFTCard
+                            collectionName={nft.contract.name}
+                            title={nft.title}
+                            imageURI={nft.rawMetadata?.image}
+                          />
+                        </FormLabel>
+                      </ListItem>
+                    ))}
+                  </List>
+                </TabPanel>
+              </TabPanels>
+            </Tabs>
           </ModalBase>
           <List display="grid" gridTemplateColumns="1fr 1fr 1fr" gridGap={3}>
-            {watch('nfts').map((index) => (
-              <ListItem mb={3} p={3} border="1px solid grey" key={index}>
-                <label>
-                  <Text>{holdingNFTs[index].collectionName}</Text>
-                  <Text>{holdingNFTs[index].name}</Text>
-                  <NFTImage url={holdingNFTs[index].image} />
-                </label>
+            {watch('nfts').map((nft) => (
+              <ListItem
+                mb={3}
+                p={3}
+                border="1px solid grey"
+                key={`${nft.chain}${nft.index}`}
+              >
+                <SelectedNft chain={nft.chain} index={nft.index} />
               </ListItem>
             ))}
           </List>

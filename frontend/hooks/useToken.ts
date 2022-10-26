@@ -1,8 +1,12 @@
 import { useAddress } from '@thirdweb-dev/react'
-import { AssetTransfersCategory, TokenUri } from 'alchemy-sdk'
+import { AssetTransfersCategory, OwnedNftsResponse } from 'alchemy-sdk'
 import { unionBy } from 'lodash'
 import { useEffect, useState } from 'react'
-import { useAlchemyClient } from './useAlchemy'
+import {
+  useArbitrumAlchemyClient,
+  useEthereumAlchemyClient,
+  usePolygonAlchemyClient,
+} from './useAlchemy'
 
 export const useHoldingFTs = () => {
   const [holdingFTs, setTokens] = useState<
@@ -10,12 +14,14 @@ export const useHoldingFTs = () => {
   >([])
 
   const address = useAddress()
-  const alchemy = useAlchemyClient()
+  const ethAlchemy = useEthereumAlchemyClient()
+  const polygonAlchemy = usePolygonAlchemyClient()
+  const arbAlchemy = useArbitrumAlchemyClient()
 
   useEffect(() => {
     const fetch = async () => {
       if (!address) return
-      const balances = await alchemy.core.getAssetTransfers({
+      const balances = await polygonAlchemy.core.getAssetTransfers({
         toAddress: address,
         category: [AssetTransfersCategory.ERC20],
       })
@@ -35,39 +41,27 @@ export const useHoldingFTs = () => {
 }
 
 export const useHoldingNFTs = () => {
-  const [holdingNFTs, setTokens] = useState<
-    {
-      collectionName?: string
-      tokenId: string
-      name: string | null
-      contractAddress: string | null
-      image?: string
-      tokenURI: TokenUri | undefined
-    }[]
-  >([])
+  const [holdingNFTsOnEth, setTokensEth] = useState<OwnedNftsResponse>()
+  const [holdingNFTsOnPolygon, setTokensPolygon] = useState<OwnedNftsResponse>()
+  const [holdingNFTsOnArb, setTokensArb] = useState<OwnedNftsResponse>()
 
   const address = useAddress()
-  const alchemy = useAlchemyClient()
+  const ethAlchemy = useEthereumAlchemyClient()
+  const polygonAlchemy = usePolygonAlchemyClient()
+  const arbAlchemy = useArbitrumAlchemyClient()
 
   useEffect(() => {
     const fetch = async () => {
       if (!address) return
-      const nfts = await alchemy.nft.getNftsForOwner(address)
-      setTokens(
-        nfts.ownedNfts.map((nft) => {
-          return {
-            collectionName: nft.contract.name,
-            tokenId: nft.tokenId,
-            name: nft.title,
-            contractAddress: nft.contract.address,
-            image: nft.rawMetadata?.image,
-            tokenURI: nft.tokenUri,
-          }
-        })
-      )
+      const nftsOnEth = await ethAlchemy.nft.getNftsForOwner(address)
+      const nftsOnPolygon = await polygonAlchemy.nft.getNftsForOwner(address)
+      const nftsOnArb = await arbAlchemy.nft.getNftsForOwner(address)
+      setTokensEth(nftsOnEth)
+      setTokensPolygon(nftsOnPolygon)
+      setTokensArb(nftsOnArb)
     }
     fetch()
   }, [address])
 
-  return { holdingNFTs }
+  return { holdingNFTsOnEth, holdingNFTsOnPolygon, holdingNFTsOnArb }
 }
