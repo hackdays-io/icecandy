@@ -1,7 +1,7 @@
 import { AssetTransfersCategory, fromHex, toHex } from 'alchemy-sdk'
 import { orderBy } from 'lodash'
 import { FC, useEffect, useState } from 'react'
-import { useAlchemyClient } from '../../hooks/useAlchemy'
+import { usePolygonAlchemyClient } from '../../hooks/useAlchemy'
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -31,7 +31,7 @@ type Props = {
 }
 
 const Erc20TokenCurveChart: FC<Props> = ({ ownerAddr, tokenAddr }) => {
-  const alchemy = useAlchemyClient()
+  const alchemy = usePolygonAlchemyClient()
   const [accumulatedAmount, setAccumulatedAmount] = useState<
     { value: number; block: number }[]
   >([])
