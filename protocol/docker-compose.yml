@@ -3,10 +3,10 @@ services:
   icecandy_localchain:
     build:
       context: ./docker
-      dockerfile: ./docker/Dockerfile
+      dockerfile: ./Dockerfile
     container_name: icecandy_localchain
     ports:
       - 8545:8545
     volumes:
-      - ./:/usr/src/app
-    command: yarn hardhat node
+      - ./.env:/usr/src/app/.env
+    command: /usr/src/app/node_modules/.bin/hardhat node
