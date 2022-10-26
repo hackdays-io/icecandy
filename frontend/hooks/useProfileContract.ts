@@ -27,7 +27,7 @@ export const useCreateProfileNFT = () => {
     ) => {
       if (success.current) {
         setLoading(false)
-        setResult({ owner, profileId, handle, imageURI, blockNumber })
+        // setResult({ owner, profileId, handle, imageURI, blockNumber })
       }
     }
 
