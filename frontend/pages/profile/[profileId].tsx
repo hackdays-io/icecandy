@@ -1,6 +1,7 @@
 import { Box, List, Spinner, Text } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import ProfileMain from '../../components/organisms/profile/Main'
 import { useRetrieveProfileNFTByTokenId } from '../../hooks/useProfileContract'
 
 const ProfilePage: NextPage = () => {
@@ -17,9 +18,11 @@ const ProfilePage: NextPage = () => {
         <Spinner />
       ) : (
         <>
-          <Text>ハンドル: {profile?.handle}</Text>
-          <Text>PFPURI: {profile?.imageURI}</Text>
-          <Text>{JSON.stringify(errors)}</Text>
+          <ProfileMain
+            handle={profile?.handle}
+            pfpURI={profile?.imageURI}
+            modules={[]}
+          />
         </>
       )}
     </Box>

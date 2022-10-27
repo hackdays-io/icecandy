@@ -3,6 +3,7 @@ import { ThirdwebProvider } from '@thirdweb-dev/react'
 import { chakraTheme } from '../utils/theme'
 import { ChakraProvider } from '@chakra-ui/react'
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 const activeChainId = +process.env.NEXT_PUBLIC_CHAIN_ID!
 
@@ -12,6 +13,7 @@ function MyApp({ Component, pageProps }: AppProps) {
       <ChakraProvider theme={chakraTheme}>
         <Header />
         <Component {...pageProps} />
+        <Footer />
       </ChakraProvider>
     </ThirdwebProvider>
   )
