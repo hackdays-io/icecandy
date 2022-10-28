@@ -21,13 +21,24 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         _profile = profile;
     }
 
-    function eat(uint256 tokenId) external override {
+    function eat(
+        uint256 tokenId,
+        uint256 profileId,
+        address module,
+        uint256 moduleId
+    ) external override {
         require(_isApprovedOrOwner(msg.sender, tokenId), "IceCandy: caller is not owner or approved");
         require(_iceCandy[tokenId].isEaten == false, "IceCandy: already eaten");
+
         _iceCandy[tokenId].isEaten = true;
+        _iceCandy[tokenId].eatenProfileId = profileId;
+        _iceCandy[tokenId].eatenModule = module;
+        _iceCandy[tokenId].eatenModuleId = moduleId;
+
         _eatenBalances[ownerOf(tokenId)] += 1;
         _notEatenBalances[ownerOf(tokenId)] -= 1;
-        emit Eaten(tokenId, msg.sender, block.number);
+
+        emit Eaten(tokenId, msg.sender, profileId, module, moduleId, block.number);
     }
 
     function mint(address to) external override onlyOwner {
