@@ -25,6 +25,7 @@ async function main() {
 
   // setup
   await profile.setNFTCollectionModule(nftModule.address)
+  await profile.setIceCandy(icecandy.address)
   await icecandy.setProfile(profile.address)
 }
 

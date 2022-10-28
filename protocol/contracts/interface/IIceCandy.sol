@@ -14,5 +14,9 @@ interface IIceCandy {
 
     function isEaten(uint256 tokenId) external view returns (bool);
 
+    function balanceOfEaten(address owner) external view returns (uint256);
+
+    function balanceOfNotEaten(address owner) external view returns (uint256);
+
     event Eaten(uint256 indexed tokenId, address indexed owner, uint256 blockNumber);
 }
