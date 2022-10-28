@@ -6,16 +6,27 @@ import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/
 import {IProfile} from "../interface/IProfile.sol";
 import {INFTCollectionModule} from "../interface/INFTCollectionModule.sol";
 import {NFTCollectionModule} from "./NFTCollectionModule.sol";
+import {IceCandy} from "./IceCandy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
 contract Profile is ERC721Enumerable, IProfile, Ownable {
     mapping(uint256 => IProfile.ProfileStruct) internal _profile;
     uint256 internal _profileCounter;
+    address internal _icecandy;
     address internal _nftCollectionModule;
 
     constructor(address owner) ERC721("Profile", "PROFILE") {
         _transferOwnership(owner);
+    }
+
+    modifier hasIceCandy() {
+        require(IceCandy(_icecandy).balanceOfNotEaten(msg.sender) > 0, "Profile: caller has no icecandy");
+        _;
+    }
+
+    function setIceCandy(address icecandy) external onlyOwner {
+        _icecandy = icecandy;
     }
 
     function setNFTCollectionModule(address nftCollectionModule) external onlyOwner {

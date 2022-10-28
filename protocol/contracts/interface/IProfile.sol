@@ -17,6 +17,10 @@ interface IProfile {
         INFTCollectionModule.NFTStruct[] nfts;
     }
 
+    function setIceCandy(address icecandy) external;
+
+    function setNFTCollectionModule(address nftCollectionModule) external;
+
     function createProfile(CreateProfileStructData calldata vars) external returns (uint256);
 
     function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) external;
