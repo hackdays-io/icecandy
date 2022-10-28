@@ -48,6 +48,8 @@ const ProfileForm: FC<Props> = ({
   const { holdingNFTsOnEth, holdingNFTsOnPolygon, holdingNFTsOnArb } =
     useHoldingNFTs()
 
+  console.log(holdingNFTsOnPolygon?.ownedNfts)
+
   const handleCheck = (index: number, chain: ChainId) => {
     const { nfts } = getValues()
 

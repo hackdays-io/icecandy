@@ -14,6 +14,7 @@ const ProfilePage: NextPage = () => {
 
   return (
     <Box>
+      <img src="http://localhost:3000/api/svg/icecandy-button" alt="" />
       {loading ? (
         <Spinner />
       ) : (

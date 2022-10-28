@@ -11,7 +11,7 @@ import {
   useDisclosure,
 } from '@chakra-ui/react'
 import { FC } from 'react'
-import { useHoldingNFTs } from '../../hooks/useToken'
+import { useHoldingNFTs, useHoldingPOAPs } from '../../hooks/useToken'
 import ModalBase from '../atoms/ModalBase'
 import NFTCard from '../atoms/tokens/NFTCard'
 
@@ -19,6 +19,7 @@ const NFTListModal: FC = () => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const { holdingNFTsOnEth, holdingNFTsOnPolygon, holdingNFTsOnArb } =
     useHoldingNFTs()
+  const { holdingPOAPs } = useHoldingPOAPs()
 
   return (
     <>
@@ -32,6 +33,7 @@ const NFTListModal: FC = () => {
               <Tab>Ethreum</Tab>
               <Tab>Polygon</Tab>
               <Tab>Arbitrum</Tab>
+              <Tab>POAP</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
@@ -80,6 +82,25 @@ const NFTListModal: FC = () => {
                         collectionName={nft.contract.name}
                         title={nft.title}
                         imageURI={nft.rawMetadata?.image}
+                      />
+                    </ListItem>
+                  ))}
+                </List>
+              </TabPanel>
+              <TabPanel>
+                <List
+                  display="grid"
+                  gridTemplateColumns="1fr 1fr 1fr"
+                  gridGap={3}
+                >
+                  {holdingPOAPs?.ownedNfts.map((nft, index) => (
+                    <ListItem mb={3} p={3} border="1px solid grey" key={index}>
+                      <NFTCard
+                        collectionName={nft.contract.name}
+                        title={nft.title}
+                        imageURI={
+                          nft.rawMetadata?.image || nft.rawMetadata?.image_url
+                        }
                       />
                     </ListItem>
                   ))}

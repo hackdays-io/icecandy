@@ -89,7 +89,7 @@ const ProfileNewPage: NextPage = () => {
         <GridItem ml={5} p={8} border="1px solid grey" borderRadius={10}>
           <ProfileMain
             handle={watch('handle')}
-            pfpImageURI={watch('imageURI')}
+            pfpURI={watch('imageURI')}
             modules={[
               {
                 type: 'nftCollection',

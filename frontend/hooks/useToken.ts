@@ -1,12 +1,20 @@
 import { useAddress } from '@thirdweb-dev/react'
-import { AssetTransfersCategory, OwnedNftsResponse } from 'alchemy-sdk'
+import {
+  AssetTransfersCategory,
+  OwnedNftsResponse,
+  OwnedNft,
+  NftTokenType,
+} from 'alchemy-sdk'
+import axios from 'axios'
+import { BigNumber, ethers } from 'ethers'
 import { unionBy } from 'lodash'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   useArbitrumAlchemyClient,
   useEthereumAlchemyClient,
   usePolygonAlchemyClient,
 } from './useAlchemy'
+import { usePOAPContractClient } from './useContractClient'
 
 export const useHoldingFTs = () => {
   const [holdingFTs, setTokens] = useState<
@@ -64,4 +72,59 @@ export const useHoldingNFTs = () => {
   }, [address])
 
   return { holdingNFTsOnEth, holdingNFTsOnPolygon, holdingNFTsOnArb }
+}
+
+export const useHoldingPOAPs = () => {
+  const [holdingPOAPs, setPOAPs] = useState<OwnedNftsResponse>()
+  const [loading, setLoading] = useState(false)
+  const [errors, setErrors] = useState<any>(null)
+  const poapContract = usePOAPContractClient()
+  const address = useAddress()
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        if (!poapContract) throw new Error('Cannot find contract')
+        const holdingNum: BigNumber = await poapContract.balanceOf(address)
+        const poaps: OwnedNft[] = []
+        for (
+          let index = 0;
+          index < new Array(holdingNum.toNumber()).fill('').length;
+          index++
+        ) {
+          const tokenId = await poapContract.tokenOfOwnerByIndex(address, index)
+          const tokenURI = await poapContract.tokenURI(tokenId)
+          const { data: metadata } = await axios.get(tokenURI)
+          const poap: OwnedNft = {
+            balance: 1,
+            contract: {
+              tokenType: NftTokenType.ERC721,
+              address: process.env.NEXT_PUBLIC_CONTRACT_POAP!,
+            },
+            title: 'POAP',
+            description: metadata.description,
+            timeLastUpdated: '',
+            metadataError: '',
+            rawMetadata: metadata,
+            tokenUri: tokenURI,
+            tokenId: tokenId,
+            media: [],
+            tokenType: NftTokenType.ERC721,
+          }
+          poaps.push(poap)
+          setPOAPs({
+            ownedNfts: poaps,
+            totalCount: holdingNum.toNumber(),
+          })
+        }
+      } catch (error) {
+        console.log(error)
+        setErrors(error)
+        setLoading(false)
+      }
+    }
+    fetch()
+  }, [address])
+
+  return { holdingPOAPs, loading, errors }
 }

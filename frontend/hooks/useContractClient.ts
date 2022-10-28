@@ -3,10 +3,13 @@ import { ethers } from 'ethers'
 import { useMemo } from 'react'
 import ProfileNFTABI from '../abi/Profile.json'
 import { Profile } from '../types/contracts'
+import POAPABI from '../abi_external/POAP.json'
 
 const profileNFTContractAddress =
   process.env.NEXT_PUBLIC_CONTRACT_PROFILENFT_ADDRESS!
 const provierRpc = process.env.NEXT_PUBLIC_PROVIDER_RPC!
+const POAPContractAddress = process.env.NEXT_PUBLIC_CONTRACT_POAP!
+const xDaiProviderRPC = process.env.NEXT_PUBLIC_XDAI_PROVIDER_RPC!
 
 type Props = {
   config?: {
@@ -44,6 +47,20 @@ export const useProfileNFTContractClient = (props?: Props) => {
       }
     }
   }, [address])
+
+  return contract
+}
+
+export const usePOAPContractClient = () => {
+  const contract = useMemo(() => {
+    const provider = new ethers.providers.JsonRpcProvider(xDaiProviderRPC)
+    const _contract = new ethers.Contract(
+      POAPContractAddress,
+      POAPABI.abi,
+      provider
+    ) as any
+    return _contract
+  }, [])
 
   return contract
 }

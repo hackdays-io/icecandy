@@ -12,7 +12,7 @@ export const useEthereumAlchemyClient = () => {
 export const usePolygonAlchemyClient = () => {
   const settings: any = {
     apiKey: String(process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_POLYGON),
-    network: Network.MATIC_MUMBAI,
+    network: Network.MATIC_MAINNET,
   }
   const alchemy = new Alchemy(settings)
   return alchemy
