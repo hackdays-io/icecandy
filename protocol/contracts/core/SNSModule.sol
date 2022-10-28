@@ -4,7 +4,7 @@ pragma solidity ^0.8.10;
 import {ISNSModule} from "../interface/ISNSModule.sol";
 import "hardhat/console.sol";
 
-contract NFTCollectionModule is ISNSModule {
+contract SNSModule is ISNSModule {
     address internal _profile;
     mapping(uint256 => mapping(uint256 => ISNSModule.SNSStruct[])) internal _snsAccounts;
 

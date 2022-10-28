@@ -40,10 +40,17 @@ describe('icecandy test', () => {
 
   it('eat()', async () => {
     // send transaction
-    const _tx = await icecandy.connect(alice).eat(1)
+    const _tx = await icecandy.connect(alice).eat(1, 2, '0x1111111111111111111111111111111111111111', 3)
     await expect(_tx)
       .to.emit(icecandy, 'Eaten')
-      .withArgs(1, alice.address, await ethers.provider.getBlockNumber())
+      .withArgs(
+        1,
+        alice.address,
+        2,
+        '0x1111111111111111111111111111111111111111',
+        3,
+        await ethers.provider.getBlockNumber()
+      )
 
     // get icecandy token
     expect(await icecandy.connect(alice).isEaten(1)).to.equal(true)
@@ -62,7 +69,9 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(1)
 
     // before approval transaction is reverted
-    await expect(icecandy.connect(bob).eat(2)).to.be.revertedWith('IceCandy: caller is not owner or approved')
+    await expect(icecandy.connect(bob).eat(2, 2, '0x1111111111111111111111111111111111111111', 3)).to.be.revertedWith(
+      'IceCandy: caller is not owner or approved'
+    )
 
     // approve bob
     await expect(icecandy.connect(alice).approve(bob.address, 2))
@@ -70,7 +79,10 @@ describe('icecandy test', () => {
       .withArgs(alice.address, bob.address, 2)
 
     // after approval transaction is success
-    await expect(icecandy.connect(bob).eat(2)).to.emit(icecandy, 'Eaten')
+    await expect(icecandy.connect(bob).eat(2, 2, '0x1111111111111111111111111111111111111111', 3)).to.emit(
+      icecandy,
+      'Eaten'
+    )
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(2)
     expect(await icecandy.connect(alice).balanceOfEaten(alice.address)).to.be.equals(2)
     expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(0)
@@ -86,7 +98,9 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(1)
 
     // before approval transaction is reverted
-    await expect(icecandy.connect(carol).eat(3)).to.be.revertedWith('IceCandy: caller is not owner or approved')
+    await expect(icecandy.connect(carol).eat(3, 2, '0x1111111111111111111111111111111111111111', 3)).to.be.revertedWith(
+      'IceCandy: caller is not owner or approved'
+    )
 
     // set carol to approval for all
     await expect(icecandy.connect(alice).setApprovalForAll(carol.address, true))
@@ -94,7 +108,10 @@ describe('icecandy test', () => {
       .withArgs(alice.address, carol.address, true)
 
     // after setting transaction is success
-    await expect(icecandy.connect(carol).eat(3)).to.emit(icecandy, 'Eaten')
+    await expect(icecandy.connect(carol).eat(3, 2, '0x1111111111111111111111111111111111111111', 3)).to.emit(
+      icecandy,
+      'Eaten'
+    )
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(3)
     expect(await icecandy.connect(alice).balanceOfEaten(alice.address)).to.be.equals(3)
     expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(0)
@@ -110,13 +127,18 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(1)
 
     // before setProfile transaction is reverted
-    await expect(icecandy.connect(owner).eat(4)).to.be.revertedWith('IceCandy: caller is not owner or approved')
+    await expect(icecandy.connect(owner).eat(4, 2, '0x1111111111111111111111111111111111111111', 3)).to.be.revertedWith(
+      'IceCandy: caller is not owner or approved'
+    )
 
     // set owner address as profile
     await expect(icecandy.connect(owner).setProfile(owner.address))
 
     // after setting transaction is success
-    await expect(icecandy.connect(owner).eat(4)).to.emit(icecandy, 'Eaten')
+    await expect(icecandy.connect(owner).eat(4, 2, '0x1111111111111111111111111111111111111111', 3)).to.emit(
+      icecandy,
+      'Eaten'
+    )
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(4)
     expect(await icecandy.connect(alice).balanceOfEaten(alice.address)).to.be.equals(4)
     expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(0)
