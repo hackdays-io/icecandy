@@ -49,6 +49,26 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IERC165__factory>;
     getContractFactory(
+      name: "IceCandyAssetStoreProvider",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IceCandyAssetStoreProvider__factory>;
+    getContractFactory(
+      name: "IceCandyAssetStore",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IceCandyAssetStore__factory>;
+    getContractFactory(
+      name: "IceCandyAssetStoreAdmin",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IceCandyAssetStoreAdmin__factory>;
+    getContractFactory(
+      name: "IceCandyAssetStoreCore",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IceCandyAssetStoreCore__factory>;
+    getContractFactory(
+      name: "IceCandyAssetStoreRegistory",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IceCandyAssetStoreRegistory__factory>;
+    getContractFactory(
       name: "IceCandy",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IceCandy__factory>;
@@ -60,6 +80,10 @@ declare module "hardhat/types/runtime" {
       name: "Profile",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Profile__factory>;
+    getContractFactory(
+      name: "IIceCandyAssetStore",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IIceCandyAssetStore__factory>;
     getContractFactory(
       name: "IIceCandy",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -119,6 +143,31 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IERC165>;
     getContractAt(
+      name: "IceCandyAssetStoreProvider",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IceCandyAssetStoreProvider>;
+    getContractAt(
+      name: "IceCandyAssetStore",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IceCandyAssetStore>;
+    getContractAt(
+      name: "IceCandyAssetStoreAdmin",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IceCandyAssetStoreAdmin>;
+    getContractAt(
+      name: "IceCandyAssetStoreCore",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IceCandyAssetStoreCore>;
+    getContractAt(
+      name: "IceCandyAssetStoreRegistory",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IceCandyAssetStoreRegistory>;
+    getContractAt(
       name: "IceCandy",
       address: string,
       signer?: ethers.Signer
@@ -133,6 +182,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.Profile>;
+    getContractAt(
+      name: "IIceCandyAssetStore",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IIceCandyAssetStore>;
     getContractAt(
       name: "IIceCandy",
       address: string,

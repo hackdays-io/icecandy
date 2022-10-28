@@ -19,7 +19,7 @@ export const useCreateProfileNFT = () => {
 
   useEffect(() => {
     const transitionCreatedProfilePage: TypedListener<ProfileCreatedEvent> = (
-      owner,
+      wallet,
       profileId,
       handle,
       imageURI,
@@ -27,7 +27,7 @@ export const useCreateProfileNFT = () => {
     ) => {
       if (success.current) {
         setLoading(false)
-        // setResult({ owner, profileId, handle, imageURI, blockNumber })
+        setResult({ wallet, profileId, handle, imageURI, blockNumber })
       }
     }
 
