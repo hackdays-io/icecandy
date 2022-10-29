@@ -20,10 +20,17 @@ import { ChainId } from '@thirdweb-dev/sdk'
 import { OwnedNft } from 'alchemy-sdk'
 import { find } from 'lodash'
 import { FC, FormEventHandler } from 'react'
-import { Control, Controller, FormState, UseFormWatch } from 'react-hook-form'
+import {
+  Control,
+  Controller,
+  FormState,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form'
 import { useHoldingNFTs } from '../../../hooks/useToken'
 import { AppProfile } from '../../../types/profile'
 import ModalBase from '../../atoms/ModalBase'
+import AuthTwitter from '../../atoms/profile/AuthTwitter'
 import PFP from '../../atoms/profile/PFP'
 import NFTCard from '../../atoms/tokens/NFTCard'
 
@@ -34,6 +41,7 @@ type Props = {
   getValues: () => AppProfile.FormData
   loading: boolean
   formState: FormState<AppProfile.FormData>
+  setValue: UseFormSetValue<AppProfile.FormData>
 }
 
 const ProfileForm: FC<Props> = ({
@@ -42,13 +50,11 @@ const ProfileForm: FC<Props> = ({
   control,
   getValues,
   loading,
-  formState,
+  setValue,
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const { holdingNFTsOnEth, holdingNFTsOnPolygon, holdingNFTsOnArb } =
     useHoldingNFTs()
-
-  console.log(holdingNFTsOnPolygon?.ownedNfts)
 
   const handleCheck = (index: number, chain: ChainId) => {
     const { nfts } = getValues()
@@ -86,11 +92,27 @@ const ProfileForm: FC<Props> = ({
     )
   }
 
+  const setTwitterAccount = (params: { userName: string }) => {
+    const { snsAccounts } = getValues()
+    snsAccounts.push({
+      service: 'twitter',
+      user_id: params.userName,
+      userPageURL: `https://twitter.com/${params.userName}`,
+      wallet: '',
+    })
+    setValue('snsAccounts', snsAccounts)
+  }
+
   return (
     <form onSubmit={onSubmit}>
       <Box mb={2}>
         <PFP imgURI={watch('imageURI')} />
       </Box>
+
+      <Box my={4}>
+        <AuthTwitter setAccountData={setTwitterAccount} />
+      </Box>
+
       <Box mb={5}>
         <Text>ハンドル名</Text>
         <Controller

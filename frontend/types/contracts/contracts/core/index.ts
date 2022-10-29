@@ -4,3 +4,4 @@
 export type { IceCandy } from "./IceCandy";
 export type { NFTCollectionModule } from "./NFTCollectionModule";
 export type { Profile } from "./Profile";
+export type { SNSAccountModule } from "./SNSAccountModule";

@@ -1,22 +1,21 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-interface ISNSModule {
-    struct SNSStruct {
+interface ISNSAccountModule {
+    struct SNSAccountStruct {
         string service;
-        string user_id;
+        string userId;
         string userPageURL;
-        string signature;
         address wallet;
     }
 
     function processSNSAccount(
         uint256 profileId,
         uint256 pubId,
-        SNSStruct calldata snsAccounts
+        SNSAccountStruct calldata snsAccounts
     ) external;
 
-    function getSNSAccounts(uint256 profileId, uint256 pubId) external view returns (SNSStruct[] memory);
+    function getSNSAccounts(uint256 profileId, uint256 pubId) external view returns (SNSAccountStruct[] memory);
 
     event Query(string id, string publicSignature, address account, bytes32 queryId);
 }

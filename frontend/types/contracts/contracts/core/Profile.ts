@@ -51,6 +51,22 @@ export declare namespace INFTCollectionModule {
   };
 }
 
+export declare namespace ISNSAccountModule {
+  export type SNSAccountStructStruct = {
+    service: PromiseOrValue<string>;
+    user_id: PromiseOrValue<string>;
+    userPageURL: PromiseOrValue<string>;
+    wallet: PromiseOrValue<string>;
+  };
+
+  export type SNSAccountStructStructOutput = [
+    string,
+    string,
+    string,
+    string
+  ] & { service: string; user_id: string; userPageURL: string; wallet: string };
+}
+
 export declare namespace IProfile {
   export type CreateProfileStructDataStruct = {
     handle: PromiseOrValue<string>;
@@ -73,18 +89,21 @@ export declare namespace IProfile {
     handle: PromiseOrValue<string>;
     imageURI: PromiseOrValue<string>;
     nftCollectionPubId: PromiseOrValue<BigNumberish>;
+    snsPubId: PromiseOrValue<BigNumberish>;
   };
 
   export type ProfileStructStructOutput = [
     string[],
     string,
     string,
+    BigNumber,
     BigNumber
   ] & {
     wallets: string[];
     handle: string;
     imageURI: string;
     nftCollectionPubId: BigNumber;
+    snsPubId: BigNumber;
   };
 }
 
@@ -95,9 +114,11 @@ export interface ProfileInterface extends utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "createNFTCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
     "createProfile((string,string,(uint256,address,uint256,string,address)[]))": FunctionFragment;
+    "createSNSAccount(uint256,(string,string,string,address))": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getNFTCollection(uint256,uint256)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
+    "getSNSAccounts(uint256,uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "name()": FunctionFragment;
     "owner()": FunctionFragment;
@@ -106,7 +127,9 @@ export interface ProfileInterface extends utils.Interface {
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
+    "setIceCandy(address)": FunctionFragment;
     "setNFTCollectionModule(address)": FunctionFragment;
+    "setSNSAccountModule(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
@@ -124,9 +147,11 @@ export interface ProfileInterface extends utils.Interface {
       | "balanceOf"
       | "createNFTCollection"
       | "createProfile"
+      | "createSNSAccount"
       | "getApproved"
       | "getNFTCollection"
       | "getProfile"
+      | "getSNSAccounts"
       | "isApprovedForAll"
       | "name"
       | "owner"
@@ -135,7 +160,9 @@ export interface ProfileInterface extends utils.Interface {
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
+      | "setIceCandy"
       | "setNFTCollectionModule"
+      | "setSNSAccountModule"
       | "supportsInterface"
       | "symbol"
       | "tokenByIndex"
@@ -170,6 +197,13 @@ export interface ProfileInterface extends utils.Interface {
     values: [IProfile.CreateProfileStructDataStruct]
   ): string;
   encodeFunctionData(
+    functionFragment: "createSNSAccount",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      ISNSAccountModule.SNSAccountStructStruct
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getApproved",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -180,6 +214,10 @@ export interface ProfileInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getProfile",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSNSAccounts",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
@@ -217,7 +255,15 @@ export interface ProfileInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(
+    functionFragment: "setIceCandy",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setNFTCollectionModule",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setSNSAccountModule",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -266,6 +312,10 @@ export interface ProfileInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "createSNSAccount",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
@@ -274,6 +324,10 @@ export interface ProfileInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getProfile", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getSNSAccounts",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
@@ -298,7 +352,15 @@ export interface ProfileInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "setIceCandy",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setNFTCollectionModule",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSNSAccountModule",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -334,6 +396,7 @@ export interface ProfileInterface extends utils.Interface {
     "NFTCollectionCreated(uint256,uint256,tuple[],uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "ProfileCreated(address,uint256,string,string,uint256)": EventFragment;
+    "SNSAccountCreated(uint256,uint256,tuple,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
     "WalletAdded(uint256,address)": EventFragment;
   };
@@ -343,6 +406,7 @@ export interface ProfileInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "NFTCollectionCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SNSAccountCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WalletAdded"): EventFragment;
 }
@@ -415,6 +479,25 @@ export type ProfileCreatedEvent = TypedEvent<
 >;
 
 export type ProfileCreatedEventFilter = TypedEventFilter<ProfileCreatedEvent>;
+
+export interface SNSAccountCreatedEventObject {
+  profileId: BigNumber;
+  pubId: BigNumber;
+  sns: ISNSAccountModule.SNSAccountStructStructOutput;
+  blockNumber: BigNumber;
+}
+export type SNSAccountCreatedEvent = TypedEvent<
+  [
+    BigNumber,
+    BigNumber,
+    ISNSAccountModule.SNSAccountStructStructOutput,
+    BigNumber
+  ],
+  SNSAccountCreatedEventObject
+>;
+
+export type SNSAccountCreatedEventFilter =
+  TypedEventFilter<SNSAccountCreatedEvent>;
 
 export interface TransferEventObject {
   from: string;
@@ -494,6 +577,12 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    createSNSAccount(
+      profileId: PromiseOrValue<BigNumberish>,
+      snsAccount: ISNSAccountModule.SNSAccountStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -509,6 +598,12 @@ export interface Profile extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[IProfile.ProfileStructStructOutput]>;
+
+    getSNSAccounts(
+      profileId: PromiseOrValue<BigNumberish>,
+      snsPubId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[ISNSAccountModule.SNSAccountStructStructOutput[]]>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -550,8 +645,18 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setIceCandy(
+      icecandy: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     setNFTCollectionModule(
       nftCollectionModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setSNSAccountModule(
+      snsAccountModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -621,6 +726,12 @@ export interface Profile extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  createSNSAccount(
+    profileId: PromiseOrValue<BigNumberish>,
+    snsAccount: ISNSAccountModule.SNSAccountStructStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   getApproved(
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -636,6 +747,12 @@ export interface Profile extends BaseContract {
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<IProfile.ProfileStructStructOutput>;
+
+  getSNSAccounts(
+    profileId: PromiseOrValue<BigNumberish>,
+    snsPubId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
 
   isApprovedForAll(
     owner: PromiseOrValue<string>,
@@ -677,8 +794,18 @@ export interface Profile extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setIceCandy(
+    icecandy: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   setNFTCollectionModule(
     nftCollectionModule: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setSNSAccountModule(
+    snsAccountModule: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -748,6 +875,12 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    createSNSAccount(
+      profileId: PromiseOrValue<BigNumberish>,
+      snsAccount: ISNSAccountModule.SNSAccountStructStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -763,6 +896,12 @@ export interface Profile extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<IProfile.ProfileStructStructOutput>;
+
+    getSNSAccounts(
+      profileId: PromiseOrValue<BigNumberish>,
+      snsPubId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
 
     isApprovedForAll(
       owner: PromiseOrValue<string>,
@@ -802,8 +941,18 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setIceCandy(
+      icecandy: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     setNFTCollectionModule(
       nftCollectionModule: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setSNSAccountModule(
+      snsAccountModule: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -905,6 +1054,19 @@ export interface Profile extends BaseContract {
       blockNumber?: null
     ): ProfileCreatedEventFilter;
 
+    "SNSAccountCreated(uint256,uint256,tuple,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      pubId?: PromiseOrValue<BigNumberish> | null,
+      sns?: null,
+      blockNumber?: null
+    ): SNSAccountCreatedEventFilter;
+    SNSAccountCreated(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      pubId?: PromiseOrValue<BigNumberish> | null,
+      sns?: null,
+      blockNumber?: null
+    ): SNSAccountCreatedEventFilter;
+
     "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,
       to?: PromiseOrValue<string> | null,
@@ -952,6 +1114,12 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    createSNSAccount(
+      profileId: PromiseOrValue<BigNumberish>,
+      snsAccount: ISNSAccountModule.SNSAccountStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -965,6 +1133,12 @@ export interface Profile extends BaseContract {
 
     getProfile(
       profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSNSAccounts(
+      profileId: PromiseOrValue<BigNumberish>,
+      snsPubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1008,8 +1182,18 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setIceCandy(
+      icecandy: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     setNFTCollectionModule(
       nftCollectionModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setSNSAccountModule(
+      snsAccountModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1080,6 +1264,12 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    createSNSAccount(
+      profileId: PromiseOrValue<BigNumberish>,
+      snsAccount: ISNSAccountModule.SNSAccountStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1093,6 +1283,12 @@ export interface Profile extends BaseContract {
 
     getProfile(
       profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSNSAccounts(
+      profileId: PromiseOrValue<BigNumberish>,
+      snsPubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1136,8 +1332,18 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    setIceCandy(
+      icecandy: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     setNFTCollectionModule(
       nftCollectionModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSNSAccountModule(
+      snsAccountModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

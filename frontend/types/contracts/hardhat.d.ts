@@ -81,6 +81,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.Profile__factory>;
     getContractFactory(
+      name: "SNSAccountModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.SNSAccountModule__factory>;
+    getContractFactory(
       name: "IIceCandyAssetStore",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IIceCandyAssetStore__factory>;
@@ -96,6 +100,10 @@ declare module "hardhat/types/runtime" {
       name: "IProfile",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IProfile__factory>;
+    getContractFactory(
+      name: "ISNSAccountModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ISNSAccountModule__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -183,6 +191,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.Profile>;
     getContractAt(
+      name: "SNSAccountModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.SNSAccountModule>;
+    getContractAt(
       name: "IIceCandyAssetStore",
       address: string,
       signer?: ethers.Signer
@@ -202,6 +215,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IProfile>;
+    getContractAt(
+      name: "ISNSAccountModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ISNSAccountModule>;
 
     // default types
     getContractFactory(

@@ -4,3 +4,4 @@
 export { IceCandy__factory } from "./IceCandy__factory";
 export { NFTCollectionModule__factory } from "./NFTCollectionModule__factory";
 export { Profile__factory } from "./Profile__factory";
+export { SNSAccountModule__factory } from "./SNSAccountModule__factory";

@@ -29,19 +29,40 @@ import type {
 
 export interface IIceCandyInterface extends utils.Interface {
   functions: {
-    "eat(uint256)": FunctionFragment;
+    "balanceOfEaten(address)": FunctionFragment;
+    "balanceOfNotEaten(address)": FunctionFragment;
+    "eat(uint256,uint256,address,uint256)": FunctionFragment;
     "isEaten(uint256)": FunctionFragment;
     "mint(address)": FunctionFragment;
     "setProfile(address)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "eat" | "isEaten" | "mint" | "setProfile"
+    nameOrSignatureOrTopic:
+      | "balanceOfEaten"
+      | "balanceOfNotEaten"
+      | "eat"
+      | "isEaten"
+      | "mint"
+      | "setProfile"
   ): FunctionFragment;
 
   encodeFunctionData(
+    functionFragment: "balanceOfEaten",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "balanceOfNotEaten",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "eat",
-    values: [PromiseOrValue<BigNumberish>]
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
   ): string;
   encodeFunctionData(
     functionFragment: "isEaten",
@@ -56,13 +77,21 @@ export interface IIceCandyInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "balanceOfEaten",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "balanceOfNotEaten",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "eat", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "isEaten", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
 
   events: {
-    "Eaten(uint256,address,uint256)": EventFragment;
+    "Eaten(uint256,address,uint256,address,uint256,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Eaten"): EventFragment;
@@ -70,11 +99,14 @@ export interface IIceCandyInterface extends utils.Interface {
 
 export interface EatenEventObject {
   tokenId: BigNumber;
-  owner: string;
+  from: string;
+  profileId: BigNumber;
+  module: string;
+  moduleId: BigNumber;
   blockNumber: BigNumber;
 }
 export type EatenEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
+  [BigNumber, string, BigNumber, string, BigNumber, BigNumber],
   EatenEventObject
 >;
 
@@ -107,8 +139,21 @@ export interface IIceCandy extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    balanceOfEaten(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    balanceOfNotEaten(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     eat(
       tokenId: PromiseOrValue<BigNumberish>,
+      profileId: PromiseOrValue<BigNumberish>,
+      module: PromiseOrValue<string>,
+      moduleId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -128,8 +173,21 @@ export interface IIceCandy extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  balanceOfEaten(
+    owner: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  balanceOfNotEaten(
+    owner: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   eat(
     tokenId: PromiseOrValue<BigNumberish>,
+    profileId: PromiseOrValue<BigNumberish>,
+    module: PromiseOrValue<string>,
+    moduleId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -149,8 +207,21 @@ export interface IIceCandy extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    balanceOfEaten(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    balanceOfNotEaten(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     eat(
       tokenId: PromiseOrValue<BigNumberish>,
+      profileId: PromiseOrValue<BigNumberish>,
+      module: PromiseOrValue<string>,
+      moduleId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -168,21 +239,40 @@ export interface IIceCandy extends BaseContract {
   };
 
   filters: {
-    "Eaten(uint256,address,uint256)"(
+    "Eaten(uint256,address,uint256,address,uint256,uint256)"(
       tokenId?: PromiseOrValue<BigNumberish> | null,
-      owner?: PromiseOrValue<string> | null,
+      from?: PromiseOrValue<string> | null,
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      module?: null,
+      moduleId?: null,
       blockNumber?: null
     ): EatenEventFilter;
     Eaten(
       tokenId?: PromiseOrValue<BigNumberish> | null,
-      owner?: PromiseOrValue<string> | null,
+      from?: PromiseOrValue<string> | null,
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      module?: null,
+      moduleId?: null,
       blockNumber?: null
     ): EatenEventFilter;
   };
 
   estimateGas: {
+    balanceOfEaten(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    balanceOfNotEaten(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     eat(
       tokenId: PromiseOrValue<BigNumberish>,
+      profileId: PromiseOrValue<BigNumberish>,
+      module: PromiseOrValue<string>,
+      moduleId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -203,8 +293,21 @@ export interface IIceCandy extends BaseContract {
   };
 
   populateTransaction: {
+    balanceOfEaten(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    balanceOfNotEaten(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     eat(
       tokenId: PromiseOrValue<BigNumberish>,
+      profileId: PromiseOrValue<BigNumberish>,
+      module: PromiseOrValue<string>,
+      moduleId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -40,6 +40,8 @@ export type { NFTCollectionModule } from "./contracts/core/NFTCollectionModule";
 export { NFTCollectionModule__factory } from "./factories/contracts/core/NFTCollectionModule__factory";
 export type { Profile } from "./contracts/core/Profile";
 export { Profile__factory } from "./factories/contracts/core/Profile__factory";
+export type { SNSAccountModule } from "./contracts/core/SNSAccountModule";
+export { SNSAccountModule__factory } from "./factories/contracts/core/SNSAccountModule__factory";
 export type { IIceCandyAssetStore } from "./contracts/interface/assetstore/IIceCandyAssetStore";
 export { IIceCandyAssetStore__factory } from "./factories/contracts/interface/assetstore/IIceCandyAssetStore__factory";
 export type { IIceCandy } from "./contracts/interface/IIceCandy";
@@ -48,3 +50,5 @@ export type { INFTCollectionModule } from "./contracts/interface/INFTCollectionM
 export { INFTCollectionModule__factory } from "./factories/contracts/interface/INFTCollectionModule__factory";
 export type { IProfile } from "./contracts/interface/IProfile";
 export { IProfile__factory } from "./factories/contracts/interface/IProfile__factory";
+export type { ISNSAccountModule } from "./contracts/interface/ISNSAccountModule";
+export { ISNSAccountModule__factory } from "./factories/contracts/interface/ISNSAccountModule__factory";

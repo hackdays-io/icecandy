@@ -109,6 +109,59 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "pubId",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "service",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "user_id",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "userPageURL",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
+        ],
+        indexed: false,
+        internalType: "struct ISNSAccountModule.SNSAccountStruct",
+        name: "sns",
+        type: "tuple",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blockNumber",
+        type: "uint256",
+      },
+    ],
+    name: "SNSAccountCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: false,
         internalType: "uint256",
         name: "profileId",
@@ -258,6 +311,46 @@ const _abi = [
         type: "uint256",
       },
       {
+        components: [
+          {
+            internalType: "string",
+            name: "service",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "user_id",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "userPageURL",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
+        ],
+        internalType: "struct ISNSAccountModule.SNSAccountStruct",
+        name: "sns",
+        type: "tuple",
+      },
+    ],
+    name: "createSNSAccount",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
         internalType: "uint256",
         name: "nftCollectionPubId",
         type: "uint256",
@@ -333,6 +426,11 @@ const _abi = [
             name: "nftCollectionPubId",
             type: "uint256",
           },
+          {
+            internalType: "uint256",
+            name: "snsPubId",
+            type: "uint256",
+          },
         ],
         internalType: "struct IProfile.ProfileStruct",
         name: "",
@@ -340,6 +438,78 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "snsPubId",
+        type: "uint256",
+      },
+    ],
+    name: "getSNSAccounts",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "service",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "user_id",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "userPageURL",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
+        ],
+        internalType: "struct ISNSAccountModule.SNSAccountStruct[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "icecandy",
+        type: "address",
+      },
+    ],
+    name: "setIceCandy",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "nftCollectionModule",
+        type: "address",
+      },
+    ],
+    name: "setNFTCollectionModule",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
 ];

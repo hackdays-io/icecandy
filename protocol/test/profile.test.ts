@@ -1,8 +1,9 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { Profile, NFTCollectionModule } from '../typechain-types'
+import { Profile, NFTCollectionModule, ISNSAccountModule, SNSAccountModule } from '../typechain-types'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { BigNumber } from 'ethers'
+import { IProfile } from '../typechain-types/contracts/core/Profile'
 
 describe('profile test', () => {
   let owner: SignerWithAddress
@@ -12,6 +13,7 @@ describe('profile test', () => {
   let daniel: SignerWithAddress
   let profile: Profile
   let nftCollection: NFTCollectionModule
+  let snsAccount: SNSAccountModule
 
   before(async () => {
     // signers
@@ -27,6 +29,8 @@ describe('profile test', () => {
     profile = await fProfile.deploy(owner.address)
     const fNFTCollection = await ethers.getContractFactory('NFTCollectionModule')
     nftCollection = await fNFTCollection.deploy(profile.address)
+    const fSNSAccount = await ethers.getContractFactory('SNSAccountModule')
+    snsAccount = await fSNSAccount.deploy(profile.address)
   })
 
   it('setNFTCollectionModule()', async () => {
@@ -39,8 +43,17 @@ describe('profile test', () => {
     await expect(profile.connect(owner).setNFTCollectionModule(nftCollection.address)).to.be.not.reverted
   })
 
+  it('setSNSAccountModule()', async () => {
+    await expect(profile.connect(alice).setSNSAccountModule(snsAccount.address)).to.be.revertedWith(
+      'Ownable: caller is not the owner'
+    )
+
+    // success transaction
+    await expect(profile.connect(owner).setSNSAccountModule(snsAccount.address)).to.be.not.reverted
+  })
+
   it('createProfile()', async () => {
-    const _profile = {
+    const _profile: IProfile.CreateProfileStructDataStruct = {
       handle: 'hogehoge',
       imageURI: 'https://image.com',
       nfts: [
@@ -59,6 +72,14 @@ describe('profile test', () => {
           wallet: alice.address,
         },
       ],
+      snsAccounts: [
+        {
+          service: 'twitter',
+          userId: 'hello',
+          userPageURL: 'https://hoge.com',
+          wallet: alice.address,
+        },
+      ],
     }
 
     // send transaction
@@ -74,6 +95,7 @@ describe('profile test', () => {
     expect(profile_.handle).to.equal(_profile.handle)
     expect(profile_.imageURI).to.equal(_profile.imageURI)
     expect(profile_.nftCollectionPubId).to.equal(1)
+    expect(profile_.snsAccountsPubId).to.equal(1)
 
     // get nft struct
     const nfts_ = await profile.connect(alice).getNFTCollection(1, 1)
@@ -85,6 +107,12 @@ describe('profile test', () => {
     expect(nfts_[1]?.contractAddress).to.equal(_profile.nfts[1]?.contractAddress)
     expect(nfts_[1]?.tokenId).to.equal(BigNumber.from(_profile.nfts[1]?.tokenId))
     expect(nfts_[1]?.tokenURI).to.equal(_profile.nfts[1]?.tokenURI)
+
+    // get snsAccount struct
+    const snsAccounts_ = await profile.connect(alice).getSNSAccounts(1, 1)
+    expect(snsAccounts_[0]?.service).to.equal('twitter')
+    expect(snsAccounts_[0]?.userId).to.equal('hello')
+    expect(snsAccounts_[0]?.userPageURL).to.equal('https://hoge.com')
 
     // get profile token
     expect(await profile.connect(alice).balanceOf(alice.address)).to.be.equals(1)
@@ -126,6 +154,24 @@ describe('profile test', () => {
     // get profile struct
     const profile_ = await profile.connect(alice).getProfile(1)
     expect(profile_.nftCollectionPubId).to.equal(2)
+  })
+
+  it('createSNS()', async () => {
+    const _github: ISNSAccountModule.SNSAccountStructStruct = {
+      service: 'github',
+      userId: 'hello_world',
+      userPageURL: 'https://github.com/hello_world',
+      wallet: alice.address,
+    }
+    await expect(profile.connect(alice).createSNSAccount(1, _github)).to.emit(profile, 'SNSAccountCreated')
+
+    const aliceAccounts = await profile.connect(alice).getSNSAccounts(1, 1)
+    expect(aliceAccounts[1]?.service).to.equal('github')
+    expect(aliceAccounts[1]?.userId).to.equal('hello_world')
+    expect(aliceAccounts[1]?.userPageURL).to.equal('https://github.com/hello_world')
+
+    const retrievedProfile = await profile.connect(alice).getProfile(1)
+    expect(retrievedProfile.snsAccountsPubId).to.equal(1)
   })
 
   it('addWallet()', async () => {

@@ -6,3 +6,4 @@ export type { assetstore };
 export type { IIceCandy } from "./IIceCandy";
 export type { INFTCollectionModule } from "./INFTCollectionModule";
 export type { IProfile } from "./IProfile";
+export type { ISNSAccountModule } from "./ISNSAccountModule";

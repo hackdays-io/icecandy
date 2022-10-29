@@ -22,12 +22,13 @@ const ProfileNewPage: NextPage = () => {
     }
   }, [result])
 
-  const { handleSubmit, control, getValues, watch, formState } =
+  const { handleSubmit, control, getValues, watch, formState, setValue } =
     useForm<AppProfile.FormData>({
       defaultValues: {
         handle: '',
         imageURI: 'https://bit.ly/dan-abramov',
         nfts: [],
+        snsAccounts: [],
       },
     })
 
@@ -83,6 +84,7 @@ const ProfileNewPage: NextPage = () => {
               getValues,
               loading,
               formState,
+              setValue,
             }}
           />
         </GridItem>

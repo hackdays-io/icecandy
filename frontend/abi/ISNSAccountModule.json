@@ -1,0 +1,133 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "ISNSAccountModule",
+  "sourceName": "contracts/interface/ISNSAccountModule.sol",
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "id",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "publicSignature",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes32",
+          "name": "queryId",
+          "type": "bytes32"
+        }
+      ],
+      "name": "Query",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "profileId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "pubId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSNSAccounts",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "service",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "user_id",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "userPageURL",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "wallet",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct ISNSAccountModule.SNSAccountStruct[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "profileId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "pubId",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "service",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "user_id",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "userPageURL",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "wallet",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct ISNSAccountModule.SNSAccountStruct",
+          "name": "snsAccounts",
+          "type": "tuple"
+        }
+      ],
+      "name": "processSNSAccount",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}
