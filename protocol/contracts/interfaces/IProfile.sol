@@ -3,6 +3,7 @@ pragma solidity ^0.8.10;
 
 import {INFTCollectionModule} from "./INFTCollectionModule.sol";
 import {IScoreModule} from "./IScoreModule.sol";
+import {IMirrorModule} from "./IMirrorModule.sol";
 
 interface IProfile {
     struct ProfileStruct {
@@ -28,6 +29,8 @@ interface IProfile {
 
     function setScoreModule(address scoreModule) external;
 
+    function setMirrorModule(address mirrorModule) external;
+
     function createProfile(CreateProfileStructData calldata vars) external returns (uint256);
 
     function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) external;
@@ -35,6 +38,8 @@ interface IProfile {
     function createPOAPCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata poaps) external;
 
     function createScore(uint256 profileId) external;
+
+    function addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) external;
 
     function addWallet(uint256 profileId, address wallet) external;
 
@@ -46,11 +51,15 @@ interface IProfile {
 
     function getScore(uint256 profileId) external view returns (IScoreModule.ScoreStruct[] memory);
 
+    function getMirror(uint256 profileId) external view returns (IMirrorModule.MirrorStruct[] memory);
+
     event ProfileCreated(uint256 indexed profileId, address indexed owner, uint256 blockNumber);
 
     event NFTCollectionCreated(uint256 indexed profileId, address indexed module, uint256 blockNumber);
 
     event ScoreCreated(uint256 indexed profileId, uint256 blockNumber);
+
+    event MirrorCreated(uint256 indexed profileId, uint256 blockNumber);
 
     event WalletAdded(uint256 profileId, address wallet);
 }

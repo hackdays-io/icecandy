@@ -6,6 +6,7 @@ import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/
 import {IProfile} from "../interfaces/IProfile.sol";
 import {INFTCollectionModule} from "../interfaces/INFTCollectionModule.sol";
 import {IScoreModule} from "../interfaces/IScoreModule.sol";
+import {IMirrorModule} from "../interfaces/IMirrorModule.sol";
 import {IceCandy} from "./IceCandy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -16,6 +17,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     address internal _nftCollectionModule;
     address internal _poapCollectionModule;
     address internal _scoreModule;
+    address internal _mirrorModule;
 
     constructor(address owner) ERC721("Profile", "PROFILE") {
         _transferOwnership(owner);
@@ -40,6 +42,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     function setScoreModule(address scoreModule) external override onlyOwner {
         _scoreModule = scoreModule;
+    }
+
+    function setMirrorModule(address mirrorModule) external override onlyOwner {
+        _mirrorModule = mirrorModule;
     }
 
     function createProfile(CreateProfileStructData calldata vars) external override returns (uint256) {
@@ -68,6 +74,11 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     function createScore(uint256 profileId) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _createScore(profileId);
+    }
+
+    function addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) external override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _addMirror(profileId, mirror);
     }
 
     function addWallet(uint256 profileId, address wallet) external override {
@@ -103,6 +114,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         return _getScore(profileId);
     }
 
+    function getMirror(uint256 profileId) external view override returns (IMirrorModule.MirrorStruct[] memory) {
+        return _getMirror(profileId);
+    }
+
     function _createProfile(
         uint256 profileId,
         address owner,
@@ -136,6 +151,11 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         emit ScoreCreated(profileId, block.number);
     }
 
+    function _addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) internal {
+        IMirrorModule(_mirrorModule).processRegist(profileId, mirror);
+        emit MirrorCreated(profileId, block.number);
+    }
+
     function _getNFTCollection(uint256 profileId, address module)
         internal
         view
@@ -146,6 +166,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     function _getScore(uint256 profileId) internal view returns (IScoreModule.ScoreStruct[] memory) {
         return IScoreModule(_scoreModule).getScore(profileId);
+    }
+
+    function _getMirror(uint256 profileId) internal view returns (IMirrorModule.MirrorStruct[] memory) {
+        return IMirrorModule(_mirrorModule).getMirror(profileId);
     }
 
     function _baseURI() internal pure override returns (string memory) {
