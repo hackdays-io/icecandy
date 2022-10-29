@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "INFTCollectionModule",
-  "sourceName": "contracts/interface/INFTCollectionModule.sol",
+  "sourceName": "contracts/interfaces/INFTCollectionModule.sol",
   "abi": [
     {
       "inputs": [
@@ -9,14 +9,9 @@
           "internalType": "uint256",
           "name": "profileId",
           "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "pubId",
-          "type": "uint256"
         }
       ],
-      "name": "getNFTs",
+      "name": "getCollection",
       "outputs": [
         {
           "components": [
@@ -42,7 +37,7 @@
             },
             {
               "internalType": "address",
-              "name": "wallet",
+              "name": "owner",
               "type": "address"
             }
           ],
@@ -59,11 +54,6 @@
         {
           "internalType": "uint256",
           "name": "profileId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "pubId",
           "type": "uint256"
         },
         {
@@ -90,7 +80,7 @@
             },
             {
               "internalType": "address",
-              "name": "wallet",
+              "name": "owner",
               "type": "address"
             }
           ],

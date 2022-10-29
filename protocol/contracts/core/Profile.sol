@@ -7,7 +7,13 @@ import {IProfile} from "../interfaces/IProfile.sol";
 import {INFTCollectionModule} from "../interfaces/INFTCollectionModule.sol";
 import {IScoreModule} from "../interfaces/IScoreModule.sol";
 import {IMirrorModule} from "../interfaces/IMirrorModule.sol";
+<<<<<<< HEAD
 import {IColorExtension} from "../interfaces/IColorExtension.sol";
+=======
+import {ISNSAccountModule} from "../interfaces/ISNSAccountModule.sol";
+import {NFTCollectionModule} from "./modules/NFTCollectionModule.sol";
+import {SNSAccountModule} from "./modules/SNSAccountModule.sol";
+>>>>>>> ccbd1c88c6830916bb5b4a9a95712c2812a66bd5
 import {IceCandy} from "./IceCandy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -16,6 +22,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     uint256 internal _profileCounter;
     address internal _icecandy;
     address internal _nftCollectionModule;
+    address internal _snsAccountModule;
     address internal _poapCollectionModule;
     address internal _scoreModule;
     address internal _mirrorModule;
@@ -36,6 +43,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     function setNFTCollectionModule(address nftCollectionModule) external override onlyOwner {
         _nftCollectionModule = nftCollectionModule;
+    }
+
+    function setSNSAccountModule(address snsAccountModule) external override onlyOwner {
+        _snsAccountModule = snsAccountModule;
     }
 
     function setPOAPCollectionModule(address poapCollectionModule) external override onlyOwner {
@@ -60,6 +71,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _createProfile(profileId, msg.sender, vars.name, vars.introduction, vars.imageURI);
         _createNFTCollection(profileId, _nftCollectionModule, vars.nfts);
         _createNFTCollection(profileId, _poapCollectionModule, vars.poaps);
+        _createSNSAccount(profileId, vars.snsAccounts);
 
         return profileId;
     }
@@ -100,6 +112,11 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     function deactivateColor(uint256 profileId, uint256 extensionId) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _deactivateColor(profileId, extensionId);
+    }
+    
+    function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) public override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _createSNSAccount(profileId, snsAccounts);
     }
 
     function addWallet(uint256 profileId, address wallet) external override {
@@ -159,7 +176,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _profile[profileId].introduction = introduction;
         _profile[profileId].imageURI = imageURI;
 
-        emit ProfileCreated(profileId, owner, block.number);
+        emit ProfileCreated(owner, profileId, block.number);
     }
 
     function _createNFTCollection(
@@ -196,6 +213,11 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         emit ColorDeactivated(profileId, extensionId, block.number);
     }
 
+    function _createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) internal {
+        ISNSAccountModule(_snsAccountModule).processSNSAccount(profileId, snsAccounts);
+        emit SNSAccountCreated(profileId, block.number);
+    }
+
     function _getNFTCollection(uint256 profileId, address module)
         internal
         view
@@ -212,8 +234,13 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         return IMirrorModule(_mirrorModule).getMirror(profileId);
     }
 
+<<<<<<< HEAD
     function _getColor(uint256 profileId) internal view returns (IColorExtension.ColorStruct[] memory) {
         return IColorExtension(_colorExtension).getColor(profileId);
+=======
+    function getSNSAccounts(uint256 profileId) external view override returns (ISNSAccountModule.SNSAccountStruct[] memory) {
+        return SNSAccountModule(_snsAccountModule).getSNSAccounts(profileId);
+>>>>>>> ccbd1c88c6830916bb5b4a9a95712c2812a66bd5
     }
 
     function _baseURI() internal pure override returns (string memory) {

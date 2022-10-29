@@ -3,4 +3,4 @@
 /* eslint-disable */
 export * as assetstore from "./assetstore";
 export * as core from "./core";
-export * as interface from "./interface";
+export * as interfaces from "./interfaces";

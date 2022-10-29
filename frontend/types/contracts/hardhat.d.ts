@@ -69,13 +69,33 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IceCandyAssetStoreRegistory__factory>;
     getContractFactory(
+      name: "NFTCollectionModuleBase",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.NFTCollectionModuleBase__factory>;
+    getContractFactory(
       name: "IceCandy",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IceCandy__factory>;
     getContractFactory(
+      name: "MirrorModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.MirrorModule__factory>;
+    getContractFactory(
       name: "NFTCollectionModule",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.NFTCollectionModule__factory>;
+    getContractFactory(
+      name: "POAPCollectionModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.POAPCollectionModule__factory>;
+    getContractFactory(
+      name: "ScoreModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ScoreModule__factory>;
+    getContractFactory(
+      name: "SNSAccountModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.SNSAccountModule__factory>;
     getContractFactory(
       name: "Profile",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -89,6 +109,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IIceCandy__factory>;
     getContractFactory(
+      name: "IMirrorModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IMirrorModule__factory>;
+    getContractFactory(
       name: "INFTCollectionModule",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.INFTCollectionModule__factory>;
@@ -96,6 +120,14 @@ declare module "hardhat/types/runtime" {
       name: "IProfile",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IProfile__factory>;
+    getContractFactory(
+      name: "IScoreModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IScoreModule__factory>;
+    getContractFactory(
+      name: "ISNSAccountModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ISNSAccountModule__factory>;
 
     getContractAt(
       name: "Ownable",
@@ -168,15 +200,40 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IceCandyAssetStoreRegistory>;
     getContractAt(
+      name: "NFTCollectionModuleBase",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.NFTCollectionModuleBase>;
+    getContractAt(
       name: "IceCandy",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IceCandy>;
     getContractAt(
+      name: "MirrorModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.MirrorModule>;
+    getContractAt(
       name: "NFTCollectionModule",
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.NFTCollectionModule>;
+    getContractAt(
+      name: "POAPCollectionModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.POAPCollectionModule>;
+    getContractAt(
+      name: "ScoreModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ScoreModule>;
+    getContractAt(
+      name: "SNSAccountModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.SNSAccountModule>;
     getContractAt(
       name: "Profile",
       address: string,
@@ -193,6 +250,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IIceCandy>;
     getContractAt(
+      name: "IMirrorModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IMirrorModule>;
+    getContractAt(
       name: "INFTCollectionModule",
       address: string,
       signer?: ethers.Signer
@@ -202,6 +264,16 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IProfile>;
+    getContractAt(
+      name: "IScoreModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IScoreModule>;
+    getContractAt(
+      name: "ISNSAccountModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ISNSAccountModule>;
 
     // default types
     getContractFactory(

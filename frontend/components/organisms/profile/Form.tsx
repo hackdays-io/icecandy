@@ -14,16 +14,26 @@ import {
   TabPanels,
   Tabs,
   Text,
+  Textarea,
   useDisclosure,
 } from '@chakra-ui/react'
+import { useAddress } from '@thirdweb-dev/react'
 import { ChainId } from '@thirdweb-dev/sdk'
 import { OwnedNft } from 'alchemy-sdk'
 import { find } from 'lodash'
-import { FC, FormEventHandler } from 'react'
-import { Control, Controller, FormState, UseFormWatch } from 'react-hook-form'
+import { FC, FormEventHandler, useCallback } from 'react'
+import {
+  Control,
+  Controller,
+  FormState,
+  UseFormSetValue,
+  UseFormWatch,
+} from 'react-hook-form'
 import { useHoldingNFTs } from '../../../hooks/useToken'
+import { ISNSAccountModule } from '../../../types/contracts'
 import { AppProfile } from '../../../types/profile'
 import ModalBase from '../../atoms/ModalBase'
+import AuthTwitter from '../../atoms/profile/AuthTwitter'
 import PFP from '../../atoms/profile/PFP'
 import NFTCard from '../../atoms/tokens/NFTCard'
 
@@ -34,6 +44,7 @@ type Props = {
   getValues: () => AppProfile.FormData
   loading: boolean
   formState: FormState<AppProfile.FormData>
+  setValue: UseFormSetValue<AppProfile.FormData>
 }
 
 const ProfileForm: FC<Props> = ({
@@ -42,13 +53,12 @@ const ProfileForm: FC<Props> = ({
   control,
   getValues,
   loading,
-  formState,
+  setValue,
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
   const { holdingNFTsOnEth, holdingNFTsOnPolygon, holdingNFTsOnArb } =
     useHoldingNFTs()
-
-  console.log(holdingNFTsOnPolygon?.ownedNfts)
+  const address = useAddress()
 
   const handleCheck = (index: number, chain: ChainId) => {
     const { nfts } = getValues()
@@ -86,11 +96,25 @@ const ProfileForm: FC<Props> = ({
     )
   }
 
+  const setSNSAccount = useCallback(
+    (params: ISNSAccountModule.SNSAccountStructStruct) => {
+      const { snsAccounts } = getValues()
+      snsAccounts.push(params)
+      setValue('snsAccounts', snsAccounts)
+    },
+    [address]
+  )
+
   return (
     <form onSubmit={onSubmit}>
       <Box mb={2}>
         <PFP imgURI={watch('imageURI')} />
       </Box>
+
+      <Box my={4}>
+        <AuthTwitter setAccountData={setSNSAccount} />
+      </Box>
+
       <Box mb={5}>
         <Text>ハンドル名</Text>
         <Controller
@@ -98,7 +122,18 @@ const ProfileForm: FC<Props> = ({
             <Input value={field.value} onChange={field.onChange} />
           )}
           control={control}
-          name="handle"
+          name="name"
+        />
+      </Box>
+
+      <Box mb={5}>
+        <Text>BIO</Text>
+        <Controller
+          render={({ field }) => (
+            <Textarea rows={3} value={field.value} onChange={field.onChange} />
+          )}
+          control={control}
+          name="introduction"
         />
       </Box>
 
@@ -107,7 +142,7 @@ const ProfileForm: FC<Props> = ({
           NFTコレクション
         </Heading>
 
-        <Box mb={5}>
+        {/* <Box mb={5}>
           <Text mb={2}>コレクション名</Text>
           <Controller
             render={({ field }) => (
@@ -117,9 +152,9 @@ const ProfileForm: FC<Props> = ({
               />
             )}
             control={control}
-            name="handle"
+            name="name"
           />
-        </Box>
+        </Box> */}
 
         <ModalBase isOpen={isOpen} onClose={onClose} maxWidth="600">
           <Tabs variant="soft-rounded" colorScheme="blue">
