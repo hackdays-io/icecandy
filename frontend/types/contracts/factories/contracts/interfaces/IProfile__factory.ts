@@ -7,7 +7,7 @@ import type { Provider } from "@ethersproject/providers";
 import type {
   IProfile,
   IProfileInterface,
-} from "../../../contracts/interface/IProfile";
+} from "../../../contracts/interfaces/IProfile";
 
 const _abi = [
   {
@@ -20,43 +20,29 @@ const _abi = [
         type: "uint256",
       },
       {
+        indexed: false,
+        internalType: "uint256",
+        name: "blockNumber",
+        type: "uint256",
+      },
+    ],
+    name: "MirrorCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: true,
         internalType: "uint256",
-        name: "pubId",
+        name: "profileId",
         type: "uint256",
       },
       {
-        components: [
-          {
-            internalType: "uint256",
-            name: "chainId",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "contractAddress",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-          {
-            internalType: "string",
-            name: "tokenURI",
-            type: "string",
-          },
-          {
-            internalType: "address",
-            name: "wallet",
-            type: "address",
-          },
-        ],
-        indexed: false,
-        internalType: "struct INFTCollectionModule.NFTStruct[]",
-        name: "nfts",
-        type: "tuple[]",
+        indexed: true,
+        internalType: "address",
+        name: "module",
+        type: "address",
       },
       {
         indexed: false,
@@ -74,7 +60,7 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
-        name: "wallet",
+        name: "owner",
         type: "address",
       },
       {
@@ -82,18 +68,6 @@ const _abi = [
         internalType: "uint256",
         name: "profileId",
         type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "handle",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "imageURI",
-        type: "string",
       },
       {
         indexed: false,
@@ -115,38 +89,23 @@ const _abi = [
         type: "uint256",
       },
       {
-        indexed: true,
+        indexed: false,
         internalType: "uint256",
-        name: "pubId",
+        name: "blockNumber",
         type: "uint256",
       },
+    ],
+    name: "SNSAccountCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
       {
-        components: [
-          {
-            internalType: "string",
-            name: "service",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "userId",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "userPageURL",
-            type: "string",
-          },
-          {
-            internalType: "address",
-            name: "wallet",
-            type: "address",
-          },
-        ],
-        indexed: false,
-        internalType: "struct ISNSAccountModule.SNSAccountStruct",
-        name: "sns",
-        type: "tuple",
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
       },
       {
         indexed: false,
@@ -155,7 +114,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "SNSAccountCreated",
+    name: "ScoreCreated",
     type: "event",
   },
   {
@@ -176,6 +135,31 @@ const _abi = [
     ],
     name: "WalletAdded",
     type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "hoge",
+            type: "string",
+          },
+        ],
+        internalType: "struct IMirrorModule.MirrorStruct",
+        name: "mirror",
+        type: "tuple",
+      },
+    ],
+    name: "addMirror",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
@@ -226,7 +210,7 @@ const _abi = [
           },
           {
             internalType: "address",
-            name: "wallet",
+            name: "owner",
             type: "address",
           },
         ],
@@ -243,10 +227,60 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "chainId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "contractAddress",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "tokenURI",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+        ],
+        internalType: "struct INFTCollectionModule.NFTStruct[]",
+        name: "poaps",
+        type: "tuple[]",
+      },
+    ],
+    name: "createPOAPCollection",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         components: [
           {
             internalType: "string",
-            name: "handle",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "introduction",
             type: "string",
           },
           {
@@ -278,12 +312,44 @@ const _abi = [
               },
               {
                 internalType: "address",
-                name: "wallet",
+                name: "owner",
                 type: "address",
               },
             ],
             internalType: "struct INFTCollectionModule.NFTStruct[]",
             name: "nfts",
+            type: "tuple[]",
+          },
+          {
+            components: [
+              {
+                internalType: "uint256",
+                name: "chainId",
+                type: "uint256",
+              },
+              {
+                internalType: "address",
+                name: "contractAddress",
+                type: "address",
+              },
+              {
+                internalType: "uint256",
+                name: "tokenId",
+                type: "uint256",
+              },
+              {
+                internalType: "string",
+                name: "tokenURI",
+                type: "string",
+              },
+              {
+                internalType: "address",
+                name: "owner",
+                type: "address",
+              },
+            ],
+            internalType: "struct INFTCollectionModule.NFTStruct[]",
+            name: "poaps",
             type: "tuple[]",
           },
           {
@@ -360,9 +426,9 @@ const _abi = [
             type: "address",
           },
         ],
-        internalType: "struct ISNSAccountModule.SNSAccountStruct",
-        name: "sns",
-        type: "tuple",
+        internalType: "struct ISNSAccountModule.SNSAccountStruct[]",
+        name: "snsAccounts",
+        type: "tuple[]",
       },
     ],
     name: "createSNSAccount",
@@ -377,9 +443,43 @@ const _abi = [
         name: "profileId",
         type: "uint256",
       },
+    ],
+    name: "createScore",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
       {
         internalType: "uint256",
-        name: "nftCollectionPubId",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getMirror",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "hoge",
+            type: "string",
+          },
+        ],
+        internalType: "struct IMirrorModule.MirrorStruct[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
         type: "uint256",
       },
     ],
@@ -409,7 +509,53 @@ const _abi = [
           },
           {
             internalType: "address",
-            name: "wallet",
+            name: "owner",
+            type: "address",
+          },
+        ],
+        internalType: "struct INFTCollectionModule.NFTStruct[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getPOAPCollection",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "chainId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "contractAddress",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "tokenURI",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "owner",
             type: "address",
           },
         ],
@@ -440,18 +586,18 @@ const _abi = [
           },
           {
             internalType: "string",
-            name: "handle",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "introduction",
             type: "string",
           },
           {
             internalType: "string",
             name: "imageURI",
             type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "nftCollectionPubId",
-            type: "uint256",
           },
           {
             internalType: "uint256",
@@ -472,11 +618,6 @@ const _abi = [
       {
         internalType: "uint256",
         name: "profileId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "snsPubId",
         type: "uint256",
       },
     ],
@@ -516,6 +657,37 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getScore",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "uint256",
+            name: "point",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct IScoreModule.ScoreStruct[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "icecandy",
         type: "address",
@@ -530,11 +702,63 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
+        name: "mirrorModule",
+        type: "address",
+      },
+    ],
+    name: "setMirrorModule",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
         name: "nftCollectionModule",
         type: "address",
       },
     ],
     name: "setNFTCollectionModule",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "poapCollectionModule",
+        type: "address",
+      },
+    ],
+    name: "setPOAPCollectionModule",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "snsAccountModule",
+        type: "address",
+      },
+    ],
+    name: "setSNSAccountModule",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "scoreModule",
+        type: "address",
+      },
+    ],
+    name: "setScoreModule",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

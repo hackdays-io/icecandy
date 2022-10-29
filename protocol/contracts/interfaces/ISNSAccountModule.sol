@@ -11,11 +11,8 @@ interface ISNSAccountModule {
 
     function processSNSAccount(
         uint256 profileId,
-        uint256 pubId,
-        SNSAccountStruct calldata snsAccounts
+        SNSAccountStruct[] calldata snsAccounts
     ) external;
 
-    function getSNSAccounts(uint256 profileId, uint256 pubId) external view returns (SNSAccountStruct[] memory);
-
-    event Query(string id, string publicSignature, address account, bytes32 queryId);
+    function getSNSAccounts(uint256 profileId) external view returns (SNSAccountStruct[] memory);
 }

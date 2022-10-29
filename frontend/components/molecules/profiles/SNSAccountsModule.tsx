@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Link, Text } from '@chakra-ui/react'
+import { Box, Button, Link } from '@chakra-ui/react'
 import { FC } from 'react'
 import { ISNSAccountModule } from '../../../types/contracts'
 
@@ -33,12 +33,14 @@ const ProfileSNSAccountsModule: FC<Props> = ({ snsAccounts }) => {
     }
   }
 
-  return (
+  return snsAccounts?.length ? (
     <Box p={5} borderRadius={10} mt={4} mb={10}>
-      {snsAccounts?.map((account) => (
-        <SNSPageButton {...account} />
+      {snsAccounts?.map((account, index) => (
+        <SNSPageButton {...account} key={index} />
       ))}
     </Box>
+  ) : (
+    <></>
   )
 }
 

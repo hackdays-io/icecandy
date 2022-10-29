@@ -18,6 +18,11 @@ async function main() {
   const nftModule = await fNFTModule.deploy(profile.address)
   console.log('NFTCollectionModule address:', nftModule.address)
 
+  // POAPCollectionModule
+  const fPOAPModule = await ethers.getContractFactory('POAPCollectionModule')
+  const poapModule = await fPOAPModule.deploy(profile.address)
+  console.log('POAPCollectionModule address:', poapModule.address)
+
   // SNSAccountModule
   const fSNSAccount = await ethers.getContractFactory('SNSAccountModule')
   const snsAccountModule = await fSNSAccount.deploy(profile.address)
@@ -28,11 +33,27 @@ async function main() {
   const icecandy = await fIceCandy.deploy(deployer.address)
   console.log('IceCandy address:', icecandy.address)
 
+  // Score
+  const fScore = await ethers.getContractFactory('ScoreModule')
+  const score = await fScore.deploy(deployer.address)
+
+  //Mirror
+  const fMirror = await ethers.getContractFactory('MirrorModule')
+  const mirror = await fMirror.deploy(deployer.address)
+
   // setup
   await profile.setNFTCollectionModule(nftModule.address)
+  await profile.setPOAPCollectionModule(poapModule.address)
   await profile.setSNSAccountModule(snsAccountModule.address)
   await profile.setIceCandy(icecandy.address)
+  await profile.setScoreModule(score.address)
+  await profile.setMirrorModule(mirror.address)
+
+  await score.setProfile(profile.address)
+  await score.setNFTCollectionModule(nftModule.address)
+  await score.setPOAPCollectionModule(poapModule.address)
   await icecandy.setProfile(profile.address)
+  await mirror.setProfile(profile.address)
 }
 
 main()

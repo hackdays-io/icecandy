@@ -34,11 +34,13 @@ interface IProfile {
 
     function setMirrorModule(address mirrorModule) external;
 
+    function setSNSAccountModule(address snsAccountModule) external;
+
     function createProfile(CreateProfileStructData calldata vars) external returns (uint256);
 
     function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) external;
 
-    function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct calldata sns) external;
+    function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) external;
 
     function createPOAPCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata poaps) external;
 
@@ -52,7 +54,7 @@ interface IProfile {
 
     function getNFTCollection(uint256 profileId) external view returns (INFTCollectionModule.NFTStruct[] memory);
 
-    function getSNSAccounts(uint256 profileId, uint256 snsPubId) external view returns (ISNSAccountModule.SNSAccountStruct[] memory);
+    function getSNSAccounts(uint256 profileId) external view returns (ISNSAccountModule.SNSAccountStruct[] memory);
 
     function getPOAPCollection(uint256 profileId) external view returns (INFTCollectionModule.NFTStruct[] memory);
 
@@ -60,7 +62,7 @@ interface IProfile {
 
     function getMirror(uint256 profileId) external view returns (IMirrorModule.MirrorStruct[] memory);
 
-    event ProfileCreated(uint256 indexed profileId, address indexed owner, uint256 blockNumber);
+    event ProfileCreated(address indexed owner, uint256 profileId, uint256 blockNumber);
 
     event NFTCollectionCreated(uint256 indexed profileId, address indexed module, uint256 blockNumber);
 

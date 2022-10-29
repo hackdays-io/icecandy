@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "IIceCandy",
-  "sourceName": "contracts/interface/IIceCandy.sol",
+  "sourceName": "contracts/interfaces/IIceCandy.sol",
   "abi": [
     {
       "anonymous": false,

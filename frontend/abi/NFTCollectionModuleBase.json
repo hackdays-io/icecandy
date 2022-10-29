@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
-  "contractName": "ISNSAccountModule",
-  "sourceName": "contracts/interfaces/ISNSAccountModule.sol",
+  "contractName": "NFTCollectionModuleBase",
+  "sourceName": "contracts/core/bases/NFTCollectionModuleBase.sol",
   "abi": [
     {
       "inputs": [
@@ -11,32 +11,37 @@
           "type": "uint256"
         }
       ],
-      "name": "getSNSAccounts",
+      "name": "getCollection",
       "outputs": [
         {
           "components": [
             {
-              "internalType": "string",
-              "name": "service",
-              "type": "string"
+              "internalType": "uint256",
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "contractAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
             },
             {
               "internalType": "string",
-              "name": "userId",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "userPageURL",
+              "name": "tokenURI",
               "type": "string"
             },
             {
               "internalType": "address",
-              "name": "wallet",
+              "name": "owner",
               "type": "address"
             }
           ],
-          "internalType": "struct ISNSAccountModule.SNSAccountStruct[]",
+          "internalType": "struct INFTCollectionModule.NFTStruct[]",
           "name": "",
           "type": "tuple[]"
         }
@@ -54,32 +59,37 @@
         {
           "components": [
             {
-              "internalType": "string",
-              "name": "service",
-              "type": "string"
+              "internalType": "uint256",
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "contractAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
             },
             {
               "internalType": "string",
-              "name": "userId",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "userPageURL",
+              "name": "tokenURI",
               "type": "string"
             },
             {
               "internalType": "address",
-              "name": "wallet",
+              "name": "owner",
               "type": "address"
             }
           ],
-          "internalType": "struct ISNSAccountModule.SNSAccountStruct[]",
-          "name": "snsAccounts",
+          "internalType": "struct INFTCollectionModule.NFTStruct[]",
+          "name": "nfts",
           "type": "tuple[]"
         }
       ],
-      "name": "processSNSAccount",
+      "name": "processCollect",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

@@ -18,7 +18,7 @@ const ProfilePage: NextPage = () => {
       ) : (
         <Container>
           <ProfileMain
-            handle={profile?.handle}
+            name={profile?.name}
             pfpURI={profile?.imageURI}
             modules={[
               { type: 'snsAccounts', data: snsAccounts },

@@ -10,10 +10,7 @@ import ProfileForm from '../../components/organisms/profile/Form'
 import ProfileMain from '../../components/organisms/profile/Main'
 import { useCreateProfileNFT } from '../../hooks/useProfileContract'
 import { useHoldingNFTs } from '../../hooks/useToken'
-import {
-  INFTCollectionModule,
-  NFTCollectionModule,
-} from '../../types/contracts'
+import { INFTCollectionModule } from '../../types/contracts'
 import { AppProfile } from '../../types/profile'
 
 const ProfileNewPage: NextPage = () => {
@@ -22,6 +19,7 @@ const ProfileNewPage: NextPage = () => {
   const address = useAddress()
 
   useEffect(() => {
+    console.log(result, 'result')
     if (result) {
       router.push(`/profile/${result.profileId.toNumber()}`)
     }
@@ -30,7 +28,8 @@ const ProfileNewPage: NextPage = () => {
   const { handleSubmit, control, getValues, watch, formState, setValue } =
     useForm<AppProfile.FormData>({
       defaultValues: {
-        handle: '',
+        name: '',
+        introduction: '',
         imageURI: 'https://bit.ly/dan-abramov',
         nfts: [],
         snsAccounts: [],
@@ -61,7 +60,7 @@ const ProfileNewPage: NextPage = () => {
           contractAddress: String(nft?.contract.address),
           tokenId: Number(nft?.tokenId),
           tokenURI: JSON.stringify(nft?.rawMetadata),
-          wallet: address || '',
+          owner: address || '',
         }
       }
     )
@@ -70,9 +69,9 @@ const ProfileNewPage: NextPage = () => {
   }
 
   const execute = async (data: AppProfile.FormData) => {
-    console.log(data)
     await mintProfileNFT(
-      data.handle,
+      data.name,
+      data.introduction,
       data.imageURI,
       parseNFTsForm2Contract(data.nfts),
       data.snsAccounts
@@ -97,7 +96,8 @@ const ProfileNewPage: NextPage = () => {
         </GridItem>
         <GridItem ml={5} p={8} border="1px solid grey" borderRadius={10}>
           <ProfileMain
-            handle={watch('handle')}
+            name={watch('name')}
+            introduction={watch('introduction')}
             pfpURI={watch('imageURI')}
             modules={[
               {

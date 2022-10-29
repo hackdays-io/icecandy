@@ -3,6 +3,8 @@
 /* eslint-disable */
 export * as assetstore from "./assetstore";
 export { IIceCandy__factory } from "./IIceCandy__factory";
+export { IMirrorModule__factory } from "./IMirrorModule__factory";
 export { INFTCollectionModule__factory } from "./INFTCollectionModule__factory";
 export { IProfile__factory } from "./IProfile__factory";
 export { ISNSAccountModule__factory } from "./ISNSAccountModule__factory";
+export { IScoreModule__factory } from "./IScoreModule__factory";

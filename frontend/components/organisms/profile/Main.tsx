@@ -1,4 +1,4 @@
-import { Box, Heading } from '@chakra-ui/react'
+import { Box, Heading, Text } from '@chakra-ui/react'
 import { FC } from 'react'
 import { AppProfile } from '../../../types/profile'
 import PFP from '../../atoms/profile/PFP'
@@ -7,28 +7,32 @@ import ProfileSNSAccountsModule from '../../molecules/profiles/SNSAccountsModule
 
 type Props = {
   pfpURI?: string
-  handle?: string
+  name?: string
+  introduction?: string
   modules: [
     AppProfile.Module<'snsAccounts'>,
     AppProfile.Module<'nftCollection'>
   ]
 }
 
-const ProfileMain: FC<Props> = ({ pfpURI, handle, modules }) => {
+const ProfileMain: FC<Props> = ({ pfpURI, name, introduction, modules }) => {
   return (
     <Box>
       <Box textAlign="center" mb={3}>
         <PFP imgURI={pfpURI} />
       </Box>
-      <Heading fontSize="24px" textAlign="center">
-        {handle}
+      <Heading fontSize="24px" textAlign="center" mb={3}>
+        {name}
       </Heading>
-      {modules.map((module) => {
+      <Text mb={4}>{introduction}</Text>
+      {modules.map((module, index) => {
         switch (module.type) {
           case 'nftCollection':
-            return <ProfileNFTCollectionModule nfts={module.data} />
+            return <ProfileNFTCollectionModule nfts={module.data} key={index} />
           case 'snsAccounts':
-            return <ProfileSNSAccountsModule snsAccounts={module.data} />
+            return (
+              <ProfileSNSAccountsModule snsAccounts={module.data} key={index} />
+            )
           default:
             return <></>
         }

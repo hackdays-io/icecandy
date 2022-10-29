@@ -1,6 +1,6 @@
 import { Box, Grid, Text } from '@chakra-ui/react'
 import { FC } from 'react'
-import { INFTCollectionModule } from '../../../types/contracts/contracts/core/NFTCollectionModule'
+import { INFTCollectionModule } from '../../../types/contracts'
 import NFTImage from '../../atoms/NFTImage'
 
 type Props = {

@@ -4,7 +4,8 @@ import { ISNSAccountModule } from './contracts/contracts/core/Profile'
 
 export namespace AppProfile {
   export type FormData = {
-    handle: string
+    name: string
+    introduction: string
     imageURI: string
     nfts: { chain: ChainId; index: number }[]
     snsAccounts: ISNSAccountModule.SNSAccountStructStruct[]

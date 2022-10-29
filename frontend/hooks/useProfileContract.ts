@@ -7,7 +7,7 @@ import {
 } from '../types/contracts'
 import { TypedListener } from '../types/contracts/common'
 import { ProfileCreatedEvent } from '../types/contracts/contracts/core/Profile'
-import { ProfileCreatedEventObject } from '../types/contracts/contracts/interface/IProfile'
+import { ProfileCreatedEventObject } from '../types/contracts/contracts/interfaces/IProfile'
 import { useProfileNFTContractClient } from './useContractClient'
 
 export const useCreateProfileNFT = () => {
@@ -23,15 +23,13 @@ export const useCreateProfileNFT = () => {
 
   useEffect(() => {
     const transitionCreatedProfilePage: TypedListener<ProfileCreatedEvent> = (
-      wallet,
+      owner,
       profileId,
-      handle,
-      imageURI,
       blockNumber
     ) => {
       if (success.current) {
         setLoading(false)
-        setResult({ wallet, profileId, handle, imageURI, blockNumber })
+        setResult({ owner, profileId, blockNumber })
       }
     }
 
@@ -42,7 +40,8 @@ export const useCreateProfileNFT = () => {
   }, [profileNFTContract, address])
 
   const mintProfileNFT = async (
-    handle: string,
+    name: string,
+    introduction: string,
     imageURI: string,
     nfts: INFTCollectionModule.NFTStructStruct[],
     snsAccounts: ISNSAccountModule.SNSAccountStructStruct[]
@@ -55,9 +54,11 @@ export const useCreateProfileNFT = () => {
       }
       setLoading(true)
       await profileNFTContract.createProfile({
-        handle,
+        name,
+        introduction,
         imageURI,
         nfts,
+        poaps: [],
         snsAccounts,
       })
       success.current = true
@@ -90,13 +91,11 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
           const profile = await profileNFTContract.getProfile(Number(tokenId))
           setProfile(profile)
           const nftCollection = await profileNFTContract.getNFTCollection(
-            Number(tokenId),
-            1
+            Number(tokenId)
           )
           setNFTCollection(nftCollection)
           const snsAccounts = await profileNFTContract.getSNSAccounts(
-            Number(tokenId),
-            1
+            Number(tokenId)
           )
           setSNSAccounts(snsAccounts)
           setLoading(false)

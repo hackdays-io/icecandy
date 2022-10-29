@@ -7,50 +7,14 @@ import type { Provider } from "@ethersproject/providers";
 import type {
   ISNSAccountModule,
   ISNSAccountModuleInterface,
-} from "../../../contracts/interface/ISNSAccountModule";
+} from "../../../contracts/interfaces/ISNSAccountModule";
 
 const _abi = [
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: false,
-        internalType: "string",
-        name: "id",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "string",
-        name: "publicSignature",
-        type: "string",
-      },
-      {
-        indexed: false,
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "bytes32",
-        name: "queryId",
-        type: "bytes32",
-      },
-    ],
-    name: "Query",
-    type: "event",
-  },
   {
     inputs: [
       {
         internalType: "uint256",
         name: "profileId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "pubId",
         type: "uint256",
       },
     ],
@@ -95,11 +59,6 @@ const _abi = [
         type: "uint256",
       },
       {
-        internalType: "uint256",
-        name: "pubId",
-        type: "uint256",
-      },
-      {
         components: [
           {
             internalType: "string",
@@ -122,9 +81,9 @@ const _abi = [
             type: "address",
           },
         ],
-        internalType: "struct ISNSAccountModule.SNSAccountStruct",
+        internalType: "struct ISNSAccountModule.SNSAccountStruct[]",
         name: "snsAccounts",
-        type: "tuple",
+        type: "tuple[]",
       },
     ],
     name: "processSNSAccount",

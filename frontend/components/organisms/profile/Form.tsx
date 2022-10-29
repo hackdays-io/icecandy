@@ -14,6 +14,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  Textarea,
   useDisclosure,
 } from '@chakra-ui/react'
 import { useAddress } from '@thirdweb-dev/react'
@@ -121,7 +122,18 @@ const ProfileForm: FC<Props> = ({
             <Input value={field.value} onChange={field.onChange} />
           )}
           control={control}
-          name="handle"
+          name="name"
+        />
+      </Box>
+
+      <Box mb={5}>
+        <Text>BIO</Text>
+        <Controller
+          render={({ field }) => (
+            <Textarea rows={3} value={field.value} onChange={field.onChange} />
+          )}
+          control={control}
+          name="introduction"
         />
       </Box>
 
@@ -130,7 +142,7 @@ const ProfileForm: FC<Props> = ({
           NFTコレクション
         </Heading>
 
-        <Box mb={5}>
+        {/* <Box mb={5}>
           <Text mb={2}>コレクション名</Text>
           <Controller
             render={({ field }) => (
@@ -140,9 +152,9 @@ const ProfileForm: FC<Props> = ({
               />
             )}
             control={control}
-            name="handle"
+            name="name"
           />
-        </Box>
+        </Box> */}
 
         <ModalBase isOpen={isOpen} onClose={onClose} maxWidth="600">
           <Tabs variant="soft-rounded" colorScheme="blue">

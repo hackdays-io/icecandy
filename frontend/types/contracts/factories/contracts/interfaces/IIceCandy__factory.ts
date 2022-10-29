@@ -7,7 +7,7 @@ import type { Provider } from "@ethersproject/providers";
 import type {
   IIceCandy,
   IIceCandyInterface,
-} from "../../../contracts/interface/IIceCandy";
+} from "../../../contracts/interfaces/IIceCandy";
 
 const _abi = [
   {

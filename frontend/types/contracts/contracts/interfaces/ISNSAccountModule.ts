@@ -13,11 +13,7 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type {
-  FunctionFragment,
-  Result,
-  EventFragment,
-} from "@ethersproject/abi";
+import type { FunctionFragment, Result } from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -45,8 +41,8 @@ export declare namespace ISNSAccountModule {
 
 export interface ISNSAccountModuleInterface extends utils.Interface {
   functions: {
-    "getSNSAccounts(uint256,uint256)": FunctionFragment;
-    "processSNSAccount(uint256,uint256,(string,string,string,address))": FunctionFragment;
+    "getSNSAccounts(uint256)": FunctionFragment;
+    "processSNSAccount(uint256,(string,string,string,address)[])": FunctionFragment;
   };
 
   getFunction(
@@ -55,14 +51,13 @@ export interface ISNSAccountModuleInterface extends utils.Interface {
 
   encodeFunctionData(
     functionFragment: "getSNSAccounts",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "processSNSAccount",
     values: [
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      ISNSAccountModule.SNSAccountStructStruct
+      ISNSAccountModule.SNSAccountStructStruct[]
     ]
   ): string;
 
@@ -75,25 +70,8 @@ export interface ISNSAccountModuleInterface extends utils.Interface {
     data: BytesLike
   ): Result;
 
-  events: {
-    "Query(string,string,address,bytes32)": EventFragment;
-  };
-
-  getEvent(nameOrSignatureOrTopic: "Query"): EventFragment;
+  events: {};
 }
-
-export interface QueryEventObject {
-  id: string;
-  publicSignature: string;
-  account: string;
-  queryId: string;
-}
-export type QueryEvent = TypedEvent<
-  [string, string, string, string],
-  QueryEventObject
->;
-
-export type QueryEventFilter = TypedEventFilter<QueryEvent>;
 
 export interface ISNSAccountModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -124,72 +102,51 @@ export interface ISNSAccountModule extends BaseContract {
   functions: {
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[ISNSAccountModule.SNSAccountStructStructOutput[]]>;
 
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct,
+      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
   getSNSAccounts(
     profileId: PromiseOrValue<BigNumberish>,
-    pubId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
 
   processSNSAccount(
     profileId: PromiseOrValue<BigNumberish>,
-    pubId: PromiseOrValue<BigNumberish>,
-    snsAccounts: ISNSAccountModule.SNSAccountStructStruct,
+    snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
 
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct,
+      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
-  filters: {
-    "Query(string,string,address,bytes32)"(
-      id?: null,
-      publicSignature?: null,
-      account?: null,
-      queryId?: null
-    ): QueryEventFilter;
-    Query(
-      id?: null,
-      publicSignature?: null,
-      account?: null,
-      queryId?: null
-    ): QueryEventFilter;
-  };
+  filters: {};
 
   estimateGas: {
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct,
+      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
@@ -197,14 +154,12 @@ export interface ISNSAccountModule extends BaseContract {
   populateTransaction: {
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct,
+      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

@@ -5,7 +5,7 @@ import {ISNSAccountModule} from "../../interfaces/ISNSAccountModule.sol";
 
 contract SNSAccountModule is ISNSAccountModule {
     address internal _profile;
-    mapping(uint256 => mapping(uint256 => ISNSAccountModule.SNSAccountStruct[])) internal _snsAccounts;
+    mapping(uint256 => ISNSAccountModule.SNSAccountStruct[]) internal _snsAccounts;
 
     constructor(address profile) {
         _profile = profile;
@@ -18,13 +18,14 @@ contract SNSAccountModule is ISNSAccountModule {
 
     function processSNSAccount(
         uint256 profileId,
-        uint256 pubId,
-        ISNSAccountModule.SNSAccountStruct calldata sns
+        ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts
     ) external override onlyProfile {
-        _snsAccounts[profileId][pubId].push(sns);
+        for (uint i = 0; i < snsAccounts.length; i++) {
+            _snsAccounts[profileId].push(snsAccounts[i]);
+        }
     }
 
-    function getSNSAccounts(uint256 profileId, uint256 pubId) external view override onlyProfile returns (ISNSAccountModule.SNSAccountStruct[] memory) {
-        return _snsAccounts[profileId][pubId];
+    function getSNSAccounts(uint256 profileId) external view override onlyProfile returns (ISNSAccountModule.SNSAccountStruct[] memory) {
+        return _snsAccounts[profileId];
     }
 }

@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "IProfile",
-  "sourceName": "contracts/interface/IProfile.sol",
+  "sourceName": "contracts/interfaces/IProfile.sol",
   "abi": [
     {
       "anonymous": false,
@@ -13,43 +13,29 @@
           "type": "uint256"
         },
         {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "blockNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "MirrorCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "internalType": "uint256",
-          "name": "pubId",
+          "name": "profileId",
           "type": "uint256"
         },
         {
-          "components": [
-            {
-              "internalType": "uint256",
-              "name": "chainId",
-              "type": "uint256"
-            },
-            {
-              "internalType": "address",
-              "name": "contractAddress",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "tokenId",
-              "type": "uint256"
-            },
-            {
-              "internalType": "string",
-              "name": "tokenURI",
-              "type": "string"
-            },
-            {
-              "internalType": "address",
-              "name": "wallet",
-              "type": "address"
-            }
-          ],
-          "indexed": false,
-          "internalType": "struct INFTCollectionModule.NFTStruct[]",
-          "name": "nfts",
-          "type": "tuple[]"
+          "indexed": true,
+          "internalType": "address",
+          "name": "module",
+          "type": "address"
         },
         {
           "indexed": false,
@@ -67,7 +53,7 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "wallet",
+          "name": "owner",
           "type": "address"
         },
         {
@@ -75,18 +61,6 @@
           "internalType": "uint256",
           "name": "profileId",
           "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "handle",
-          "type": "string"
-        },
-        {
-          "indexed": false,
-          "internalType": "string",
-          "name": "imageURI",
-          "type": "string"
         },
         {
           "indexed": false,
@@ -108,38 +82,23 @@
           "type": "uint256"
         },
         {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "blockNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "SNSAccountCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
           "indexed": true,
           "internalType": "uint256",
-          "name": "pubId",
+          "name": "profileId",
           "type": "uint256"
-        },
-        {
-          "components": [
-            {
-              "internalType": "string",
-              "name": "service",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "userId",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "userPageURL",
-              "type": "string"
-            },
-            {
-              "internalType": "address",
-              "name": "wallet",
-              "type": "address"
-            }
-          ],
-          "indexed": false,
-          "internalType": "struct ISNSAccountModule.SNSAccountStruct",
-          "name": "sns",
-          "type": "tuple"
         },
         {
           "indexed": false,
@@ -148,7 +107,7 @@
           "type": "uint256"
         }
       ],
-      "name": "SNSAccountCreated",
+      "name": "ScoreCreated",
       "type": "event"
     },
     {
@@ -169,6 +128,31 @@
       ],
       "name": "WalletAdded",
       "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "profileId",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "hoge",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct IMirrorModule.MirrorStruct",
+          "name": "mirror",
+          "type": "tuple"
+        }
+      ],
+      "name": "addMirror",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "inputs": [
@@ -219,7 +203,7 @@
             },
             {
               "internalType": "address",
-              "name": "wallet",
+              "name": "owner",
               "type": "address"
             }
           ],
@@ -236,10 +220,60 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "profileId",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "contractAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "tokenURI",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "owner",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct INFTCollectionModule.NFTStruct[]",
+          "name": "poaps",
+          "type": "tuple[]"
+        }
+      ],
+      "name": "createPOAPCollection",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "components": [
             {
               "internalType": "string",
-              "name": "handle",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "introduction",
               "type": "string"
             },
             {
@@ -271,12 +305,44 @@
                 },
                 {
                   "internalType": "address",
-                  "name": "wallet",
+                  "name": "owner",
                   "type": "address"
                 }
               ],
               "internalType": "struct INFTCollectionModule.NFTStruct[]",
               "name": "nfts",
+              "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "uint256",
+                  "name": "chainId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "address",
+                  "name": "contractAddress",
+                  "type": "address"
+                },
+                {
+                  "internalType": "uint256",
+                  "name": "tokenId",
+                  "type": "uint256"
+                },
+                {
+                  "internalType": "string",
+                  "name": "tokenURI",
+                  "type": "string"
+                },
+                {
+                  "internalType": "address",
+                  "name": "owner",
+                  "type": "address"
+                }
+              ],
+              "internalType": "struct INFTCollectionModule.NFTStruct[]",
+              "name": "poaps",
               "type": "tuple[]"
             },
             {
@@ -353,9 +419,9 @@
               "type": "address"
             }
           ],
-          "internalType": "struct ISNSAccountModule.SNSAccountStruct",
-          "name": "sns",
-          "type": "tuple"
+          "internalType": "struct ISNSAccountModule.SNSAccountStruct[]",
+          "name": "snsAccounts",
+          "type": "tuple[]"
         }
       ],
       "name": "createSNSAccount",
@@ -369,10 +435,44 @@
           "internalType": "uint256",
           "name": "profileId",
           "type": "uint256"
-        },
+        }
+      ],
+      "name": "createScore",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
         {
           "internalType": "uint256",
-          "name": "nftCollectionPubId",
+          "name": "profileId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getMirror",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "hoge",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct IMirrorModule.MirrorStruct[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "profileId",
           "type": "uint256"
         }
       ],
@@ -402,7 +502,53 @@
             },
             {
               "internalType": "address",
-              "name": "wallet",
+              "name": "owner",
+              "type": "address"
+            }
+          ],
+          "internalType": "struct INFTCollectionModule.NFTStruct[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "profileId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPOAPCollection",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "uint256",
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "address",
+              "name": "contractAddress",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "tokenId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "string",
+              "name": "tokenURI",
+              "type": "string"
+            },
+            {
+              "internalType": "address",
+              "name": "owner",
               "type": "address"
             }
           ],
@@ -433,18 +579,18 @@
             },
             {
               "internalType": "string",
-              "name": "handle",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "introduction",
               "type": "string"
             },
             {
               "internalType": "string",
               "name": "imageURI",
               "type": "string"
-            },
-            {
-              "internalType": "uint256",
-              "name": "nftCollectionPubId",
-              "type": "uint256"
             },
             {
               "internalType": "uint256",
@@ -465,11 +611,6 @@
         {
           "internalType": "uint256",
           "name": "profileId",
-          "type": "uint256"
-        },
-        {
-          "internalType": "uint256",
-          "name": "snsPubId",
           "type": "uint256"
         }
       ],
@@ -509,6 +650,37 @@
     {
       "inputs": [
         {
+          "internalType": "uint256",
+          "name": "profileId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getScore",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "internalType": "uint256",
+              "name": "point",
+              "type": "uint256"
+            }
+          ],
+          "internalType": "struct IScoreModule.ScoreStruct[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
           "internalType": "address",
           "name": "icecandy",
           "type": "address"
@@ -523,11 +695,63 @@
       "inputs": [
         {
           "internalType": "address",
+          "name": "mirrorModule",
+          "type": "address"
+        }
+      ],
+      "name": "setMirrorModule",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "nftCollectionModule",
           "type": "address"
         }
       ],
       "name": "setNFTCollectionModule",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "poapCollectionModule",
+          "type": "address"
+        }
+      ],
+      "name": "setPOAPCollectionModule",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "snsAccountModule",
+          "type": "address"
+        }
+      ],
+      "name": "setSNSAccountModule",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "scoreModule",
+          "type": "address"
+        }
+      ],
+      "name": "setScoreModule",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"

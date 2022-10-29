@@ -21,7 +21,7 @@ import type {
   TypedListener,
   OnEvent,
   PromiseOrValue,
-} from "../../common";
+} from "../../../common";
 
 export declare namespace INFTCollectionModule {
   export type NFTStructStruct = {
@@ -29,7 +29,7 @@ export declare namespace INFTCollectionModule {
     contractAddress: PromiseOrValue<string>;
     tokenId: PromiseOrValue<BigNumberish>;
     tokenURI: PromiseOrValue<string>;
-    wallet: PromiseOrValue<string>;
+    owner: PromiseOrValue<string>;
   };
 
   export type NFTStructStructOutput = [
@@ -43,34 +43,36 @@ export declare namespace INFTCollectionModule {
     contractAddress: string;
     tokenId: BigNumber;
     tokenURI: string;
-    wallet: string;
+    owner: string;
   };
 }
 
-export interface NFTCollectionModuleInterface extends utils.Interface {
+export interface POAPCollectionModuleInterface extends utils.Interface {
   functions: {
-    "getNFTs(uint256,uint256)": FunctionFragment;
-    "processCollect(uint256,uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
+    "getCollection(uint256)": FunctionFragment;
+    "processCollect(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "getNFTs" | "processCollect"
+    nameOrSignatureOrTopic: "getCollection" | "processCollect"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "getNFTs",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    functionFragment: "getCollection",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "processCollect",
     values: [
       PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
       INFTCollectionModule.NFTStructStruct[]
     ]
   ): string;
 
-  decodeFunctionResult(functionFragment: "getNFTs", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getCollection",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "processCollect",
     data: BytesLike
@@ -79,12 +81,12 @@ export interface NFTCollectionModuleInterface extends utils.Interface {
   events: {};
 }
 
-export interface NFTCollectionModule extends BaseContract {
+export interface POAPCollectionModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: NFTCollectionModuleInterface;
+  interface: POAPCollectionModuleInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -106,43 +108,37 @@ export interface NFTCollectionModule extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    getNFTs(
+    getCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[INFTCollectionModule.NFTStructStructOutput[]]>;
 
     processCollect(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
 
-  getNFTs(
+  getCollection(
     profileId: PromiseOrValue<BigNumberish>,
-    pubId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
 
   processCollect(
     profileId: PromiseOrValue<BigNumberish>,
-    pubId: PromiseOrValue<BigNumberish>,
     nfts: INFTCollectionModule.NFTStructStruct[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    getNFTs(
+    getCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
 
     processCollect(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
@@ -151,30 +147,26 @@ export interface NFTCollectionModule extends BaseContract {
   filters: {};
 
   estimateGas: {
-    getNFTs(
+    getCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     processCollect(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    getNFTs(
+    getCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     processCollect(
       profileId: PromiseOrValue<BigNumberish>,
-      pubId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

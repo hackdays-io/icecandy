@@ -1,0 +1,75 @@
+{
+  "_format": "hh-sol-artifact-1",
+  "contractName": "IMirrorModule",
+  "sourceName": "contracts/interfaces/IMirrorModule.sol",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "profileId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getMirror",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "hoge",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct IMirrorModule.MirrorStruct[]",
+          "name": "",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "profileId",
+          "type": "uint256"
+        },
+        {
+          "components": [
+            {
+              "internalType": "string",
+              "name": "hoge",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct IMirrorModule.MirrorStruct",
+          "name": "mirror",
+          "type": "tuple"
+        }
+      ],
+      "name": "processRegist",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "profile",
+          "type": "address"
+        }
+      ],
+      "name": "setProfile",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "linkReferences": {},
+  "deployedLinkReferences": {}
+}

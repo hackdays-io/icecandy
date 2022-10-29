@@ -85,8 +85,9 @@ describe('profile test', () => {
     await expect(profile.connect(alice).setSNSAccountModule(snsAccount.address)).to.be.revertedWith(
       'Ownable: caller is not the owner'
     )
+
     // success transaction
-    await expect(profile.connect(owner).setPOAPCollectionModule(poapCollection.address)).to.be.not.reverted
+    await expect(profile.connect(owner).setSNSAccountModule(snsAccount.address)).to.be.not.reverted
   })
 
   it('setPOAPCollectionModule()', async () => {
@@ -184,7 +185,6 @@ describe('profile test', () => {
     expect(profile_.name).to.equal(_profile.name)
     expect(profile_.introduction).to.equal(_profile.introduction)
     expect(profile_.imageURI).to.equal(_profile.imageURI)
-    expect(profile_.snsAccountsPubId).to.equal(1)
 
     // get nfts
     const nfts_ = await profile.connect(alice).getNFTCollection(1)
@@ -198,10 +198,11 @@ describe('profile test', () => {
     expect(nfts_[1]?.tokenURI).to.equal(_profile.nfts[1]?.tokenURI)
 
     // get snsAccount struct
-    const snsAccounts_ = await profile.connect(alice).getSNSAccounts(1, 1)
+    const snsAccounts_ = await profile.connect(alice).getSNSAccounts(1)
     expect(snsAccounts_[0]?.service).to.equal('twitter')
     expect(snsAccounts_[0]?.userId).to.equal('hello')
     expect(snsAccounts_[0]?.userPageURL).to.equal('https://hoge.com')
+
     // get poaps
     const poaps_ = await profile.connect(alice).getPOAPCollection(1)
     expect(poaps_[0]?.chainId).to.equal(BigNumber.from(_profile.poaps[0]?.chainId))
@@ -328,15 +329,12 @@ describe('profile test', () => {
       userPageURL: 'https://github.com/hello_world',
       wallet: alice.address,
     }
-    await expect(profile.connect(alice).createSNSAccount(1, _github)).to.emit(profile, 'SNSAccountCreated')
+    await expect(profile.connect(alice).createSNSAccount(1, [_github])).to.emit(profile, 'SNSAccountCreated')
 
-    const aliceAccounts = await profile.connect(alice).getSNSAccounts(1, 1)
+    const aliceAccounts = await profile.connect(alice).getSNSAccounts(1)
     expect(aliceAccounts[1]?.service).to.equal('github')
     expect(aliceAccounts[1]?.userId).to.equal('hello_world')
     expect(aliceAccounts[1]?.userPageURL).to.equal('https://github.com/hello_world')
-
-    const retrievedProfile = await profile.connect(alice).getProfile(1)
-    expect(retrievedProfile.snsAccountsPubId).to.equal(1)
   })
 
   it('addWallet()', async () => {

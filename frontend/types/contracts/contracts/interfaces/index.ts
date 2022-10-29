@@ -4,6 +4,8 @@
 import type * as assetstore from "./assetstore";
 export type { assetstore };
 export type { IIceCandy } from "./IIceCandy";
+export type { IMirrorModule } from "./IMirrorModule";
 export type { INFTCollectionModule } from "./INFTCollectionModule";
 export type { IProfile } from "./IProfile";
 export type { ISNSAccountModule } from "./ISNSAccountModule";
+export type { IScoreModule } from "./IScoreModule";

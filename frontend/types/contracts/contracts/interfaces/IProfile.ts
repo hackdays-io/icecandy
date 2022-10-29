@@ -27,13 +27,19 @@ import type {
   PromiseOrValue,
 } from "../../common";
 
+export declare namespace IMirrorModule {
+  export type MirrorStructStruct = { hoge: PromiseOrValue<string> };
+
+  export type MirrorStructStructOutput = [string] & { hoge: string };
+}
+
 export declare namespace INFTCollectionModule {
   export type NFTStructStruct = {
     chainId: PromiseOrValue<BigNumberish>;
     contractAddress: PromiseOrValue<string>;
     tokenId: PromiseOrValue<BigNumberish>;
     tokenURI: PromiseOrValue<string>;
-    wallet: PromiseOrValue<string>;
+    owner: PromiseOrValue<string>;
   };
 
   export type NFTStructStructOutput = [
@@ -47,7 +53,7 @@ export declare namespace INFTCollectionModule {
     contractAddress: string;
     tokenId: BigNumber;
     tokenURI: string;
-    wallet: string;
+    owner: string;
   };
 }
 
@@ -69,29 +75,35 @@ export declare namespace ISNSAccountModule {
 
 export declare namespace IProfile {
   export type CreateProfileStructDataStruct = {
-    handle: PromiseOrValue<string>;
+    name: PromiseOrValue<string>;
+    introduction: PromiseOrValue<string>;
     imageURI: PromiseOrValue<string>;
     nfts: INFTCollectionModule.NFTStructStruct[];
+    poaps: INFTCollectionModule.NFTStructStruct[];
     snsAccounts: ISNSAccountModule.SNSAccountStructStruct[];
   };
 
   export type CreateProfileStructDataStructOutput = [
     string,
     string,
+    string,
+    INFTCollectionModule.NFTStructStructOutput[],
     INFTCollectionModule.NFTStructStructOutput[],
     ISNSAccountModule.SNSAccountStructStructOutput[]
   ] & {
-    handle: string;
+    name: string;
+    introduction: string;
     imageURI: string;
     nfts: INFTCollectionModule.NFTStructStructOutput[];
+    poaps: INFTCollectionModule.NFTStructStructOutput[];
     snsAccounts: ISNSAccountModule.SNSAccountStructStructOutput[];
   };
 
   export type ProfileStructStruct = {
     wallets: PromiseOrValue<string>[];
-    handle: PromiseOrValue<string>;
+    name: PromiseOrValue<string>;
+    introduction: PromiseOrValue<string>;
     imageURI: PromiseOrValue<string>;
-    nftCollectionPubId: PromiseOrValue<BigNumberish>;
     snsAccountsPubId: PromiseOrValue<BigNumberish>;
   };
 
@@ -99,49 +111,92 @@ export declare namespace IProfile {
     string[],
     string,
     string,
-    BigNumber,
+    string,
     BigNumber
   ] & {
     wallets: string[];
-    handle: string;
+    name: string;
+    introduction: string;
     imageURI: string;
-    nftCollectionPubId: BigNumber;
     snsAccountsPubId: BigNumber;
+  };
+}
+
+export declare namespace IScoreModule {
+  export type ScoreStructStruct = {
+    name: PromiseOrValue<string>;
+    point: PromiseOrValue<BigNumberish>;
+  };
+
+  export type ScoreStructStructOutput = [string, BigNumber] & {
+    name: string;
+    point: BigNumber;
   };
 }
 
 export interface IProfileInterface extends utils.Interface {
   functions: {
+    "addMirror(uint256,(string))": FunctionFragment;
     "addWallet(uint256,address)": FunctionFragment;
     "createNFTCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
-    "createProfile((string,string,(uint256,address,uint256,string,address)[],(string,string,string,address)[]))": FunctionFragment;
-    "createSNSAccount(uint256,(string,string,string,address))": FunctionFragment;
-    "getNFTCollection(uint256,uint256)": FunctionFragment;
+    "createPOAPCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
+    "createProfile((string,string,string,(uint256,address,uint256,string,address)[],(uint256,address,uint256,string,address)[],(string,string,string,address)[]))": FunctionFragment;
+    "createSNSAccount(uint256,(string,string,string,address)[])": FunctionFragment;
+    "createScore(uint256)": FunctionFragment;
+    "getMirror(uint256)": FunctionFragment;
+    "getNFTCollection(uint256)": FunctionFragment;
+    "getPOAPCollection(uint256)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
-    "getSNSAccounts(uint256,uint256)": FunctionFragment;
+    "getSNSAccounts(uint256)": FunctionFragment;
+    "getScore(uint256)": FunctionFragment;
     "setIceCandy(address)": FunctionFragment;
+    "setMirrorModule(address)": FunctionFragment;
     "setNFTCollectionModule(address)": FunctionFragment;
+    "setPOAPCollectionModule(address)": FunctionFragment;
+    "setSNSAccountModule(address)": FunctionFragment;
+    "setScoreModule(address)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "addMirror"
       | "addWallet"
       | "createNFTCollection"
+      | "createPOAPCollection"
       | "createProfile"
       | "createSNSAccount"
+      | "createScore"
+      | "getMirror"
       | "getNFTCollection"
+      | "getPOAPCollection"
       | "getProfile"
       | "getSNSAccounts"
+      | "getScore"
       | "setIceCandy"
+      | "setMirrorModule"
       | "setNFTCollectionModule"
+      | "setPOAPCollectionModule"
+      | "setSNSAccountModule"
+      | "setScoreModule"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "addMirror",
+    values: [PromiseOrValue<BigNumberish>, IMirrorModule.MirrorStructStruct]
+  ): string;
   encodeFunctionData(
     functionFragment: "addWallet",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "createNFTCollection",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      INFTCollectionModule.NFTStructStruct[]
+    ]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "createPOAPCollection",
     values: [
       PromiseOrValue<BigNumberish>,
       INFTCollectionModule.NFTStructStruct[]
@@ -155,12 +210,24 @@ export interface IProfileInterface extends utils.Interface {
     functionFragment: "createSNSAccount",
     values: [
       PromiseOrValue<BigNumberish>,
-      ISNSAccountModule.SNSAccountStructStruct
+      ISNSAccountModule.SNSAccountStructStruct[]
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "createScore",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMirror",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getNFTCollection",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getPOAPCollection",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "getProfile",
@@ -168,20 +235,45 @@ export interface IProfileInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getSNSAccounts",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getScore",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "setIceCandy",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "setMirrorModule",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setNFTCollectionModule",
     values: [PromiseOrValue<string>]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setPOAPCollectionModule",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setSNSAccountModule",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setScoreModule",
+    values: [PromiseOrValue<string>]
+  ): string;
 
+  decodeFunctionResult(functionFragment: "addMirror", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "addWallet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createNFTCollection",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "createPOAPCollection",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -193,7 +285,16 @@ export interface IProfileInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "createScore",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "getMirror", data: BytesLike): Result;
+  decodeFunctionResult(
     functionFragment: "getNFTCollection",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getPOAPCollection",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getProfile", data: BytesLike): Result;
@@ -201,41 +302,67 @@ export interface IProfileInterface extends utils.Interface {
     functionFragment: "getSNSAccounts",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getScore", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setIceCandy",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setMirrorModule",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "setNFTCollectionModule",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "setPOAPCollectionModule",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSNSAccountModule",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setScoreModule",
+    data: BytesLike
+  ): Result;
 
   events: {
-    "NFTCollectionCreated(uint256,uint256,tuple[],uint256)": EventFragment;
-    "ProfileCreated(address,uint256,string,string,uint256)": EventFragment;
-    "SNSAccountCreated(uint256,uint256,tuple,uint256)": EventFragment;
+    "MirrorCreated(uint256,uint256)": EventFragment;
+    "NFTCollectionCreated(uint256,address,uint256)": EventFragment;
+    "ProfileCreated(address,uint256,uint256)": EventFragment;
+    "SNSAccountCreated(uint256,uint256)": EventFragment;
+    "ScoreCreated(uint256,uint256)": EventFragment;
     "WalletAdded(uint256,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "MirrorCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NFTCollectionCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SNSAccountCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ScoreCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WalletAdded"): EventFragment;
 }
 
+export interface MirrorCreatedEventObject {
+  profileId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type MirrorCreatedEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  MirrorCreatedEventObject
+>;
+
+export type MirrorCreatedEventFilter = TypedEventFilter<MirrorCreatedEvent>;
+
 export interface NFTCollectionCreatedEventObject {
   profileId: BigNumber;
-  pubId: BigNumber;
-  nfts: INFTCollectionModule.NFTStructStructOutput[];
+  module: string;
   blockNumber: BigNumber;
 }
 export type NFTCollectionCreatedEvent = TypedEvent<
-  [
-    BigNumber,
-    BigNumber,
-    INFTCollectionModule.NFTStructStructOutput[],
-    BigNumber
-  ],
+  [BigNumber, string, BigNumber],
   NFTCollectionCreatedEventObject
 >;
 
@@ -243,14 +370,12 @@ export type NFTCollectionCreatedEventFilter =
   TypedEventFilter<NFTCollectionCreatedEvent>;
 
 export interface ProfileCreatedEventObject {
-  wallet: string;
+  owner: string;
   profileId: BigNumber;
-  handle: string;
-  imageURI: string;
   blockNumber: BigNumber;
 }
 export type ProfileCreatedEvent = TypedEvent<
-  [string, BigNumber, string, string, BigNumber],
+  [string, BigNumber, BigNumber],
   ProfileCreatedEventObject
 >;
 
@@ -258,22 +383,26 @@ export type ProfileCreatedEventFilter = TypedEventFilter<ProfileCreatedEvent>;
 
 export interface SNSAccountCreatedEventObject {
   profileId: BigNumber;
-  pubId: BigNumber;
-  sns: ISNSAccountModule.SNSAccountStructStructOutput;
   blockNumber: BigNumber;
 }
 export type SNSAccountCreatedEvent = TypedEvent<
-  [
-    BigNumber,
-    BigNumber,
-    ISNSAccountModule.SNSAccountStructStructOutput,
-    BigNumber
-  ],
+  [BigNumber, BigNumber],
   SNSAccountCreatedEventObject
 >;
 
 export type SNSAccountCreatedEventFilter =
   TypedEventFilter<SNSAccountCreatedEvent>;
+
+export interface ScoreCreatedEventObject {
+  profileId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type ScoreCreatedEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  ScoreCreatedEventObject
+>;
+
+export type ScoreCreatedEventFilter = TypedEventFilter<ScoreCreatedEvent>;
 
 export interface WalletAddedEventObject {
   profileId: BigNumber;
@@ -313,6 +442,12 @@ export interface IProfile extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    addMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -325,6 +460,12 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    createPOAPCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      poaps: INFTCollectionModule.NFTStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     createProfile(
       vars: IProfile.CreateProfileStructDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -332,13 +473,27 @@ export interface IProfile extends BaseContract {
 
     createSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      sns: ISNSAccountModule.SNSAccountStructStruct,
+      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[IMirrorModule.MirrorStructStructOutput[]]>;
+
     getNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      nftCollectionPubId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[INFTCollectionModule.NFTStructStructOutput[]]>;
+
+    getPOAPCollection(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[INFTCollectionModule.NFTStructStructOutput[]]>;
 
@@ -349,12 +504,21 @@ export interface IProfile extends BaseContract {
 
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
-      snsPubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[ISNSAccountModule.SNSAccountStructStructOutput[]]>;
 
+    getScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[IScoreModule.ScoreStructStructOutput[]]>;
+
     setIceCandy(
       icecandy: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setMirrorModule(
+      mirrorModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -362,7 +526,28 @@ export interface IProfile extends BaseContract {
       nftCollectionModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    setPOAPCollectionModule(
+      poapCollectionModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setSNSAccountModule(
+      snsAccountModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setScoreModule(
+      scoreModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
+
+  addMirror(
+    profileId: PromiseOrValue<BigNumberish>,
+    mirror: IMirrorModule.MirrorStructStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   addWallet(
     profileId: PromiseOrValue<BigNumberish>,
@@ -376,6 +561,12 @@ export interface IProfile extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  createPOAPCollection(
+    profileId: PromiseOrValue<BigNumberish>,
+    poaps: INFTCollectionModule.NFTStructStruct[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   createProfile(
     vars: IProfile.CreateProfileStructDataStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -383,13 +574,27 @@ export interface IProfile extends BaseContract {
 
   createSNSAccount(
     profileId: PromiseOrValue<BigNumberish>,
-    sns: ISNSAccountModule.SNSAccountStructStruct,
+    snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  createScore(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  getMirror(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
+
   getNFTCollection(
     profileId: PromiseOrValue<BigNumberish>,
-    nftCollectionPubId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
+
+  getPOAPCollection(
+    profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
 
@@ -400,12 +605,21 @@ export interface IProfile extends BaseContract {
 
   getSNSAccounts(
     profileId: PromiseOrValue<BigNumberish>,
-    snsPubId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
 
+  getScore(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<IScoreModule.ScoreStructStructOutput[]>;
+
   setIceCandy(
     icecandy: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setMirrorModule(
+    mirrorModule: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -414,7 +628,28 @@ export interface IProfile extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setPOAPCollectionModule(
+    poapCollectionModule: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setSNSAccountModule(
+    snsAccountModule: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setScoreModule(
+    scoreModule: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
+    addMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -427,6 +662,12 @@ export interface IProfile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    createPOAPCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      poaps: INFTCollectionModule.NFTStructStruct[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     createProfile(
       vars: IProfile.CreateProfileStructDataStruct,
       overrides?: CallOverrides
@@ -434,13 +675,27 @@ export interface IProfile extends BaseContract {
 
     createSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      sns: ISNSAccountModule.SNSAccountStructStruct,
+      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
 
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
+
     getNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      nftCollectionPubId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
+
+    getPOAPCollection(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
 
@@ -451,12 +706,21 @@ export interface IProfile extends BaseContract {
 
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
-      snsPubId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
 
+    getScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<IScoreModule.ScoreStructStructOutput[]>;
+
     setIceCandy(
       icecandy: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setMirrorModule(
+      mirrorModule: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -464,49 +728,72 @@ export interface IProfile extends BaseContract {
       nftCollectionModule: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setPOAPCollectionModule(
+      poapCollectionModule: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setSNSAccountModule(
+      snsAccountModule: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setScoreModule(
+      scoreModule: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
   filters: {
-    "NFTCollectionCreated(uint256,uint256,tuple[],uint256)"(
+    "MirrorCreated(uint256,uint256)"(
       profileId?: PromiseOrValue<BigNumberish> | null,
-      pubId?: PromiseOrValue<BigNumberish> | null,
-      nfts?: null,
+      blockNumber?: null
+    ): MirrorCreatedEventFilter;
+    MirrorCreated(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): MirrorCreatedEventFilter;
+
+    "NFTCollectionCreated(uint256,address,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      module?: PromiseOrValue<string> | null,
       blockNumber?: null
     ): NFTCollectionCreatedEventFilter;
     NFTCollectionCreated(
       profileId?: PromiseOrValue<BigNumberish> | null,
-      pubId?: PromiseOrValue<BigNumberish> | null,
-      nfts?: null,
+      module?: PromiseOrValue<string> | null,
       blockNumber?: null
     ): NFTCollectionCreatedEventFilter;
 
-    "ProfileCreated(address,uint256,string,string,uint256)"(
-      wallet?: PromiseOrValue<string> | null,
+    "ProfileCreated(address,uint256,uint256)"(
+      owner?: PromiseOrValue<string> | null,
       profileId?: null,
-      handle?: null,
-      imageURI?: null,
       blockNumber?: null
     ): ProfileCreatedEventFilter;
     ProfileCreated(
-      wallet?: PromiseOrValue<string> | null,
+      owner?: PromiseOrValue<string> | null,
       profileId?: null,
-      handle?: null,
-      imageURI?: null,
       blockNumber?: null
     ): ProfileCreatedEventFilter;
 
-    "SNSAccountCreated(uint256,uint256,tuple,uint256)"(
+    "SNSAccountCreated(uint256,uint256)"(
       profileId?: PromiseOrValue<BigNumberish> | null,
-      pubId?: PromiseOrValue<BigNumberish> | null,
-      sns?: null,
       blockNumber?: null
     ): SNSAccountCreatedEventFilter;
     SNSAccountCreated(
       profileId?: PromiseOrValue<BigNumberish> | null,
-      pubId?: PromiseOrValue<BigNumberish> | null,
-      sns?: null,
       blockNumber?: null
     ): SNSAccountCreatedEventFilter;
+
+    "ScoreCreated(uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): ScoreCreatedEventFilter;
+    ScoreCreated(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): ScoreCreatedEventFilter;
 
     "WalletAdded(uint256,address)"(
       profileId?: null,
@@ -516,6 +803,12 @@ export interface IProfile extends BaseContract {
   };
 
   estimateGas: {
+    addMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -528,6 +821,12 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    createPOAPCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      poaps: INFTCollectionModule.NFTStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     createProfile(
       vars: IProfile.CreateProfileStructDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -535,13 +834,27 @@ export interface IProfile extends BaseContract {
 
     createSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      sns: ISNSAccountModule.SNSAccountStructStruct,
+      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     getNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      nftCollectionPubId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getPOAPCollection(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -552,7 +865,11 @@ export interface IProfile extends BaseContract {
 
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
-      snsPubId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getScore(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -561,13 +878,39 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setMirrorModule(
+      mirrorModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     setNFTCollectionModule(
       nftCollectionModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setPOAPCollectionModule(
+      poapCollectionModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setSNSAccountModule(
+      snsAccountModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setScoreModule(
+      scoreModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    addMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -580,6 +923,12 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    createPOAPCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      poaps: INFTCollectionModule.NFTStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     createProfile(
       vars: IProfile.CreateProfileStructDataStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -587,13 +936,27 @@ export interface IProfile extends BaseContract {
 
     createSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      sns: ISNSAccountModule.SNSAccountStructStruct,
+      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     getNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
-      nftCollectionPubId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getPOAPCollection(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -604,7 +967,11 @@ export interface IProfile extends BaseContract {
 
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
-      snsPubId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getScore(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -613,8 +980,28 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    setMirrorModule(
+      mirrorModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     setNFTCollectionModule(
       nftCollectionModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setPOAPCollectionModule(
+      poapCollectionModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSNSAccountModule(
+      snsAccountModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setScoreModule(
+      scoreModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
