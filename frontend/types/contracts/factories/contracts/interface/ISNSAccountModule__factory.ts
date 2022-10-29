@@ -65,7 +65,7 @@ const _abi = [
           },
           {
             internalType: "string",
-            name: "user_id",
+            name: "userId",
             type: "string",
           },
           {
@@ -108,7 +108,7 @@ const _abi = [
           },
           {
             internalType: "string",
-            name: "user_id",
+            name: "userId",
             type: "string",
           },
           {

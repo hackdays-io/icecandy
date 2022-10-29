@@ -1,4 +1,4 @@
-import { Box, List, Spinner, Text } from '@chakra-ui/react'
+import { Box, Container, List, Spinner, Text } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import ProfileMain from '../../components/organisms/profile/Main'
@@ -8,23 +8,24 @@ const ProfilePage: NextPage = () => {
   const router = useRouter()
   const { profileId } = router.query
 
-  const { profile, loading, errors } = useRetrieveProfileNFTByTokenId(
-    profileId as string
-  )
+  const { profile, loading, errors, snsAccounts, nftCollection } =
+    useRetrieveProfileNFTByTokenId(profileId as string)
 
   return (
     <Box>
-      <img src="http://localhost:3000/api/svg/icecandy-button" alt="" />
       {loading ? (
         <Spinner />
       ) : (
-        <>
+        <Container>
           <ProfileMain
             handle={profile?.handle}
             pfpURI={profile?.imageURI}
-            modules={[]}
+            modules={[
+              { type: 'snsAccounts', data: snsAccounts },
+              { type: 'nftCollection', data: nftCollection },
+            ]}
           />
-        </>
+        </Container>
       )}
     </Box>
   )

@@ -122,7 +122,7 @@
             },
             {
               "internalType": "string",
-              "name": "user_id",
+              "name": "userId",
               "type": "string"
             },
             {
@@ -278,6 +278,33 @@
               "internalType": "struct INFTCollectionModule.NFTStruct[]",
               "name": "nfts",
               "type": "tuple[]"
+            },
+            {
+              "components": [
+                {
+                  "internalType": "string",
+                  "name": "service",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "userId",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "userPageURL",
+                  "type": "string"
+                },
+                {
+                  "internalType": "address",
+                  "name": "wallet",
+                  "type": "address"
+                }
+              ],
+              "internalType": "struct ISNSAccountModule.SNSAccountStruct[]",
+              "name": "snsAccounts",
+              "type": "tuple[]"
             }
           ],
           "internalType": "struct IProfile.CreateProfileStructData",
@@ -312,7 +339,7 @@
             },
             {
               "internalType": "string",
-              "name": "user_id",
+              "name": "userId",
               "type": "string"
             },
             {
@@ -421,7 +448,7 @@
             },
             {
               "internalType": "uint256",
-              "name": "snsPubId",
+              "name": "snsAccountsPubId",
               "type": "uint256"
             }
           ],
@@ -457,7 +484,7 @@
             },
             {
               "internalType": "string",
-              "name": "user_id",
+              "name": "userId",
               "type": "string"
             },
             {

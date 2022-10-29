@@ -54,7 +54,7 @@ export declare namespace INFTCollectionModule {
 export declare namespace ISNSAccountModule {
   export type SNSAccountStructStruct = {
     service: PromiseOrValue<string>;
-    user_id: PromiseOrValue<string>;
+    userId: PromiseOrValue<string>;
     userPageURL: PromiseOrValue<string>;
     wallet: PromiseOrValue<string>;
   };
@@ -64,7 +64,7 @@ export declare namespace ISNSAccountModule {
     string,
     string,
     string
-  ] & { service: string; user_id: string; userPageURL: string; wallet: string };
+  ] & { service: string; userId: string; userPageURL: string; wallet: string };
 }
 
 export declare namespace IProfile {
@@ -72,16 +72,19 @@ export declare namespace IProfile {
     handle: PromiseOrValue<string>;
     imageURI: PromiseOrValue<string>;
     nfts: INFTCollectionModule.NFTStructStruct[];
+    snsAccounts: ISNSAccountModule.SNSAccountStructStruct[];
   };
 
   export type CreateProfileStructDataStructOutput = [
     string,
     string,
-    INFTCollectionModule.NFTStructStructOutput[]
+    INFTCollectionModule.NFTStructStructOutput[],
+    ISNSAccountModule.SNSAccountStructStructOutput[]
   ] & {
     handle: string;
     imageURI: string;
     nfts: INFTCollectionModule.NFTStructStructOutput[];
+    snsAccounts: ISNSAccountModule.SNSAccountStructStructOutput[];
   };
 
   export type ProfileStructStruct = {
@@ -89,7 +92,7 @@ export declare namespace IProfile {
     handle: PromiseOrValue<string>;
     imageURI: PromiseOrValue<string>;
     nftCollectionPubId: PromiseOrValue<BigNumberish>;
-    snsPubId: PromiseOrValue<BigNumberish>;
+    snsAccountsPubId: PromiseOrValue<BigNumberish>;
   };
 
   export type ProfileStructStructOutput = [
@@ -103,7 +106,7 @@ export declare namespace IProfile {
     handle: string;
     imageURI: string;
     nftCollectionPubId: BigNumber;
-    snsPubId: BigNumber;
+    snsAccountsPubId: BigNumber;
   };
 }
 
@@ -113,7 +116,7 @@ export interface ProfileInterface extends utils.Interface {
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
     "createNFTCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
-    "createProfile((string,string,(uint256,address,uint256,string,address)[]))": FunctionFragment;
+    "createProfile((string,string,(uint256,address,uint256,string,address)[],(string,string,string,address)[]))": FunctionFragment;
     "createSNSAccount(uint256,(string,string,string,address))": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getNFTCollection(uint256,uint256)": FunctionFragment;

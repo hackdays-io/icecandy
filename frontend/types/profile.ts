@@ -12,10 +12,12 @@ export namespace AppProfile {
 
   export type Module<T> = {
     type: T
-    data: WhichModule<T>
+    data?: WhichModule<T>
   }
 
-  export type WhichModule<M> = M extends 'nftCollection'
-    ? INFTCollectionModule.NFTStructStruct[]
+  export type WhichModule<T> = T extends 'nftCollection'
+    ? INFTCollectionModule.NFTStructStructOutput[]
+    : T extends 'snsAccounts'
+    ? ISNSAccountModule.SNSAccountStructStructOutput[]
     : any
 }

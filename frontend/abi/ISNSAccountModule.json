@@ -58,7 +58,7 @@
             },
             {
               "internalType": "string",
-              "name": "user_id",
+              "name": "userId",
               "type": "string"
             },
             {
@@ -101,7 +101,7 @@
             },
             {
               "internalType": "string",
-              "name": "user_id",
+              "name": "userId",
               "type": "string"
             },
             {

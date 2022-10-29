@@ -1,14 +1,14 @@
 import { Box, Grid, Text } from '@chakra-ui/react'
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 import { INFTCollectionModule } from '../../../types/contracts/contracts/core/NFTCollectionModule'
 import NFTImage from '../../atoms/NFTImage'
 
 type Props = {
-  nfts: INFTCollectionModule.NFTStructStruct[]
+  nfts?: INFTCollectionModule.NFTStructStructOutput[]
 }
 
 const ProfileNFTCollectionModule: FC<Props> = ({ nfts }) => {
-  const SingleNFT: FC<{ nft: INFTCollectionModule.NFTStructStruct }> = ({
+  const SingleNFT: FC<{ nft: INFTCollectionModule.NFTStructStructOutput }> = ({
     nft,
   }) => {
     return (
@@ -24,7 +24,7 @@ const ProfileNFTCollectionModule: FC<Props> = ({ nfts }) => {
         コレクションタイトル
       </Text>
       <Grid gridTemplateColumns="1fr 1fr 1fr" gridGap={2}>
-        {nfts.map((nft, index) => (
+        {nfts?.map((nft, index) => (
           <SingleNFT key={index} {...{ nft }}></SingleNFT>
         ))}
       </Grid>

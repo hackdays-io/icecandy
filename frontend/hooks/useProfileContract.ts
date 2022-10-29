@@ -1,6 +1,10 @@
 import { useAddress } from '@thirdweb-dev/react'
 import { useEffect, useRef, useState } from 'react'
-import { INFTCollectionModule, IProfile } from '../types/contracts'
+import {
+  INFTCollectionModule,
+  IProfile,
+  ISNSAccountModule,
+} from '../types/contracts'
 import { TypedListener } from '../types/contracts/common'
 import { ProfileCreatedEvent } from '../types/contracts/contracts/core/Profile'
 import { ProfileCreatedEventObject } from '../types/contracts/contracts/interface/IProfile'
@@ -40,7 +44,8 @@ export const useCreateProfileNFT = () => {
   const mintProfileNFT = async (
     handle: string,
     imageURI: string,
-    nfts: INFTCollectionModule.NFTStructStruct[]
+    nfts: INFTCollectionModule.NFTStructStruct[],
+    snsAccounts: ISNSAccountModule.SNSAccountStructStruct[]
   ) => {
     try {
       setErrors(null)
@@ -49,7 +54,12 @@ export const useCreateProfileNFT = () => {
         return
       }
       setLoading(true)
-      await profileNFTContract.createProfile({ handle, imageURI, nfts })
+      await profileNFTContract.createProfile({
+        handle,
+        imageURI,
+        nfts,
+        snsAccounts,
+      })
       success.current = true
     } catch (error) {
       setLoading(false)
@@ -62,6 +72,10 @@ export const useCreateProfileNFT = () => {
 
 export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
   const [profile, setProfile] = useState<IProfile.ProfileStructStructOutput>()
+  const [nftCollection, setNFTCollection] =
+    useState<INFTCollectionModule.NFTStructStructOutput[]>()
+  const [snsAccounts, setSNSAccounts] =
+    useState<ISNSAccountModule.SNSAccountStructStructOutput[]>()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>(null)
   const profileNFTContract = useProfileNFTContractClient()
@@ -75,6 +89,16 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
           setLoading(true)
           const profile = await profileNFTContract.getProfile(Number(tokenId))
           setProfile(profile)
+          const nftCollection = await profileNFTContract.getNFTCollection(
+            Number(tokenId),
+            1
+          )
+          setNFTCollection(nftCollection)
+          const snsAccounts = await profileNFTContract.getSNSAccounts(
+            Number(tokenId),
+            1
+          )
+          setSNSAccounts(snsAccounts)
           setLoading(false)
         }
       } catch (error) {
@@ -89,5 +113,5 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
     }
   }, [tokenId])
 
-  return { profile, loading, errors }
+  return { profile, nftCollection, snsAccounts, loading, errors }
 }

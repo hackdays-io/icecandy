@@ -1,4 +1,5 @@
 import { Container, Grid, GridItem } from '@chakra-ui/react'
+import { useAddress } from '@thirdweb-dev/react'
 import { ChainId } from '@thirdweb-dev/sdk'
 import { OwnedNft } from 'alchemy-sdk'
 import { NextPage } from 'next'
@@ -9,12 +10,16 @@ import ProfileForm from '../../components/organisms/profile/Form'
 import ProfileMain from '../../components/organisms/profile/Main'
 import { useCreateProfileNFT } from '../../hooks/useProfileContract'
 import { useHoldingNFTs } from '../../hooks/useToken'
-import { INFTCollectionModule } from '../../types/contracts'
+import {
+  INFTCollectionModule,
+  NFTCollectionModule,
+} from '../../types/contracts'
 import { AppProfile } from '../../types/profile'
 
 const ProfileNewPage: NextPage = () => {
   const { mintProfileNFT, loading, errors, result } = useCreateProfileNFT()
   const router = useRouter()
+  const address = useAddress()
 
   useEffect(() => {
     if (result) {
@@ -56,7 +61,7 @@ const ProfileNewPage: NextPage = () => {
           contractAddress: String(nft?.contract.address),
           tokenId: Number(nft?.tokenId),
           tokenURI: JSON.stringify(nft?.rawMetadata),
-          wallet: '',
+          wallet: address || '',
         }
       }
     )
@@ -65,10 +70,12 @@ const ProfileNewPage: NextPage = () => {
   }
 
   const execute = async (data: AppProfile.FormData) => {
+    console.log(data)
     await mintProfileNFT(
       data.handle,
       data.imageURI,
-      parseNFTsForm2Contract(data.nfts)
+      parseNFTsForm2Contract(data.nfts),
+      data.snsAccounts
     )
   }
 
@@ -94,8 +101,12 @@ const ProfileNewPage: NextPage = () => {
             pfpURI={watch('imageURI')}
             modules={[
               {
+                type: 'snsAccounts',
+                data: watch('snsAccounts') as any,
+              },
+              {
                 type: 'nftCollection',
-                data: parseNFTsForm2Contract(watch('nfts')),
+                data: parseNFTsForm2Contract(watch('nfts')) as any,
               },
             ]}
           />

@@ -30,7 +30,7 @@ import type {
 export declare namespace ISNSAccountModule {
   export type SNSAccountStructStruct = {
     service: PromiseOrValue<string>;
-    user_id: PromiseOrValue<string>;
+    userId: PromiseOrValue<string>;
     userPageURL: PromiseOrValue<string>;
     wallet: PromiseOrValue<string>;
   };
@@ -40,7 +40,7 @@ export declare namespace ISNSAccountModule {
     string,
     string,
     string
-  ] & { service: string; user_id: string; userPageURL: string; wallet: string };
+  ] & { service: string; userId: string; userPageURL: string; wallet: string };
 }
 
 export interface SNSAccountModuleInterface extends utils.Interface {

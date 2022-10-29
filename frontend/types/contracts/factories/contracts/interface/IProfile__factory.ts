@@ -129,7 +129,7 @@ const _abi = [
           },
           {
             internalType: "string",
-            name: "user_id",
+            name: "userId",
             type: "string",
           },
           {
@@ -286,6 +286,33 @@ const _abi = [
             name: "nfts",
             type: "tuple[]",
           },
+          {
+            components: [
+              {
+                internalType: "string",
+                name: "service",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "userId",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "userPageURL",
+                type: "string",
+              },
+              {
+                internalType: "address",
+                name: "wallet",
+                type: "address",
+              },
+            ],
+            internalType: "struct ISNSAccountModule.SNSAccountStruct[]",
+            name: "snsAccounts",
+            type: "tuple[]",
+          },
         ],
         internalType: "struct IProfile.CreateProfileStructData",
         name: "vars",
@@ -319,7 +346,7 @@ const _abi = [
           },
           {
             internalType: "string",
-            name: "user_id",
+            name: "userId",
             type: "string",
           },
           {
@@ -428,7 +455,7 @@ const _abi = [
           },
           {
             internalType: "uint256",
-            name: "snsPubId",
+            name: "snsAccountsPubId",
             type: "uint256",
           },
         ],
@@ -464,7 +491,7 @@ const _abi = [
           },
           {
             internalType: "string",
-            name: "user_id",
+            name: "userId",
             type: "string",
           },
           {

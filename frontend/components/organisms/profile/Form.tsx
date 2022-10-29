@@ -16,10 +16,11 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
+import { useAddress } from '@thirdweb-dev/react'
 import { ChainId } from '@thirdweb-dev/sdk'
 import { OwnedNft } from 'alchemy-sdk'
 import { find } from 'lodash'
-import { FC, FormEventHandler } from 'react'
+import { FC, FormEventHandler, useCallback } from 'react'
 import {
   Control,
   Controller,
@@ -28,6 +29,7 @@ import {
   UseFormWatch,
 } from 'react-hook-form'
 import { useHoldingNFTs } from '../../../hooks/useToken'
+import { ISNSAccountModule } from '../../../types/contracts'
 import { AppProfile } from '../../../types/profile'
 import ModalBase from '../../atoms/ModalBase'
 import AuthTwitter from '../../atoms/profile/AuthTwitter'
@@ -55,6 +57,7 @@ const ProfileForm: FC<Props> = ({
   const { isOpen, onClose, onOpen } = useDisclosure()
   const { holdingNFTsOnEth, holdingNFTsOnPolygon, holdingNFTsOnArb } =
     useHoldingNFTs()
+  const address = useAddress()
 
   const handleCheck = (index: number, chain: ChainId) => {
     const { nfts } = getValues()
@@ -92,16 +95,14 @@ const ProfileForm: FC<Props> = ({
     )
   }
 
-  const setTwitterAccount = (params: { userName: string }) => {
-    const { snsAccounts } = getValues()
-    snsAccounts.push({
-      service: 'twitter',
-      user_id: params.userName,
-      userPageURL: `https://twitter.com/${params.userName}`,
-      wallet: '',
-    })
-    setValue('snsAccounts', snsAccounts)
-  }
+  const setSNSAccount = useCallback(
+    (params: ISNSAccountModule.SNSAccountStructStruct) => {
+      const { snsAccounts } = getValues()
+      snsAccounts.push(params)
+      setValue('snsAccounts', snsAccounts)
+    },
+    [address]
+  )
 
   return (
     <form onSubmit={onSubmit}>
@@ -110,7 +111,7 @@ const ProfileForm: FC<Props> = ({
       </Box>
 
       <Box my={4}>
-        <AuthTwitter setAccountData={setTwitterAccount} />
+        <AuthTwitter setAccountData={setSNSAccount} />
       </Box>
 
       <Box mb={5}>

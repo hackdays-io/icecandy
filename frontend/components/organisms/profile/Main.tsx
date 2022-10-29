@@ -3,11 +3,15 @@ import { FC } from 'react'
 import { AppProfile } from '../../../types/profile'
 import PFP from '../../atoms/profile/PFP'
 import ProfileNFTCollectionModule from '../../molecules/profiles/NFTCollectionModule'
+import ProfileSNSAccountsModule from '../../molecules/profiles/SNSAccountsModule'
 
 type Props = {
   pfpURI?: string
   handle?: string
-  modules: AppProfile.Module<'nftCollection'>[]
+  modules: [
+    AppProfile.Module<'snsAccounts'>,
+    AppProfile.Module<'nftCollection'>
+  ]
 }
 
 const ProfileMain: FC<Props> = ({ pfpURI, handle, modules }) => {
@@ -23,7 +27,8 @@ const ProfileMain: FC<Props> = ({ pfpURI, handle, modules }) => {
         switch (module.type) {
           case 'nftCollection':
             return <ProfileNFTCollectionModule nfts={module.data} />
-
+          case 'snsAccounts':
+            return <ProfileSNSAccountsModule snsAccounts={module.data} />
           default:
             return <></>
         }
