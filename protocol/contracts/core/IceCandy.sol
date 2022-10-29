@@ -3,7 +3,7 @@ pragma solidity ^0.8.10;
 
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
-import {IIceCandy} from "../interface/IIceCandy.sol";
+import {IIceCandy} from "../interfaces/IIceCandy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
