@@ -7,13 +7,10 @@ import {IProfile} from "../interfaces/IProfile.sol";
 import {INFTCollectionModule} from "../interfaces/INFTCollectionModule.sol";
 import {IScoreModule} from "../interfaces/IScoreModule.sol";
 import {IMirrorModule} from "../interfaces/IMirrorModule.sol";
-<<<<<<< HEAD
 import {IColorExtension} from "../interfaces/IColorExtension.sol";
-=======
 import {ISNSAccountModule} from "../interfaces/ISNSAccountModule.sol";
 import {NFTCollectionModule} from "./modules/NFTCollectionModule.sol";
 import {SNSAccountModule} from "./modules/SNSAccountModule.sol";
->>>>>>> ccbd1c88c6830916bb5b4a9a95712c2812a66bd5
 import {IceCandy} from "./IceCandy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -94,6 +91,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _createScore(profileId);
     }
 
+    /*
     function addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _addMirror(profileId, mirror);
@@ -113,8 +111,12 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _deactivateColor(profileId, extensionId);
     }
-    
-    function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) public override {
+    */
+
+    function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts)
+        public
+        override
+    {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _createSNSAccount(profileId, snsAccounts);
     }
@@ -152,6 +154,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         return _getScore(profileId);
     }
 
+    /*
     function getMirror(uint256 profileId) external view override returns (IMirrorModule.MirrorStruct[] memory) {
         return _getMirror(profileId);
     }
@@ -159,6 +162,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     function getColor(uint256 profileId) external view override returns (IColorExtension.ColorStruct[] memory) {
         return _getColor(profileId);
     }
+    */
 
     function _createProfile(
         uint256 profileId,
@@ -176,7 +180,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _profile[profileId].introduction = introduction;
         _profile[profileId].imageURI = imageURI;
 
-        emit ProfileCreated(owner, profileId, block.number);
+        emit ProfileCreated(profileId, owner, block.number);
     }
 
     function _createNFTCollection(
@@ -193,6 +197,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         emit ScoreCreated(profileId, block.number);
     }
 
+    /*
     function _addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) internal {
         uint256 moduleId = IMirrorModule(_mirrorModule).addMirror(profileId, mirror);
         emit MirrorAdded(profileId, moduleId, block.number);
@@ -212,6 +217,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         IColorExtension(_colorExtension).deactivate(profileId, extensionId);
         emit ColorDeactivated(profileId, extensionId, block.number);
     }
+    */
 
     function _createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) internal {
         ISNSAccountModule(_snsAccountModule).processSNSAccount(profileId, snsAccounts);
@@ -230,17 +236,23 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         return IScoreModule(_scoreModule).getScore(profileId);
     }
 
+    /*
     function _getMirror(uint256 profileId) internal view returns (IMirrorModule.MirrorStruct[] memory) {
         return IMirrorModule(_mirrorModule).getMirror(profileId);
     }
 
-<<<<<<< HEAD
     function _getColor(uint256 profileId) internal view returns (IColorExtension.ColorStruct[] memory) {
         return IColorExtension(_colorExtension).getColor(profileId);
-=======
-    function getSNSAccounts(uint256 profileId) external view override returns (ISNSAccountModule.SNSAccountStruct[] memory) {
+    }
+    */
+
+    function getSNSAccounts(uint256 profileId)
+        external
+        view
+        override
+        returns (ISNSAccountModule.SNSAccountStruct[] memory)
+    {
         return SNSAccountModule(_snsAccountModule).getSNSAccounts(profileId);
->>>>>>> ccbd1c88c6830916bb5b4a9a95712c2812a66bd5
     }
 
     function _baseURI() internal pure override returns (string memory) {

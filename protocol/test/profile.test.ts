@@ -322,6 +322,7 @@ describe('profile test', () => {
     expect(scores_[2]?.point).to.equal(200)
   })
 
+  /*
   it('addMirror()', async () => {
     const _mirror = {
       hoge: 'fuga',
@@ -373,6 +374,7 @@ describe('profile test', () => {
     const mirror_ = await profile.connect(alice).getColor(1)
     expect(mirror_[0]?.active).to.equal(false)
   })
+  */
 
   it('createSNS()', async () => {
     const _github: ISNSAccountModule.SNSAccountStructStruct = {

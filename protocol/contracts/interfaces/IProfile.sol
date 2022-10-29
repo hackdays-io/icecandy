@@ -34,7 +34,7 @@ interface IProfile {
     function setScoreModule(address scoreModule) external;
 
     function setMirrorModule(address mirrorModule) external;
-    
+
     function setSNSAccountModule(address snsAccountModule) external;
 
     function setColorExtension(address colorExtension) external;
@@ -49,6 +49,7 @@ interface IProfile {
 
     function createScore(uint256 profileId) external;
 
+    /*
     function addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) external;
 
     function addColor(uint256 profileId, string memory color) external;
@@ -56,7 +57,8 @@ interface IProfile {
     function activateColor(uint256 profileId, uint256 extensionId) external;
 
     function deactivateColor(uint256 profileId, uint256 extensionId) external;
-
+    */
+   
     function addWallet(uint256 profileId, address wallet) external;
 
     function getProfile(uint256 profileId) external view returns (ProfileStruct memory);
@@ -69,15 +71,13 @@ interface IProfile {
 
     function getScore(uint256 profileId) external view returns (IScoreModule.ScoreStruct[] memory);
 
+    /*
     function getMirror(uint256 profileId) external view returns (IMirrorModule.MirrorStruct[] memory);
 
-<<<<<<< HEAD
     function getColor(uint256 profileId) external view returns (IColorExtension.ColorStruct[] memory);
+    */
 
     event ProfileCreated(uint256 indexed profileId, address indexed owner, uint256 blockNumber);
-=======
-    event ProfileCreated(address indexed owner, uint256 profileId, uint256 blockNumber);
->>>>>>> ccbd1c88c6830916bb5b4a9a95712c2812a66bd5
 
     event NFTCollectionCreated(uint256 indexed profileId, address indexed module, uint256 blockNumber);
 
