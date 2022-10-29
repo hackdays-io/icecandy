@@ -5,6 +5,7 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {IProfile} from "../interfaces/IProfile.sol";
 import {INFTCollectionModule} from "../interfaces/INFTCollectionModule.sol";
+import {IScoreModule} from "../interfaces/IScoreModule.sol";
 import {IceCandy} from "./IceCandy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
@@ -14,6 +15,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     address internal _icecandy;
     address internal _nftCollectionModule;
     address internal _poapCollectionModule;
+    address internal _scoreModule;
 
     constructor(address owner) ERC721("Profile", "PROFILE") {
         _transferOwnership(owner);
@@ -34,6 +36,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     function setPOAPCollectionModule(address poapCollectionModule) external override onlyOwner {
         _poapCollectionModule = poapCollectionModule;
+    }
+
+    function setScoreModule(address scoreModule) external override onlyOwner {
+        _scoreModule = scoreModule;
     }
 
     function createProfile(CreateProfileStructData calldata vars) external override returns (uint256) {
@@ -57,6 +63,11 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _createNFTCollection(profileId, _poapCollectionModule, poaps);
+    }
+
+    function createScore(uint256 profileId) external override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _createScore(profileId);
     }
 
     function addWallet(uint256 profileId, address wallet) external override {
@@ -88,6 +99,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         return _getNFTCollection(profileId, _poapCollectionModule);
     }
 
+    function getScore(uint256 profileId) external view override returns (IScoreModule.ScoreStruct[] memory) {
+        return _getScore(profileId);
+    }
+
     function _createProfile(
         uint256 profileId,
         address owner,
@@ -116,12 +131,21 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         emit NFTCollectionCreated(profileId, module, block.number);
     }
 
+    function _createScore(uint256 profileId) internal {
+        IScoreModule(_scoreModule).processScore(profileId);
+        emit ScoreCreated(profileId, block.number);
+    }
+
     function _getNFTCollection(uint256 profileId, address module)
         internal
         view
         returns (INFTCollectionModule.NFTStruct[] memory)
     {
         return INFTCollectionModule(module).getCollection(profileId);
+    }
+
+    function _getScore(uint256 profileId) internal view returns (IScoreModule.ScoreStruct[] memory) {
+        return IScoreModule(_scoreModule).getScore(profileId);
     }
 
     function _baseURI() internal pure override returns (string memory) {
