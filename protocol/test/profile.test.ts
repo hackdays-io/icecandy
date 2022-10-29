@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { Profile, NFTCollectionModule, POAPCollectionModule, IceCandy } from '../typechain-types'
+import { Profile, NFTCollectionModule, POAPCollectionModule, IceCandy, ScoreModule } from '../typechain-types'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { BigNumber } from 'ethers'
 
@@ -14,6 +14,7 @@ describe('profile test', () => {
   let icecandy: IceCandy
   let nftCollection: NFTCollectionModule
   let poapCollection: POAPCollectionModule
+  let score: ScoreModule
 
   before(async () => {
     // signers
@@ -33,6 +34,14 @@ describe('profile test', () => {
     nftCollection = await fNFTCollection.deploy(profile.address)
     const fPOAPCollection = await ethers.getContractFactory('POAPCollectionModule')
     poapCollection = await fPOAPCollection.deploy(profile.address)
+    const fScore = await ethers.getContractFactory('ScoreModule')
+    score = await fScore.deploy(owner.address)
+
+    // setup
+    await icecandy.setProfile(profile.address)
+    await score.setProfile(profile.address)
+    await score.setNFTCollectionModule(nftCollection.address)
+    await score.setPOAPCollectionModule(poapCollection.address)
   })
 
   it('setIceCandy()', async () => {
@@ -63,6 +72,16 @@ describe('profile test', () => {
 
     // success transaction
     await expect(profile.connect(owner).setPOAPCollectionModule(poapCollection.address)).to.be.not.reverted
+  })
+
+  it('setScoreModule()', async () => {
+    // revert transaction
+    await expect(profile.connect(alice).setScoreModule(score.address)).to.be.revertedWith(
+      'Ownable: caller is not the owner'
+    )
+
+    // success transaction
+    await expect(profile.connect(owner).setScoreModule(score.address)).to.be.not.reverted
   })
 
   it('createProfile()', async () => {
@@ -219,6 +238,23 @@ describe('profile test', () => {
     expect(poaps_[1]?.contractAddress).to.equal(_poaps[1]?.contractAddress)
     expect(poaps_[1]?.tokenId).to.equal(BigNumber.from(_poaps[1]?.tokenId))
     expect(poaps_[1]?.tokenURI).to.equal(_poaps[1]?.tokenURI)
+  })
+
+  it('createScore()', async () => {
+    // send transaction
+    const _tx = await profile.connect(alice).createScore(1)
+    await expect(_tx)
+      .to.emit(profile, 'ScoreCreated')
+      .withArgs(1, await ethers.provider.getBlockNumber())
+
+    // get score
+    const scores_ = await profile.connect(alice).getScore(1)
+    expect(scores_[0]?.name).to.equal('PROFILE')
+    expect(scores_[0]?.point).to.equal(300)
+    expect(scores_[1]?.name).to.equal('NFT')
+    expect(scores_[1]?.point).to.equal(100)
+    expect(scores_[2]?.name).to.equal('POAP')
+    expect(scores_[2]?.point).to.equal(200)
   })
 
   it('addWallet()', async () => {
