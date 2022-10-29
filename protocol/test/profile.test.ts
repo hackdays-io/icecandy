@@ -1,6 +1,13 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { Profile, NFTCollectionModule, POAPCollectionModule, IceCandy, ScoreModule } from '../typechain-types'
+import {
+  Profile,
+  NFTCollectionModule,
+  POAPCollectionModule,
+  IceCandy,
+  ScoreModule,
+  MirrorModule,
+} from '../typechain-types'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { BigNumber } from 'ethers'
 
@@ -15,6 +22,7 @@ describe('profile test', () => {
   let nftCollection: NFTCollectionModule
   let poapCollection: POAPCollectionModule
   let score: ScoreModule
+  let mirror: MirrorModule
 
   before(async () => {
     // signers
@@ -36,12 +44,15 @@ describe('profile test', () => {
     poapCollection = await fPOAPCollection.deploy(profile.address)
     const fScore = await ethers.getContractFactory('ScoreModule')
     score = await fScore.deploy(owner.address)
+    const fMirror = await ethers.getContractFactory('MirrorModule')
+    mirror = await fMirror.deploy(owner.address)
 
     // setup
     await icecandy.setProfile(profile.address)
     await score.setProfile(profile.address)
     await score.setNFTCollectionModule(nftCollection.address)
     await score.setPOAPCollectionModule(poapCollection.address)
+    await mirror.setProfile(profile.address)
   })
 
   it('setIceCandy()', async () => {
@@ -82,6 +93,16 @@ describe('profile test', () => {
 
     // success transaction
     await expect(profile.connect(owner).setScoreModule(score.address)).to.be.not.reverted
+  })
+
+  it('setMirrorModule()', async () => {
+    // revert transaction
+    await expect(profile.connect(alice).setMirrorModule(mirror.address)).to.be.revertedWith(
+      'Ownable: caller is not the owner'
+    )
+
+    // success transaction
+    await expect(profile.connect(owner).setMirrorModule(mirror.address)).to.be.not.reverted
   })
 
   it('createProfile()', async () => {
@@ -255,6 +276,21 @@ describe('profile test', () => {
     expect(scores_[1]?.point).to.equal(100)
     expect(scores_[2]?.name).to.equal('POAP')
     expect(scores_[2]?.point).to.equal(200)
+  })
+
+  it('addMirror()', async () => {
+    const _mirror = {
+      hoge: 'fuga',
+    }
+    // send transaction
+    const _tx = await profile.connect(alice).addMirror(1, _mirror)
+    await expect(_tx)
+      .to.emit(profile, 'MirrorCreated')
+      .withArgs(1, await ethers.provider.getBlockNumber())
+
+    // get score
+    const mirror_ = await profile.connect(alice).getMirror(1)
+    expect(mirror_[0]?.hoge).to.equal(_mirror.hoge)
   })
 
   it('addWallet()', async () => {
