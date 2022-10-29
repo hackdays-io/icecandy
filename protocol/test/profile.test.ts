@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { Profile, NFTCollectionModule } from '../typechain-types'
+import { Profile, NFTCollectionModule, POAPCollectionModule, IceCandy } from '../typechain-types'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { BigNumber } from 'ethers'
 
@@ -11,7 +11,9 @@ describe('profile test', () => {
   let carol: SignerWithAddress
   let daniel: SignerWithAddress
   let profile: Profile
+  let icecandy: IceCandy
   let nftCollection: NFTCollectionModule
+  let poapCollection: POAPCollectionModule
 
   before(async () => {
     // signers
@@ -25,8 +27,22 @@ describe('profile test', () => {
     // deploy contracts
     const fProfile = await ethers.getContractFactory('Profile')
     profile = await fProfile.deploy(owner.address)
+    const fIceCandy = await ethers.getContractFactory('IceCandy')
+    icecandy = await fIceCandy.deploy(owner.address)
     const fNFTCollection = await ethers.getContractFactory('NFTCollectionModule')
     nftCollection = await fNFTCollection.deploy(profile.address)
+    const fPOAPCollection = await ethers.getContractFactory('POAPCollectionModule')
+    poapCollection = await fPOAPCollection.deploy(profile.address)
+  })
+
+  it('setIceCandy()', async () => {
+    // revert transaction
+    await expect(profile.connect(alice).setIceCandy(icecandy.address)).to.be.revertedWith(
+      'Ownable: caller is not the owner'
+    )
+
+    // success transaction
+    await expect(profile.connect(owner).setIceCandy(icecandy.address)).to.be.not.reverted
   })
 
   it('setNFTCollectionModule()', async () => {
@@ -39,24 +55,51 @@ describe('profile test', () => {
     await expect(profile.connect(owner).setNFTCollectionModule(nftCollection.address)).to.be.not.reverted
   })
 
+  it('setPOAPCollectionModule()', async () => {
+    // revert transaction
+    await expect(profile.connect(alice).setPOAPCollectionModule(poapCollection.address)).to.be.revertedWith(
+      'Ownable: caller is not the owner'
+    )
+
+    // success transaction
+    await expect(profile.connect(owner).setPOAPCollectionModule(poapCollection.address)).to.be.not.reverted
+  })
+
   it('createProfile()', async () => {
     const _profile = {
-      handle: 'hogehoge',
+      name: 'hogehoge',
+      introduction: 'fugafuga',
       imageURI: 'https://image.com',
       nfts: [
         {
           chainId: 1,
-          contractAddress: '0x1111111111111111111111111111111111111111',
+          contractAddress: '0x0000000000000000000000000000000000000001',
           tokenId: 1,
           tokenURI: '',
-          wallet: alice.address,
+          owner: alice.address,
         },
         {
           chainId: 137,
-          contractAddress: '0x2222222222222222222222222222222222222222',
+          contractAddress: '0x0000000000000000000000000000000000000001',
           tokenId: 1,
           tokenURI: 'https://polygon.com/1',
-          wallet: alice.address,
+          owner: alice.address,
+        },
+      ],
+      poaps: [
+        {
+          chainId: 1,
+          contractAddress: '0x0000000000000000000000000000000000000002',
+          tokenId: 2,
+          tokenURI: '',
+          owner: alice.address,
+        },
+        {
+          chainId: 137,
+          contractAddress: '0x0000000000000000000000000000000000000002',
+          tokenId: 2,
+          tokenURI: 'https://polygon.com/2',
+          owner: alice.address,
         },
       ],
     }
@@ -65,18 +108,23 @@ describe('profile test', () => {
     const _tx = await profile.connect(alice).createProfile(_profile)
     await expect(_tx)
       .to.emit(profile, 'ProfileCreated')
-      .withArgs(1, alice.address, _profile.handle, _profile.imageURI, await ethers.provider.getBlockNumber())
+      .withArgs(1, alice.address, await ethers.provider.getBlockNumber())
+      .to.emit(icecandy, 'Transfer')
+      .withArgs(owner.address, alice.address, 1)
       .to.emit(profile, 'NFTCollectionCreated')
+      .withArgs(1, nftCollection.address, await ethers.provider.getBlockNumber())
+      .to.emit(profile, 'NFTCollectionCreated')
+      .withArgs(1, poapCollection.address, await ethers.provider.getBlockNumber())
 
-    // get profile struct
+    // get profile
     const profile_ = await profile.connect(alice).getProfile(1)
     expect(profile_.wallets[0]).to.equal(alice.address)
-    expect(profile_.handle).to.equal(_profile.handle)
+    expect(profile_.name).to.equal(_profile.name)
+    expect(profile_.introduction).to.equal(_profile.introduction)
     expect(profile_.imageURI).to.equal(_profile.imageURI)
-    expect(profile_.nftCollectionPubId).to.equal(1)
 
-    // get nft struct
-    const nfts_ = await profile.connect(alice).getNFTCollection(1, 1)
+    // get nfts
+    const nfts_ = await profile.connect(alice).getNFTCollection(1)
     expect(nfts_[0]?.chainId).to.equal(BigNumber.from(_profile.nfts[0]?.chainId))
     expect(nfts_[0]?.contractAddress).to.equal(_profile.nfts[0]?.contractAddress)
     expect(nfts_[0]?.tokenId).to.equal(BigNumber.from(_profile.nfts[0]?.tokenId))
@@ -85,6 +133,17 @@ describe('profile test', () => {
     expect(nfts_[1]?.contractAddress).to.equal(_profile.nfts[1]?.contractAddress)
     expect(nfts_[1]?.tokenId).to.equal(BigNumber.from(_profile.nfts[1]?.tokenId))
     expect(nfts_[1]?.tokenURI).to.equal(_profile.nfts[1]?.tokenURI)
+
+    // get poaps
+    const poaps_ = await profile.connect(alice).getPOAPCollection(1)
+    expect(poaps_[0]?.chainId).to.equal(BigNumber.from(_profile.poaps[0]?.chainId))
+    expect(poaps_[0]?.contractAddress).to.equal(_profile.poaps[0]?.contractAddress)
+    expect(poaps_[0]?.tokenId).to.equal(BigNumber.from(_profile.poaps[0]?.tokenId))
+    expect(poaps_[0]?.tokenURI).to.equal(_profile.poaps[0]?.tokenURI)
+    expect(poaps_[1]?.chainId).to.equal(BigNumber.from(_profile.poaps[1]?.chainId))
+    expect(poaps_[1]?.contractAddress).to.equal(_profile.poaps[1]?.contractAddress)
+    expect(poaps_[1]?.tokenId).to.equal(BigNumber.from(_profile.poaps[1]?.tokenId))
+    expect(poaps_[1]?.tokenURI).to.equal(_profile.poaps[1]?.tokenURI)
 
     // get profile token
     expect(await profile.connect(alice).balanceOf(alice.address)).to.be.equals(1)
@@ -96,24 +155,27 @@ describe('profile test', () => {
     const _nfts = [
       {
         chainId: 1,
-        contractAddress: '0x3333333333333333333333333333333333333333',
-        tokenId: 2,
+        contractAddress: '0x0000000000000000000000000000000000000003',
+        tokenId: 3,
         tokenURI: '',
-        wallet: alice.address,
+        owner: alice.address,
       },
       {
         chainId: 137,
-        contractAddress: '0x4444444444444444444444444444444444444444',
-        tokenId: 2,
-        tokenURI: 'https://polygon.com/2',
-        wallet: alice.address,
+        contractAddress: '0x0000000000000000000000000000000000000003',
+        tokenId: 3,
+        tokenURI: 'https://polygon.com/3',
+        owner: alice.address,
       },
     ]
     // send transaction
-    await expect(profile.connect(alice).createNFTCollection(1, _nfts)).to.emit(profile, 'NFTCollectionCreated')
+    const _tx = await profile.connect(alice).createNFTCollection(1, _nfts)
+    await expect(_tx)
+      .to.emit(profile, 'NFTCollectionCreated')
+      .withArgs(1, nftCollection.address, await ethers.provider.getBlockNumber())
 
-    // get nft struct
-    const nfts_ = await profile.connect(alice).getNFTCollection(1, 2)
+    // get nfts
+    const nfts_ = await profile.connect(alice).getNFTCollection(1)
     expect(nfts_[0]?.chainId).to.equal(BigNumber.from(_nfts[0]?.chainId))
     expect(nfts_[0]?.contractAddress).to.equal(_nfts[0]?.contractAddress)
     expect(nfts_[0]?.tokenId).to.equal(BigNumber.from(_nfts[0]?.tokenId))
@@ -122,17 +184,48 @@ describe('profile test', () => {
     expect(nfts_[1]?.contractAddress).to.equal(_nfts[1]?.contractAddress)
     expect(nfts_[1]?.tokenId).to.equal(BigNumber.from(_nfts[1]?.tokenId))
     expect(nfts_[1]?.tokenURI).to.equal(_nfts[1]?.tokenURI)
+  })
 
-    // get profile struct
-    const profile_ = await profile.connect(alice).getProfile(1)
-    expect(profile_.nftCollectionPubId).to.equal(2)
+  it('createPOAPCollection()', async () => {
+    const _poaps = [
+      {
+        chainId: 1,
+        contractAddress: '0x0000000000000000000000000000000000000004',
+        tokenId: 4,
+        tokenURI: '',
+        owner: alice.address,
+      },
+      {
+        chainId: 137,
+        contractAddress: '0x0000000000000000000000000000000000000004',
+        tokenId: 4,
+        tokenURI: 'https://polygon.com/4',
+        owner: alice.address,
+      },
+    ]
+    // send transaction
+    const _tx = await profile.connect(alice).createPOAPCollection(1, _poaps)
+    await expect(_tx)
+      .to.emit(profile, 'NFTCollectionCreated')
+      .withArgs(1, poapCollection.address, await ethers.provider.getBlockNumber())
+
+    // get poaps
+    const poaps_ = await profile.connect(alice).getPOAPCollection(1)
+    expect(poaps_[0]?.chainId).to.equal(BigNumber.from(_poaps[0]?.chainId))
+    expect(poaps_[0]?.contractAddress).to.equal(_poaps[0]?.contractAddress)
+    expect(poaps_[0]?.tokenId).to.equal(BigNumber.from(_poaps[0]?.tokenId))
+    expect(poaps_[0]?.tokenURI).to.equal(_poaps[0]?.tokenURI)
+    expect(poaps_[1]?.chainId).to.equal(BigNumber.from(_poaps[1]?.chainId))
+    expect(poaps_[1]?.contractAddress).to.equal(_poaps[1]?.contractAddress)
+    expect(poaps_[1]?.tokenId).to.equal(BigNumber.from(_poaps[1]?.tokenId))
+    expect(poaps_[1]?.tokenURI).to.equal(_poaps[1]?.tokenURI)
   })
 
   it('addWallet()', async () => {
     // send transaction
     await expect(profile.connect(alice).addWallet(1, bob.address)).to.emit(profile, 'WalletAdded')
 
-    // get profile struct
+    // get profile
     const profile_ = await profile.connect(alice).getProfile(1)
     expect(profile_.wallets[0]).to.equal(alice.address)
     expect(profile_.wallets[1]).to.equal(bob.address)
@@ -142,17 +235,17 @@ describe('profile test', () => {
     const _nfts = [
       {
         chainId: 1,
-        contractAddress: '0x3333333333333333333333333333333333333333',
-        tokenId: 2,
+        contractAddress: '0x0000000000000000000000000000000000000005',
+        tokenId: 5,
         tokenURI: '',
-        wallet: alice.address,
+        owner: alice.address,
       },
       {
         chainId: 137,
-        contractAddress: '0x4444444444444444444444444444444444444444',
-        tokenId: 2,
-        tokenURI: 'https://polygon.com/2',
-        wallet: alice.address,
+        contractAddress: '0x0000000000000000000000000000000000000005',
+        tokenId: 5,
+        tokenURI: 'https://polygon.com/5',
+        owner: alice.address,
       },
     ]
 
@@ -180,17 +273,17 @@ describe('profile test', () => {
     const _nfts = [
       {
         chainId: 1,
-        contractAddress: '0x5555555555555555555555555555555555555555',
-        tokenId: 3,
+        contractAddress: '0x0000000000000000000000000000000000000006',
+        tokenId: 6,
         tokenURI: '',
-        wallet: alice.address,
+        owner: alice.address,
       },
       {
         chainId: 137,
-        contractAddress: '0x6666666666666666666666666666666666666666',
-        tokenId: 3,
-        tokenURI: 'https://polygon.com/3',
-        wallet: alice.address,
+        contractAddress: '0x0000000000000000000000000000000000000006',
+        tokenId: 6,
+        tokenURI: 'https://polygon.com/6',
+        owner: alice.address,
       },
     ]
 
