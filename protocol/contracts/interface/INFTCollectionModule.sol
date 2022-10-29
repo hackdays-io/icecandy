@@ -7,14 +7,13 @@ interface INFTCollectionModule {
         address contractAddress;
         uint256 tokenId;
         string tokenURI; // for cross chain
-        address wallet;
+        address owner;
     }
 
     function processCollect(
         uint256 profileId,
-        uint256 pubId,
         NFTStruct[] calldata nfts
     ) external;
 
-    function getNFTs(uint256 profileId, uint256 pubId) external view returns (NFTStruct[] memory);
+    function getCollection(uint256 profileId) external view returns (NFTStruct[] memory);
 }

@@ -5,7 +5,6 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {IProfile} from "../interface/IProfile.sol";
 import {INFTCollectionModule} from "../interface/INFTCollectionModule.sol";
-import {NFTCollectionModule} from "./NFTCollectionModule.sol";
 import {IceCandy} from "./IceCandy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
@@ -15,6 +14,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     uint256 internal _profileCounter;
     address internal _icecandy;
     address internal _nftCollectionModule;
+    address internal _poapCollectionModule;
 
     constructor(address owner) ERC721("Profile", "PROFILE") {
         _transferOwnership(owner);
@@ -25,34 +25,39 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _;
     }
 
-    function setIceCandy(address icecandy) external onlyOwner {
+    function setIceCandy(address icecandy) external override onlyOwner {
         _icecandy = icecandy;
     }
 
-    function setNFTCollectionModule(address nftCollectionModule) external onlyOwner {
+    function setNFTCollectionModule(address nftCollectionModule) external override onlyOwner {
         _nftCollectionModule = nftCollectionModule;
+    }
+
+    function setPOAPCollectionModule(address poapCollectionModule) external override onlyOwner {
+        _poapCollectionModule = poapCollectionModule;
     }
 
     function createProfile(CreateProfileStructData calldata vars) external override returns (uint256) {
         uint256 profileId = ++_profileCounter;
 
-        _mint(msg.sender, profileId);
-
-        _profile[profileId].wallets.push(msg.sender);
-        _profile[profileId].handle = vars.handle;
-        _profile[profileId].imageURI = vars.imageURI;
-        _profile[profileId].nftCollectionPubId = 0;
-
-        _createNFTCollection(profileId, 1, vars.nfts);
-
-        emit ProfileCreated(msg.sender, profileId, vars.handle, vars.imageURI, block.number);
+        _createProfile(profileId, msg.sender, vars.name, vars.introduction, vars.imageURI);
+        _createNFTCollection(profileId, _nftCollectionModule, vars.nfts);
+        _createNFTCollection(profileId, _poapCollectionModule, vars.poaps);
 
         return profileId;
     }
 
-    function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) public override {
+    function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        _createNFTCollection(profileId, ++_profile[profileId].nftCollectionPubId, nfts);
+        _createNFTCollection(profileId, _nftCollectionModule, nfts);
+    }
+
+    function createPOAPCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata poaps)
+        external
+        override
+    {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _createNFTCollection(profileId, _poapCollectionModule, poaps);
     }
 
     function addWallet(uint256 profileId, address wallet) external override {
@@ -66,23 +71,58 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         return _profile[profileId];
     }
 
-    function getNFTCollection(uint256 profileId, uint256 nftCollectionPubId)
+    function getNFTCollection(uint256 profileId)
         external
         view
         override
         returns (INFTCollectionModule.NFTStruct[] memory)
     {
-        return NFTCollectionModule(_nftCollectionModule).getNFTs(profileId, nftCollectionPubId);
+        return _getNFTCollection(profileId, _nftCollectionModule);
+    }
+
+    function getPOAPCollection(uint256 profileId)
+        external
+        view
+        override
+        returns (INFTCollectionModule.NFTStruct[] memory)
+    {
+        return _getNFTCollection(profileId, _poapCollectionModule);
+    }
+
+    function _createProfile(
+        uint256 profileId,
+        address owner,
+        string memory name,
+        string memory introduction,
+        string memory imageURI
+    ) internal {
+        // mint
+        _mint(msg.sender, profileId);
+
+        // create Profile
+        _profile[profileId].wallets.push(owner);
+        _profile[profileId].name = name;
+        _profile[profileId].introduction = introduction;
+        _profile[profileId].imageURI = imageURI;
+
+        emit ProfileCreated(profileId, owner, block.number);
     }
 
     function _createNFTCollection(
         uint256 profileId,
-        uint256 pubId,
+        address module,
         INFTCollectionModule.NFTStruct[] calldata nfts
     ) internal {
-        NFTCollectionModule(_nftCollectionModule).processCollect(profileId, pubId, nfts);
-        _profile[profileId].nftCollectionPubId = pubId;
-        emit NFTCollectionCreated(profileId, pubId, nfts, block.number);
+        INFTCollectionModule(module).processCollect(profileId, nfts);
+        emit NFTCollectionCreated(profileId, module, block.number);
+    }
+
+    function _getNFTCollection(uint256 profileId, address module)
+        internal
+        view
+        returns (INFTCollectionModule.NFTStruct[] memory)
+    {
+        return INFTCollectionModule(module).getCollection(profileId);
     }
 
     function _baseURI() internal pure override returns (string memory) {
