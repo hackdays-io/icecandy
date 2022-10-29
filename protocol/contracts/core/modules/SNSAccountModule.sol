@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import {ISNSAccountModule} from "../interface/ISNSAccountModule.sol";
-import "hardhat/console.sol";
+import {ISNSAccountModule} from "../../interfaces/ISNSAccountModule.sol";
 
 contract SNSAccountModule is ISNSAccountModule {
     address internal _profile;

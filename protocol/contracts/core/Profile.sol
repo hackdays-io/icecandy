@@ -3,14 +3,15 @@ pragma solidity ^0.8.10;
 
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import {IProfile} from "../interface/IProfile.sol";
-import {INFTCollectionModule} from "../interface/INFTCollectionModule.sol";
-import {ISNSAccountModule} from "../interface/ISNSAccountModule.sol";
-import {NFTCollectionModule} from "./NFTCollectionModule.sol";
-import {SNSAccountModule} from "./SNSAccountModule.sol";
+import {IProfile} from "../interfaces/IProfile.sol";
+import {INFTCollectionModule} from "../interfaces/INFTCollectionModule.sol";
+import {IScoreModule} from "../interfaces/IScoreModule.sol";
+import {IMirrorModule} from "../interfaces/IMirrorModule.sol";
+import {ISNSAccountModule} from "../interfaces/ISNSAccountModule.sol";
+import {NFTCollectionModule} from "./modules/NFTCollectionModule.sol";
+import {SNSAccountModule} from "./modules/SNSAccountModule.sol";
 import {IceCandy} from "./IceCandy.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "hardhat/console.sol";
 
 contract Profile is ERC721Enumerable, IProfile, Ownable {
     mapping(uint256 => IProfile.ProfileStruct) internal _profile;
@@ -18,6 +19,9 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     address internal _icecandy;
     address internal _nftCollectionModule;
     address internal _snsAccountModule;
+    address internal _poapCollectionModule;
+    address internal _scoreModule;
+    address internal _mirrorModule;
 
     constructor(address owner) ERC721("Profile", "PROFILE") {
         _transferOwnership(owner);
@@ -28,11 +32,11 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _;
     }
 
-    function setIceCandy(address icecandy) external onlyOwner {
+    function setIceCandy(address icecandy) external override onlyOwner {
         _icecandy = icecandy;
     }
 
-    function setNFTCollectionModule(address nftCollectionModule) external onlyOwner {
+    function setNFTCollectionModule(address nftCollectionModule) external override onlyOwner {
         _nftCollectionModule = nftCollectionModule;
     }
 
@@ -40,30 +44,52 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _snsAccountModule = snsAccountModule;
     }
 
+    function setPOAPCollectionModule(address poapCollectionModule) external override onlyOwner {
+        _poapCollectionModule = poapCollectionModule;
+    }
+
+    function setScoreModule(address scoreModule) external override onlyOwner {
+        _scoreModule = scoreModule;
+    }
+
+    function setMirrorModule(address mirrorModule) external override onlyOwner {
+        _mirrorModule = mirrorModule;
+    }
+
     function createProfile(CreateProfileStructData calldata vars) external override returns (uint256) {
         uint256 profileId = ++_profileCounter;
 
-        _mint(msg.sender, profileId);
-
-        _profile[profileId].wallets.push(msg.sender);
-        _profile[profileId].handle = vars.handle;
-        _profile[profileId].imageURI = vars.imageURI;
-        _profile[profileId].nftCollectionPubId = 0;
-        _profile[profileId].snsAccountsPubId = 0;
-
-        _createNFTCollection(profileId, 1, vars.nfts);
+        _createProfile(profileId, msg.sender, vars.name, vars.introduction, vars.imageURI);
+        _createNFTCollection(profileId, _nftCollectionModule, vars.nfts);
+        _createNFTCollection(profileId, _poapCollectionModule, vars.poaps);
         for (uint i = 0; i < vars.snsAccounts.length; i++) {
             _createSNSAccount(profileId, 1, vars.snsAccounts[i]);
         }
 
-        emit ProfileCreated(msg.sender, profileId, vars.handle, vars.imageURI, block.number);
-
         return profileId;
     }
 
-    function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) public override {
+    function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        _createNFTCollection(profileId, ++_profile[profileId].nftCollectionPubId, nfts);
+        _createNFTCollection(profileId, _nftCollectionModule, nfts);
+    }
+
+    function createPOAPCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata poaps)
+        external
+        override
+    {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _createNFTCollection(profileId, _poapCollectionModule, poaps);
+    }
+
+    function createScore(uint256 profileId) external override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _createScore(profileId);
+    }
+
+    function addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) external override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _addMirror(profileId, mirror);
     }
 
     function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct calldata snsAccount) public override {
@@ -86,23 +112,84 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         return _profile[profileId];
     }
 
-    function getNFTCollection(uint256 profileId, uint256 nftCollectionPubId)
+    function getNFTCollection(uint256 profileId)
         external
         view
         override
         returns (INFTCollectionModule.NFTStruct[] memory)
     {
-        return NFTCollectionModule(_nftCollectionModule).getNFTs(profileId, nftCollectionPubId);
+        return _getNFTCollection(profileId, _nftCollectionModule);
+    }
+
+    function getPOAPCollection(uint256 profileId)
+        external
+        view
+        override
+        returns (INFTCollectionModule.NFTStruct[] memory)
+    {
+        return _getNFTCollection(profileId, _poapCollectionModule);
+    }
+
+    function getScore(uint256 profileId) external view override returns (IScoreModule.ScoreStruct[] memory) {
+        return _getScore(profileId);
+    }
+
+    function getMirror(uint256 profileId) external view override returns (IMirrorModule.MirrorStruct[] memory) {
+        return _getMirror(profileId);
+    }
+
+    function _createProfile(
+        uint256 profileId,
+        address owner,
+        string memory name,
+        string memory introduction,
+        string memory imageURI
+    ) internal {
+        // mint
+        _mint(msg.sender, profileId);
+
+        // create Profile
+        _profile[profileId].wallets.push(owner);
+        _profile[profileId].name = name;
+        _profile[profileId].introduction = introduction;
+        _profile[profileId].imageURI = imageURI;
+
+        emit ProfileCreated(profileId, owner, block.number);
     }
 
     function _createNFTCollection(
         uint256 profileId,
-        uint256 pubId,
+        address module,
         INFTCollectionModule.NFTStruct[] calldata nfts
     ) internal {
-        NFTCollectionModule(_nftCollectionModule).processCollect(profileId, pubId, nfts);
-        _profile[profileId].nftCollectionPubId = pubId;
-        emit NFTCollectionCreated(profileId, pubId, nfts, block.number);
+        INFTCollectionModule(module).processCollect(profileId, nfts);
+        emit NFTCollectionCreated(profileId, module, block.number);
+    }
+
+    function _createScore(uint256 profileId) internal {
+        IScoreModule(_scoreModule).processScore(profileId);
+        emit ScoreCreated(profileId, block.number);
+    }
+
+    function _addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) internal {
+        IMirrorModule(_mirrorModule).processRegist(profileId, mirror);
+        emit MirrorCreated(profileId, block.number);
+    }
+
+    function _getNFTCollection(uint256 profileId, address module)
+        internal
+        view
+        returns (INFTCollectionModule.NFTStruct[] memory)
+    {
+        return INFTCollectionModule(module).getCollection(profileId);
+    }
+
+    function _getScore(uint256 profileId) internal view returns (IScoreModule.ScoreStruct[] memory) {
+        return IScoreModule(_scoreModule).getScore(profileId);
+    }
+
+    function _getMirror(uint256 profileId) internal view returns (IMirrorModule.MirrorStruct[] memory) {
+        return IMirrorModule(_mirrorModule).getMirror(profileId);
     }
 
     function getSNSAccounts(uint256 profileId, uint256 snsPubId)
@@ -117,7 +204,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     function _createSNSAccount(uint256 profileId, uint256 pubId, ISNSAccountModule.SNSAccountStruct calldata sns) internal {
         SNSAccountModule(_snsAccountModule).processSNSAccount(profileId, pubId, sns);
         _profile[profileId].snsAccountsPubId = pubId;
-        emit SNSAccountCreated(profileId, pubId, sns, block.number);
+        emit SNSAccountCreated(profileId, block.number);
     }
 
     function _baseURI() internal pure override returns (string memory) {
