@@ -7,7 +7,7 @@
 pragma solidity ^0.8.10;
 
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
-import "../interface/assetstore/IIceCandyAssetStore.sol";
+import "../interfaces/assetstore/IIceCandyAssetStore.sol";
 import "@openzeppelin/contracts/utils/Strings.sol";
 
 // ToDo checksupport interface as Nakashima's contract

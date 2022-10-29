@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import {NFTCollectionModuleBase} from "../base/NFTCollectionModuleBase.sol";
+import {NFTCollectionModuleBase} from "../bases/NFTCollectionModuleBase.sol";
 
 contract POAPCollectionModule is NFTCollectionModuleBase {
     constructor(address profile) {

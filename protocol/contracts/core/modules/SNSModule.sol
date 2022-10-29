@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import {ISNSModule} from "../interface/ISNSModule.sol";
+import {ISNSModule} from "../../interfaces/ISNSModule.sol";
 import "hardhat/console.sol";
 
 contract SNSModule is ISNSModule {
@@ -23,11 +23,17 @@ contract SNSModule is ISNSModule {
         ISNSModule.SNSStruct calldata sns
     ) external override onlyProfile {
         // set NFTs
-        emit Query(sns.user_id, sns.signature, msg.sender, '11');
+        emit Query(sns.user_id, sns.signature, msg.sender, "11");
         _snsAccounts[profileId][pubId].push(sns);
     }
 
-    function getSNSAccounts(uint256 profileId, uint256 pubId) external view override onlyProfile returns (ISNSModule.SNSStruct[] memory) {
+    function getSNSAccounts(uint256 profileId, uint256 pubId)
+        external
+        view
+        override
+        onlyProfile
+        returns (ISNSModule.SNSStruct[] memory)
+    {
         return _snsAccounts[profileId][pubId];
     }
 }
