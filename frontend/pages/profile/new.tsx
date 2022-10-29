@@ -1,4 +1,5 @@
 import { Container, Grid, GridItem } from '@chakra-ui/react'
+import { useAddress } from '@thirdweb-dev/react'
 import { ChainId } from '@thirdweb-dev/sdk'
 import { OwnedNft } from 'alchemy-sdk'
 import { NextPage } from 'next'
@@ -15,19 +16,23 @@ import { AppProfile } from '../../types/profile'
 const ProfileNewPage: NextPage = () => {
   const { mintProfileNFT, loading, errors, result } = useCreateProfileNFT()
   const router = useRouter()
+  const address = useAddress()
 
   useEffect(() => {
+    console.log(result, 'result')
     if (result) {
       router.push(`/profile/${result.profileId.toNumber()}`)
     }
   }, [result])
 
-  const { handleSubmit, control, getValues, watch, formState } =
+  const { handleSubmit, control, getValues, watch, formState, setValue } =
     useForm<AppProfile.FormData>({
       defaultValues: {
-        handle: '',
+        name: '',
+        introduction: '',
         imageURI: 'https://bit.ly/dan-abramov',
         nfts: [],
+        snsAccounts: [],
       },
     })
 
@@ -55,7 +60,7 @@ const ProfileNewPage: NextPage = () => {
           contractAddress: String(nft?.contract.address),
           tokenId: Number(nft?.tokenId),
           tokenURI: JSON.stringify(nft?.rawMetadata),
-          wallet: '',
+          owner: address || '',
         }
       }
     )
@@ -65,9 +70,11 @@ const ProfileNewPage: NextPage = () => {
 
   const execute = async (data: AppProfile.FormData) => {
     await mintProfileNFT(
-      data.handle,
+      data.name,
+      data.introduction,
       data.imageURI,
-      parseNFTsForm2Contract(data.nfts)
+      parseNFTsForm2Contract(data.nfts),
+      data.snsAccounts
     )
   }
 
@@ -83,17 +90,23 @@ const ProfileNewPage: NextPage = () => {
               getValues,
               loading,
               formState,
+              setValue,
             }}
           />
         </GridItem>
         <GridItem ml={5} p={8} border="1px solid grey" borderRadius={10}>
           <ProfileMain
-            handle={watch('handle')}
+            name={watch('name')}
+            introduction={watch('introduction')}
             pfpURI={watch('imageURI')}
             modules={[
               {
+                type: 'snsAccounts',
+                data: watch('snsAccounts') as any,
+              },
+              {
                 type: 'nftCollection',
-                data: parseNFTsForm2Contract(watch('nfts')),
+                data: parseNFTsForm2Contract(watch('nfts')) as any,
               },
             ]}
           />

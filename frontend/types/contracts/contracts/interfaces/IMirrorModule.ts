@@ -13,11 +13,7 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type {
-  FunctionFragment,
-  Result,
-  EventFragment,
-} from "@ethersproject/abi";
+import type { FunctionFragment, Result } from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -27,65 +23,52 @@ import type {
   PromiseOrValue,
 } from "../../common";
 
-export interface IIceCandyInterface extends utils.Interface {
+export declare namespace IMirrorModule {
+  export type MirrorStructStruct = { hoge: PromiseOrValue<string> };
+
+  export type MirrorStructStructOutput = [string] & { hoge: string };
+}
+
+export interface IMirrorModuleInterface extends utils.Interface {
   functions: {
-    "eat(uint256)": FunctionFragment;
-    "isEaten(uint256)": FunctionFragment;
-    "mint(address)": FunctionFragment;
+    "getMirror(uint256)": FunctionFragment;
+    "processRegist(uint256,(string))": FunctionFragment;
     "setProfile(address)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "eat" | "isEaten" | "mint" | "setProfile"
+    nameOrSignatureOrTopic: "getMirror" | "processRegist" | "setProfile"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "eat",
+    functionFragment: "getMirror",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "isEaten",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "mint",
-    values: [PromiseOrValue<string>]
+    functionFragment: "processRegist",
+    values: [PromiseOrValue<BigNumberish>, IMirrorModule.MirrorStructStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "setProfile",
     values: [PromiseOrValue<string>]
   ): string;
 
-  decodeFunctionResult(functionFragment: "eat", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "isEaten", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getMirror", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "processRegist",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
 
-  events: {
-    "Eaten(uint256,address,uint256)": EventFragment;
-  };
-
-  getEvent(nameOrSignatureOrTopic: "Eaten"): EventFragment;
+  events: {};
 }
 
-export interface EatenEventObject {
-  tokenId: BigNumber;
-  owner: string;
-  blockNumber: BigNumber;
-}
-export type EatenEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
-  EatenEventObject
->;
-
-export type EatenEventFilter = TypedEventFilter<EatenEvent>;
-
-export interface IIceCandy extends BaseContract {
+export interface IMirrorModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: IIceCandyInterface;
+  interface: IMirrorModuleInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -107,18 +90,14 @@ export interface IIceCandy extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    eat(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    isEaten(
-      tokenId: PromiseOrValue<BigNumberish>,
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    ): Promise<[IMirrorModule.MirrorStructStructOutput[]]>;
 
-    mint(
-      to: PromiseOrValue<string>,
+    processRegist(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -128,18 +107,14 @@ export interface IIceCandy extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  eat(
-    tokenId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  isEaten(
-    tokenId: PromiseOrValue<BigNumberish>,
+  getMirror(
+    profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<boolean>;
+  ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
 
-  mint(
-    to: PromiseOrValue<string>,
+  processRegist(
+    profileId: PromiseOrValue<BigNumberish>,
+    mirror: IMirrorModule.MirrorStructStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -149,17 +124,16 @@ export interface IIceCandy extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    eat(
-      tokenId: PromiseOrValue<BigNumberish>,
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
+
+    processRegist(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    isEaten(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    mint(to: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
 
     setProfile(
       profile: PromiseOrValue<string>,
@@ -167,32 +141,17 @@ export interface IIceCandy extends BaseContract {
     ): Promise<void>;
   };
 
-  filters: {
-    "Eaten(uint256,address,uint256)"(
-      tokenId?: PromiseOrValue<BigNumberish> | null,
-      owner?: PromiseOrValue<string> | null,
-      blockNumber?: null
-    ): EatenEventFilter;
-    Eaten(
-      tokenId?: PromiseOrValue<BigNumberish> | null,
-      owner?: PromiseOrValue<string> | null,
-      blockNumber?: null
-    ): EatenEventFilter;
-  };
+  filters: {};
 
   estimateGas: {
-    eat(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    isEaten(
-      tokenId: PromiseOrValue<BigNumberish>,
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    mint(
-      to: PromiseOrValue<string>,
+    processRegist(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -203,18 +162,14 @@ export interface IIceCandy extends BaseContract {
   };
 
   populateTransaction: {
-    eat(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    isEaten(
-      tokenId: PromiseOrValue<BigNumberish>,
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    mint(
-      to: PromiseOrValue<string>,
+    processRegist(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

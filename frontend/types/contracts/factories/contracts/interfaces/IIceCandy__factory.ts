@@ -7,7 +7,7 @@ import type { Provider } from "@ethersproject/providers";
 import type {
   IIceCandy,
   IIceCandyInterface,
-} from "../../../contracts/interface/IIceCandy";
+} from "../../../contracts/interfaces/IIceCandy";
 
 const _abi = [
   {
@@ -22,8 +22,26 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
-        name: "owner",
+        name: "from",
         type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "module",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "moduleId",
+        type: "uint256",
       },
       {
         indexed: false,
@@ -38,8 +56,61 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "balanceOfEaten",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "balanceOfNotEaten",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "uint256",
         name: "tokenId",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        internalType: "address",
+        name: "module",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "moduleId",
         type: "uint256",
       },
     ],

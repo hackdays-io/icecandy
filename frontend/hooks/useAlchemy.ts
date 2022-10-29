@@ -1,7 +1,7 @@
-import { Alchemy, Network } from 'alchemy-sdk'
+import { Alchemy, AlchemySettings, Network } from 'alchemy-sdk'
 
 export const useEthereumAlchemyClient = () => {
-  const settings: any = {
+  const settings: AlchemySettings = {
     apiKey: String(process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_ETH),
     network: Network.ETH_GOERLI,
   }
@@ -10,7 +10,7 @@ export const useEthereumAlchemyClient = () => {
 }
 
 export const usePolygonAlchemyClient = () => {
-  const settings: any = {
+  const settings: AlchemySettings = {
     apiKey: String(process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_POLYGON),
     network: Network.MATIC_MAINNET,
   }
@@ -19,7 +19,7 @@ export const usePolygonAlchemyClient = () => {
 }
 
 export const useArbitrumAlchemyClient = () => {
-  const settings: any = {
+  const settings: AlchemySettings = {
     apiKey: String(process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_ARBITRUM),
     network: Network.ARB_GOERLI,
   }

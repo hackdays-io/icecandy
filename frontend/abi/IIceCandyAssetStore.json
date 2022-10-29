@@ -1,7 +1,7 @@
 {
   "_format": "hh-sol-artifact-1",
   "contractName": "IIceCandyAssetStore",
-  "sourceName": "contracts/interface/assetstore/IIceCandyAssetStore.sol",
+  "sourceName": "contracts/interfaces/assetstore/IIceCandyAssetStore.sol",
   "abi": [
     {
       "inputs": [

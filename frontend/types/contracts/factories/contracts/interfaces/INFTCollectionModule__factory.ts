@@ -7,7 +7,7 @@ import type { Provider } from "@ethersproject/providers";
 import type {
   INFTCollectionModule,
   INFTCollectionModuleInterface,
-} from "../../../contracts/interface/INFTCollectionModule";
+} from "../../../contracts/interfaces/INFTCollectionModule";
 
 const _abi = [
   {
@@ -17,13 +17,8 @@ const _abi = [
         name: "profileId",
         type: "uint256",
       },
-      {
-        internalType: "uint256",
-        name: "pubId",
-        type: "uint256",
-      },
     ],
-    name: "getNFTs",
+    name: "getCollection",
     outputs: [
       {
         components: [
@@ -49,7 +44,7 @@ const _abi = [
           },
           {
             internalType: "address",
-            name: "wallet",
+            name: "owner",
             type: "address",
           },
         ],
@@ -66,11 +61,6 @@ const _abi = [
       {
         internalType: "uint256",
         name: "profileId",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "pubId",
         type: "uint256",
       },
       {
@@ -97,7 +87,7 @@ const _abi = [
           },
           {
             internalType: "address",
-            name: "wallet",
+            name: "owner",
             type: "address",
           },
         ],

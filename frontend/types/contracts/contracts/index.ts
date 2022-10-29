@@ -5,5 +5,5 @@ import type * as assetstore from "./assetstore";
 export type { assetstore };
 import type * as core from "./core";
 export type { core };
-import type * as interface from "./interface";
-export type { interface };
+import type * as interfaces from "./interfaces";
+export type { interfaces };

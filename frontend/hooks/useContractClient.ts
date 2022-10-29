@@ -29,16 +29,18 @@ export const useProfileNFTContractClient = (props?: Props) => {
         const provider = new ethers.providers.Web3Provider(ethereum as any)
         const signer = provider.getSigner()
         if (signer) {
-          const _contract: Profile = new ethers.Contract(
+          const _contract = new ethers.Contract(
             profileNFTContractAddress,
             ProfileNFTABI.abi,
             signer
           ) as Profile
           return _contract
+        } else {
+          return
         }
       } else {
         const provider = new ethers.providers.JsonRpcProvider(provierRpc)
-        const _contract: Profile = new ethers.Contract(
+        const _contract = new ethers.Contract(
           profileNFTContractAddress,
           ProfileNFTABI.abi,
           provider
