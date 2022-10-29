@@ -22,10 +22,16 @@ contract MirrorModule is IMirrorModule, Ownable {
         _profile = profile;
     }
 
-    function processRegist(uint256 profileId, MirrorStruct calldata mirror) external override onlyProfile {
-        // add Mirror
+    function addMirror(uint256 profileId, MirrorStruct calldata mirror)
+        external
+        override
+        onlyProfile
+        returns (uint256)
+    {
+        uint256 moduleId = _mirrorCount[profileId];
         _mirrors[profileId][_mirrorCount[profileId]] = mirror;
         _mirrorCount[profileId]++;
+        return moduleId;
     }
 
     function getMirror(uint256 profileId) external view override onlyProfile returns (MirrorStruct[] memory) {

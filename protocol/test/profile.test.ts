@@ -7,6 +7,7 @@ import {
   IceCandy,
   ScoreModule,
   MirrorModule,
+  ColorExtension,
 } from '../typechain-types'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { BigNumber } from 'ethers'
@@ -23,6 +24,7 @@ describe('profile test', () => {
   let poapCollection: POAPCollectionModule
   let score: ScoreModule
   let mirror: MirrorModule
+  let color: ColorExtension
 
   before(async () => {
     // signers
@@ -46,6 +48,8 @@ describe('profile test', () => {
     score = await fScore.deploy(owner.address)
     const fMirror = await ethers.getContractFactory('MirrorModule')
     mirror = await fMirror.deploy(owner.address)
+    const fColor = await ethers.getContractFactory('ColorExtension')
+    color = await fColor.deploy(owner.address)
 
     // setup
     await icecandy.setProfile(profile.address)
@@ -53,6 +57,7 @@ describe('profile test', () => {
     await score.setNFTCollectionModule(nftCollection.address)
     await score.setPOAPCollectionModule(poapCollection.address)
     await mirror.setProfile(profile.address)
+    await color.setProfile(profile.address)
   })
 
   it('setIceCandy()', async () => {
@@ -103,6 +108,16 @@ describe('profile test', () => {
 
     // success transaction
     await expect(profile.connect(owner).setMirrorModule(mirror.address)).to.be.not.reverted
+  })
+
+  it('setColorExtension()', async () => {
+    // revert transaction
+    await expect(profile.connect(alice).setColorExtension(color.address)).to.be.revertedWith(
+      'Ownable: caller is not the owner'
+    )
+
+    // success transaction
+    await expect(profile.connect(owner).setColorExtension(color.address)).to.be.not.reverted
   })
 
   it('createProfile()', async () => {
@@ -285,12 +300,49 @@ describe('profile test', () => {
     // send transaction
     const _tx = await profile.connect(alice).addMirror(1, _mirror)
     await expect(_tx)
-      .to.emit(profile, 'MirrorCreated')
-      .withArgs(1, await ethers.provider.getBlockNumber())
+      .to.emit(profile, 'MirrorAdded')
+      .withArgs(1, 0, await ethers.provider.getBlockNumber())
 
-    // get score
+    // get mirror
     const mirror_ = await profile.connect(alice).getMirror(1)
     expect(mirror_[0]?.hoge).to.equal(_mirror.hoge)
+  })
+
+  it('addColor()', async () => {
+    // send transaction
+    const _tx = await profile.connect(alice).addColor(1, 'white')
+    await expect(_tx)
+      .to.emit(profile, 'ColorAdded')
+      .withArgs(1, 0, await ethers.provider.getBlockNumber())
+
+    // get color
+    const mirror_ = await profile.connect(alice).getColor(1)
+    expect(mirror_[0]?.color).to.equal('white')
+    expect(mirror_[0]?.active).to.equal(false)
+  })
+
+  it('activateColor()', async () => {
+    // send transaction
+    const _tx = await profile.connect(alice).activateColor(1, 0)
+    await expect(_tx)
+      .to.emit(profile, 'ColorActivated')
+      .withArgs(1, 0, await ethers.provider.getBlockNumber())
+
+    // get color
+    const mirror_ = await profile.connect(alice).getColor(1)
+    expect(mirror_[0]?.active).to.equal(true)
+  })
+
+  it('deactivateColor()', async () => {
+    // send transaction
+    const _tx = await profile.connect(alice).deactivateColor(1, 0)
+    await expect(_tx)
+      .to.emit(profile, 'ColorDeactivated')
+      .withArgs(1, 0, await ethers.provider.getBlockNumber())
+
+    // get color
+    const mirror_ = await profile.connect(alice).getColor(1)
+    expect(mirror_[0]?.active).to.equal(false)
   })
 
   it('addWallet()', async () => {
