@@ -7,6 +7,7 @@ import {IProfile} from "../interfaces/IProfile.sol";
 import {INFTCollectionModule} from "../interfaces/INFTCollectionModule.sol";
 import {IScoreModule} from "../interfaces/IScoreModule.sol";
 import {IMirrorModule} from "../interfaces/IMirrorModule.sol";
+import {IColorExtension} from "../interfaces/IColorExtension.sol";
 import {ISNSAccountModule} from "../interfaces/ISNSAccountModule.sol";
 import {NFTCollectionModule} from "./modules/NFTCollectionModule.sol";
 import {SNSAccountModule} from "./modules/SNSAccountModule.sol";
@@ -22,6 +23,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     address internal _poapCollectionModule;
     address internal _scoreModule;
     address internal _mirrorModule;
+    address internal _colorExtension;
 
     constructor(address owner) ERC721("Profile", "PROFILE") {
         _transferOwnership(owner);
@@ -56,6 +58,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _mirrorModule = mirrorModule;
     }
 
+    function setColorExtension(address colorExtension) external override onlyOwner {
+        _colorExtension = colorExtension;
+    }
+
     function createProfile(CreateProfileStructData calldata vars) external override returns (uint256) {
         uint256 profileId = ++_profileCounter;
 
@@ -85,12 +91,32 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _createScore(profileId);
     }
 
+    /*
     function addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _addMirror(profileId, mirror);
     }
 
-    function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) public override {
+    function addColor(uint256 profileId, string memory color) external override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _addColor(profileId, color);
+    }
+
+    function activateColor(uint256 profileId, uint256 extensionId) external override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _activateColor(profileId, extensionId);
+    }
+
+    function deactivateColor(uint256 profileId, uint256 extensionId) external override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        _deactivateColor(profileId, extensionId);
+    }
+    */
+
+    function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts)
+        public
+        override
+    {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _createSNSAccount(profileId, snsAccounts);
     }
@@ -128,9 +154,15 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         return _getScore(profileId);
     }
 
+    /*
     function getMirror(uint256 profileId) external view override returns (IMirrorModule.MirrorStruct[] memory) {
         return _getMirror(profileId);
     }
+
+    function getColor(uint256 profileId) external view override returns (IColorExtension.ColorStruct[] memory) {
+        return _getColor(profileId);
+    }
+    */
 
     function _createProfile(
         uint256 profileId,
@@ -148,7 +180,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _profile[profileId].introduction = introduction;
         _profile[profileId].imageURI = imageURI;
 
-        emit ProfileCreated(owner, profileId, block.number);
+        emit ProfileCreated(profileId, owner, block.number);
     }
 
     function _createNFTCollection(
@@ -165,10 +197,27 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         emit ScoreCreated(profileId, block.number);
     }
 
+    /*
     function _addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) internal {
-        IMirrorModule(_mirrorModule).processRegist(profileId, mirror);
-        emit MirrorCreated(profileId, block.number);
+        uint256 moduleId = IMirrorModule(_mirrorModule).addMirror(profileId, mirror);
+        emit MirrorAdded(profileId, moduleId, block.number);
     }
+
+    function _addColor(uint256 profileId, string memory color) internal {
+        uint256 extensionId = IColorExtension(_colorExtension).addColor(profileId, color);
+        emit ColorAdded(profileId, extensionId, block.number);
+    }
+
+    function _activateColor(uint256 profileId, uint256 extensionId) internal {
+        IColorExtension(_colorExtension).activate(profileId, extensionId);
+        emit ColorActivated(profileId, extensionId, block.number);
+    }
+
+    function _deactivateColor(uint256 profileId, uint256 extensionId) internal {
+        IColorExtension(_colorExtension).deactivate(profileId, extensionId);
+        emit ColorDeactivated(profileId, extensionId, block.number);
+    }
+    */
 
     function _createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) internal {
         ISNSAccountModule(_snsAccountModule).processSNSAccount(profileId, snsAccounts);
@@ -187,11 +236,22 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         return IScoreModule(_scoreModule).getScore(profileId);
     }
 
+    /*
     function _getMirror(uint256 profileId) internal view returns (IMirrorModule.MirrorStruct[] memory) {
         return IMirrorModule(_mirrorModule).getMirror(profileId);
     }
 
-    function getSNSAccounts(uint256 profileId) external view override returns (ISNSAccountModule.SNSAccountStruct[] memory) {
+    function _getColor(uint256 profileId) internal view returns (IColorExtension.ColorStruct[] memory) {
+        return IColorExtension(_colorExtension).getColor(profileId);
+    }
+    */
+
+    function getSNSAccounts(uint256 profileId)
+        external
+        view
+        override
+        returns (ISNSAccountModule.SNSAccountStruct[] memory)
+    {
         return SNSAccountModule(_snsAccountModule).getSNSAccounts(profileId);
     }
 
