@@ -1,4 +1,4 @@
-import { Box, Grid, Spinner, Text } from '@chakra-ui/react'
+import { Box, Flex, Grid, Spinner, Text } from '@chakra-ui/react'
 import { FC, useEffect, useMemo, useState } from 'react'
 import { INFTCollectionModule } from '../../../types/contracts'
 import NFTImage from '../../atoms/NFTImage'
@@ -44,7 +44,13 @@ const SingleNFT: FC<{ nft: INFTCollectionModule.NFTStructStruct }> = ({
   }, [nft])
 
   return (
-    <Box display="inline-block">
+    <Box
+      height={0}
+      paddingBottom="100%"
+      overflow="hidden"
+      borderRadius={5}
+      position="relative"
+    >
       {tokenURI !== undefined ? (
         <NFTImage
           size="auto"
@@ -67,11 +73,13 @@ const ProfileNFTCollectionModule: FC<Props> = ({ nfts }) => {
       <Text fontWeight="bold" fontSize="20px" mb={5}>
         Favorite NFTs
       </Text>
-      <Grid gridTemplateColumns="1fr 1fr 1fr 1fr 1fr" gridGap={2}>
+      <Grid
+        gridTemplateColumns="repeat(5, minmax(100px, 1fr))"
+        gridGap={4}
+        gridAutoRows="1fr"
+      >
         {nfts?.map((nft, index) => (
-          <Box key={index}>
-            <SingleNFT {...{ nft }}></SingleNFT>
-          </Box>
+          <SingleNFT {...{ nft }}></SingleNFT>
         ))}
       </Grid>
     </Box>

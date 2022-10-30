@@ -22,7 +22,13 @@ const SingleNFT: FC<{ poap: INFTCollectionModule.NFTStructStruct }> = ({
   }, [poap])
 
   return (
-    <Box display="inline-block">
+    <Box
+      height={0}
+      paddingBottom="100%"
+      overflow="hidden"
+      borderRadius="full"
+      position="relative"
+    >
       <NFTImage
         size="auto"
         url={tokenURI?.image || tokenURI?.image_url || ''}
@@ -37,7 +43,11 @@ const ProfilePOAPCollectionModulePreview: FC<Props> = ({ poaps }) => {
       <Text fontWeight="bold" fontSize="20px" mb={5}>
         POAPs
       </Text>
-      <Grid gridTemplateColumns="1fr 1fr 1fr 1fr" gridGap={2}>
+      <Grid
+        gridTemplateColumns="repeat(5, minmax(100px, 1fr))"
+        gridGap={4}
+        gridAutoRows="1fr"
+      >
         {poaps?.map((poap, index) => (
           <SingleNFT key={index} {...{ poap }} />
         ))}
