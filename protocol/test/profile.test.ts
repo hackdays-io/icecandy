@@ -273,7 +273,7 @@ describe('profile test', () => {
     const _tx = await profile.connect(alice).addMirror(1, _mirror)
     await expect(_tx)
       .to.emit(profile, 'MirrorAdded')
-      .withArgs(1, 0, await ethers.provider.getBlockNumber())
+      .withArgs(1, 1, await ethers.provider.getBlockNumber())
 
     // get mirror
     const mirror_ = await profile.connect(alice).getMirror(1)
@@ -285,7 +285,7 @@ describe('profile test', () => {
     const _tx = await profile.connect(alice).addColor(1, 'white')
     await expect(_tx)
       .to.emit(profile, 'ColorAdded')
-      .withArgs(1, 0, await ethers.provider.getBlockNumber())
+      .withArgs(1, 1, await ethers.provider.getBlockNumber())
 
     // get color
     const mirror_ = await profile.connect(alice).getColor(1)
@@ -295,10 +295,10 @@ describe('profile test', () => {
 
   it('activateColor()', async () => {
     // send transaction
-    const _tx = await profile.connect(alice).activateColor(1, 0)
+    const _tx = await profile.connect(alice).activateColor(1, 1)
     await expect(_tx)
       .to.emit(profile, 'ColorActivated')
-      .withArgs(1, 0, await ethers.provider.getBlockNumber())
+      .withArgs(1, 1, await ethers.provider.getBlockNumber())
 
     // get color
     const mirror_ = await profile.connect(alice).getColor(1)
@@ -307,10 +307,10 @@ describe('profile test', () => {
 
   it('deactivateColor()', async () => {
     // send transaction
-    const _tx = await profile.connect(alice).deactivateColor(1, 0)
+    const _tx = await profile.connect(alice).deactivateColor(1, 1)
     await expect(_tx)
       .to.emit(profile, 'ColorDeactivated')
-      .withArgs(1, 0, await ethers.provider.getBlockNumber())
+      .withArgs(1, 1, await ethers.provider.getBlockNumber())
 
     // get color
     const mirror_ = await profile.connect(alice).getColor(1)
@@ -318,18 +318,29 @@ describe('profile test', () => {
   })
 
   it('createSNS()', async () => {
-    const _github: ISNSAccountModule.SNSAccountStructStruct = {
-      service: 'github',
-      userId: 'hello_world',
-      userPageURL: 'https://github.com/hello_world',
-      wallet: alice.address,
-    }
-    await expect(profile.connect(alice).createSNSAccount(1, [_github])).to.emit(profile, 'SNSAccountCreated')
+    const _sns = [
+      {
+        service: 'github',
+        userId: 'hello_world',
+        userPageURL: 'https://github.com/hello_world',
+        wallet: alice.address,
+      },
+      {
+        service: 'twitter',
+        userId: 'hello',
+        userPageURL: 'https://twitter.com/hello',
+        wallet: alice.address,
+      },
+    ]
+    await expect(profile.connect(alice).createSNSAccount(1, _sns)).to.emit(profile, 'SNSAccountCreated')
 
-    const aliceAccounts = await profile.connect(alice).getSNSAccounts(1)
-    expect(aliceAccounts[1]?.service).to.equal('github')
-    expect(aliceAccounts[1]?.userId).to.equal('hello_world')
-    expect(aliceAccounts[1]?.userPageURL).to.equal('https://github.com/hello_world')
+    const sns_ = await profile.connect(alice).getSNSAccounts(1)
+    expect(sns_[0]?.service).to.equal(_sns[0]?.service)
+    expect(sns_[0]?.userId).to.equal(_sns[0]?.userId)
+    expect(sns_[0]?.userPageURL).to.equal(_sns[0]?.userPageURL)
+    expect(sns_[1]?.service).to.equal(_sns[1]?.service)
+    expect(sns_[1]?.userId).to.equal(_sns[1]?.userId)
+    expect(sns_[1]?.userPageURL).to.equal(_sns[1]?.userPageURL)
   })
 
   it('addWallet()', async () => {

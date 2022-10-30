@@ -11,10 +11,9 @@ contract ColorExtension is IColorExtension, ExtensionBase {
     constructor(address owner) ExtensionBase(owner) {}
 
     function addColor(uint256 profileId, string memory color) external override onlyProfile returns (uint256) {
-        uint256 extensionId = _colorCount[profileId];
+        uint256 extensionId = ++_colorCount[profileId];
         _colors[profileId][extensionId].color = color;
         _colors[profileId][extensionId].active = false;
-        _colorCount[profileId]++;
         return extensionId;
     }
 
@@ -29,7 +28,7 @@ contract ColorExtension is IColorExtension, ExtensionBase {
     function getColor(uint256 profileId) external view override returns (ColorStruct[] memory) {
         ColorStruct[] memory colorArray = new ColorStruct[](_colorCount[profileId]);
         for (uint256 i = 0; i < _colorCount[profileId]; i++) {
-            colorArray[i] = _colors[profileId][i];
+            colorArray[i] = _colors[profileId][i + 1];
         }
         return colorArray;
     }

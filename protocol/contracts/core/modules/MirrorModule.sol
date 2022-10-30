@@ -16,16 +16,15 @@ contract MirrorModule is IMirrorModule, ModuleBase {
         onlyProfile
         returns (uint256)
     {
-        uint256 moduleId = _mirrorCount[profileId];
+        uint256 moduleId = ++_mirrorCount[profileId];
         _mirrors[profileId][_mirrorCount[profileId]] = mirror;
-        _mirrorCount[profileId]++;
         return moduleId;
     }
 
     function getMirror(uint256 profileId) external view override returns (MirrorStruct[] memory) {
         MirrorStruct[] memory mirrorArray = new MirrorStruct[](_mirrorCount[profileId]);
         for (uint256 i = 0; i < _mirrorCount[profileId]; i++) {
-            mirrorArray[i] = _mirrors[profileId][i];
+            mirrorArray[i] = _mirrors[profileId][i + 1];
         }
         return mirrorArray;
     }
