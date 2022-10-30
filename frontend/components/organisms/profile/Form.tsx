@@ -3,7 +3,9 @@ import {
   Box,
   Button,
   Checkbox,
+  Flex,
   FormLabel,
+  Grid,
   Heading,
   Input,
   List,
@@ -20,6 +22,7 @@ import {
 import { useAddress } from '@thirdweb-dev/react'
 import { ChainId } from '@thirdweb-dev/sdk'
 import { OwnedNft } from 'alchemy-sdk'
+import { BigNumber } from 'ethers'
 import { find } from 'lodash'
 import { FC, FormEventHandler, useCallback } from 'react'
 import {
@@ -29,12 +32,17 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form'
-import { useHoldingNFTs } from '../../../hooks/useToken'
-import { ISNSAccountModule } from '../../../types/contracts'
+import { useHoldingNFTs, useHoldingPOAPs } from '../../../hooks/useToken'
+import {
+  INFTCollectionModule,
+  ISNSAccountModule,
+} from '../../../types/contracts'
 import { AppProfile } from '../../../types/profile'
 import ModalBase from '../../atoms/ModalBase'
 import AuthTwitter from '../../atoms/profile/AuthTwitter'
 import PFP from '../../atoms/profile/PFP'
+import SingleNFT from '../../atoms/profile/SingleNFT'
+import SinglePOAP from '../../atoms/profile/SinglePOAP'
 import NFTCard from '../../atoms/tokens/NFTCard'
 
 type Props = {
@@ -56,44 +64,68 @@ const ProfileForm: FC<Props> = ({
   setValue,
 }) => {
   const { isOpen, onClose, onOpen } = useDisclosure()
+  const {
+    isOpen: poapIsOpen,
+    onClose: poapOnClose,
+    onOpen: poapOnOpen,
+  } = useDisclosure()
   const { holdingNFTsOnEth, holdingNFTsOnPolygon, holdingNFTsOnArb } =
     useHoldingNFTs()
+  const { holdingPOAPs } = useHoldingPOAPs()
   const address = useAddress()
 
-  const handleCheck = (index: number, chain: ChainId) => {
+  const handleCheck = (targetNft: OwnedNft, chainId: ChainId) => {
     const { nfts } = getValues()
 
-    const newIds = find(nfts, { index, chain })
+    const newNfts: INFTCollectionModule.NFTStructStruct[] = find(nfts, {
+      contractAddress: targetNft.contract.address,
+      tokenId: targetNft.tokenId,
+      chainId,
+    })
       ? nfts?.filter(
-          (nft) => JSON.stringify(nft) !== JSON.stringify({ chain, index })
+          (nft) =>
+            nft.chainId !== chainId ||
+            nft.contractAddress !== targetNft.contract.address ||
+            nft.tokenId !== targetNft.tokenId
         )
-      : [...(nfts ?? []), { chain, index }]
-    return newIds
+      : [
+          ...(nfts ?? []),
+          {
+            chainId,
+            contractAddress: targetNft.contract.address,
+            tokenId: targetNft.tokenId,
+            tokenURI: targetNft.tokenUri?.raw || '',
+            owner: address || '',
+          },
+        ]
+    return newNfts
   }
 
-  const SelectedNft: FC<{ chain: ChainId; index: number }> = ({
-    chain,
-    index,
-  }) => {
-    let nft!: OwnedNft | undefined
-    switch (chain) {
-      case ChainId.Goerli:
-        nft = holdingNFTsOnEth?.ownedNfts[index]
-        break
-      case ChainId.Mumbai:
-        nft = holdingNFTsOnPolygon?.ownedNfts[index]
-        break
-      case ChainId.ArbitrumGoerli:
-        nft = holdingNFTsOnArb?.ownedNfts[index]
-        break
-    }
-    return (
-      <NFTCard
-        collectionName={nft?.contract.name}
-        title={nft?.title}
-        imageURI={nft?.rawMetadata?.image}
-      />
-    )
+  const handlePoapCheck = (targetNft: OwnedNft) => {
+    const { poaps } = getValues()
+
+    console.log(targetNft)
+
+    const newPoaps: INFTCollectionModule.NFTStructStruct[] = find(poaps, {
+      contractAddress: targetNft.contract.address,
+      tokenId: targetNft.tokenId,
+    })
+      ? poaps?.filter(
+          (poap) =>
+            poap.contractAddress !== targetNft.contract.address ||
+            poap.tokenId !== targetNft.tokenId
+        )
+      : [
+          ...(poaps ?? []),
+          {
+            chainId: BigNumber.from(100),
+            contractAddress: targetNft.contract.address,
+            tokenId: targetNft.tokenId,
+            tokenURI: targetNft.tokenUri?.raw || '',
+            owner: address || '',
+          },
+        ]
+    return newPoaps
   }
 
   const setSNSAccount = useCallback(
@@ -107,56 +139,42 @@ const ProfileForm: FC<Props> = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <Box mb={2}>
+      <Grid gridTemplateColumns="1fr 400px" mb={3} width="50%">
         <PFP imgURI={watch('imageURI')} />
-      </Box>
+        <Box ml={5} mt={3}>
+          <Text>名前</Text>
+          <Controller
+            render={({ field }) => (
+              <Input value={field.value} onChange={field.onChange} />
+            )}
+            control={control}
+            name="name"
+          />
+          <Text mt={3}>BIO</Text>
+          <Controller
+            render={({ field }) => (
+              <Textarea
+                rows={3}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+            control={control}
+            name="introduction"
+          />
+        </Box>
+      </Grid>
 
       <Box my={4}>
         <AuthTwitter setAccountData={setSNSAccount} />
       </Box>
 
-      <Box mb={5}>
-        <Text>ハンドル名</Text>
-        <Controller
-          render={({ field }) => (
-            <Input value={field.value} onChange={field.onChange} />
-          )}
-          control={control}
-          name="name"
-        />
-      </Box>
-
-      <Box mb={5}>
-        <Text>BIO</Text>
-        <Controller
-          render={({ field }) => (
-            <Textarea rows={3} value={field.value} onChange={field.onChange} />
-          )}
-          control={control}
-          name="introduction"
-        />
-      </Box>
-
-      <Box mb={5} backgroundColor="gray.100" p={3} borderRadius={10}>
+      <Box mb={5} backgroundColor="gray.200" p={3} borderRadius={10}>
         <Heading size="md" as="h3" mb={2}>
-          NFTコレクション
+          Favorite NFTs
         </Heading>
 
-        {/* <Box mb={5}>
-          <Text mb={2}>コレクション名</Text>
-          <Controller
-            render={({ field }) => (
-              <Input
-                backgroundColor="white"
-                placeholder="コレクション名を入力してください"
-              />
-            )}
-            control={control}
-            name="name"
-          />
-        </Box> */}
-
-        <ModalBase isOpen={isOpen} onClose={onClose} maxWidth="600">
+        <ModalBase isOpen={isOpen} onClose={onClose} maxWidth="800">
           <Tabs variant="soft-rounded" colorScheme="blue">
             <TabList>
               <Tab>Ethreum</Tab>
@@ -171,37 +189,42 @@ const ProfileForm: FC<Props> = ({
                   gridGap={3}
                 >
                   {holdingNFTsOnEth?.ownedNfts.map((nft, index) => (
-                    <ListItem
-                      mb={3}
-                      p={3}
-                      border="1px solid grey"
+                    <Controller
                       key={`eth${index}`}
-                    >
-                      <FormLabel>
-                        <Controller
-                          name="nfts"
-                          control={control}
-                          render={({ field: { value, onChange } }) => (
-                            <Checkbox
-                              defaultChecked={
-                                !!find(value, {
-                                  index,
-                                  chain: ChainId.Goerli,
-                                })
-                              }
-                              onChange={() =>
-                                onChange(handleCheck(index, ChainId.Goerli))
-                              }
-                            />
-                          )}
-                        />
-                        <NFTCard
-                          collectionName={nft.contract.name}
-                          title={nft.title}
-                          imageURI={nft.rawMetadata?.image}
-                        />
-                      </FormLabel>
-                    </ListItem>
+                      name="nfts"
+                      control={control}
+                      render={({ field: { value, onChange } }) => {
+                        const selected = !!find(value, {
+                          contractAddress: nft.contract.address,
+                          tokenId: nft.tokenId,
+                          chainId: ChainId.Goerli,
+                        })
+                        return (
+                          <ListItem
+                            mb={3}
+                            p={3}
+                            backgroundColor={selected ? 'blue.100' : 'white'}
+                            borderRadius={5}
+                            boxShadow="0 0 6px 0 lightgrey"
+                          >
+                            <label>
+                              <Checkbox
+                                size="lg"
+                                defaultChecked={selected}
+                                onChange={() =>
+                                  onChange(handleCheck(nft, ChainId.Goerli))
+                                }
+                              />
+                              <NFTCard
+                                collectionName={nft.contract.name}
+                                title={nft.title}
+                                imageURI={nft.rawMetadata?.image}
+                              />
+                            </label>
+                          </ListItem>
+                        )
+                      }}
+                    />
                   ))}
                 </List>
               </TabPanel>
@@ -212,37 +235,42 @@ const ProfileForm: FC<Props> = ({
                   gridGap={3}
                 >
                   {holdingNFTsOnPolygon?.ownedNfts.map((nft, index) => (
-                    <ListItem
-                      mb={3}
-                      p={3}
-                      border="1px solid grey"
+                    <Controller
                       key={`polygon${index}`}
-                    >
-                      <FormLabel>
-                        <Controller
-                          name="nfts"
-                          control={control}
-                          render={({ field: { value, onChange } }) => (
-                            <Checkbox
-                              defaultChecked={
-                                !!find(value, {
-                                  index,
-                                  chain: ChainId.Mumbai,
-                                })
-                              }
-                              onChange={() =>
-                                onChange(handleCheck(index, ChainId.Mumbai))
-                              }
-                            />
-                          )}
-                        />
-                        <NFTCard
-                          collectionName={nft.contract.name}
-                          title={nft.title}
-                          imageURI={nft.rawMetadata?.image}
-                        />
-                      </FormLabel>
-                    </ListItem>
+                      name="nfts"
+                      control={control}
+                      render={({ field: { value, onChange } }) => {
+                        const selected = !!find(value, {
+                          contractAddress: nft.contract.address,
+                          tokenId: nft.tokenId,
+                          chainId: ChainId.Mumbai,
+                        })
+                        return (
+                          <ListItem
+                            mb={3}
+                            p={3}
+                            backgroundColor={selected ? 'blue.100' : 'white'}
+                            borderRadius={5}
+                            boxShadow="0 0 6px 0 lightgrey"
+                          >
+                            <label>
+                              <Checkbox
+                                size="lg"
+                                defaultChecked={selected}
+                                onChange={() =>
+                                  onChange(handleCheck(nft, ChainId.Mumbai))
+                                }
+                              />
+                              <NFTCard
+                                collectionName={nft.contract.name}
+                                title={nft.title}
+                                imageURI={nft.rawMetadata?.image}
+                              />
+                            </label>
+                          </ListItem>
+                        )
+                      }}
+                    />
                   ))}
                 </List>
               </TabPanel>
@@ -253,87 +281,172 @@ const ProfileForm: FC<Props> = ({
                   gridGap={3}
                 >
                   {holdingNFTsOnArb?.ownedNfts.map((nft, index) => (
-                    <ListItem
-                      mb={3}
-                      p={3}
-                      border="1px solid grey"
+                    <Controller
                       key={`arb${index}`}
-                    >
-                      <FormLabel>
-                        <Controller
-                          name="nfts"
-                          control={control}
-                          render={({ field: { value, onChange } }) => (
-                            <Checkbox
-                              defaultChecked={
-                                !!find(value, {
-                                  index,
-                                  chain: ChainId.ArbitrumGoerli,
-                                })
-                              }
-                              onChange={() =>
-                                onChange(
-                                  handleCheck(index, ChainId.ArbitrumGoerli)
-                                )
-                              }
-                            />
-                          )}
-                        />
-                        <NFTCard
-                          collectionName={nft.contract.name}
-                          title={nft.title}
-                          imageURI={nft.rawMetadata?.image}
-                        />
-                      </FormLabel>
-                    </ListItem>
+                      name="nfts"
+                      control={control}
+                      render={({ field: { value, onChange } }) => {
+                        const selected = !!find(value, {
+                          contractAddress: nft.contract.address,
+                          tokenId: nft.tokenId,
+                          chainId: ChainId.ArbitrumGoerli,
+                        })
+                        return (
+                          <ListItem
+                            mb={3}
+                            p={3}
+                            backgroundColor={selected ? 'blue.100' : 'white'}
+                            borderRadius={5}
+                            boxShadow="0 0 6px 0 lightgrey"
+                          >
+                            <label>
+                              <Checkbox
+                                size="lg"
+                                defaultChecked={selected}
+                                onChange={() =>
+                                  onChange(
+                                    handleCheck(nft, ChainId.ArbitrumGoerli)
+                                  )
+                                }
+                              />
+                              <NFTCard
+                                collectionName={nft.contract.name}
+                                title={nft.title}
+                                imageURI={nft.rawMetadata?.image}
+                              />
+                            </label>
+                          </ListItem>
+                        )
+                      }}
+                    />
                   ))}
                 </List>
               </TabPanel>
             </TabPanels>
           </Tabs>
         </ModalBase>
-        <List display="grid" gridTemplateColumns="1fr 1fr 1fr" gridGap={3}>
+
+        <List
+          display="grid"
+          gridTemplateColumns="1fr 1fr 1fr 1fr 1fr"
+          gridGap={3}
+        >
           {watch('nfts').map((nft) => (
             <ListItem
               mb={3}
               p={3}
-              boxShadow="0 0 3px 2px lightgrey"
-              borderRadius={3}
-              key={`${nft.chain}${nft.index}`}
-              height={180}
-              overflow="hidden"
-              backgroundColor="white"
+              key={`${nft.chainId}${nft.contractAddress}${nft.tokenId}`}
             >
-              <Box>
-                <SelectedNft chain={nft.chain} index={nft.index} />
-              </Box>
+              <SingleNFT nft={nft} />
             </ListItem>
           ))}
-          <ListItem
-            mb={3}
-            p={3}
-            boxShadow="0 0 3px 2px lightgrey"
-            borderRadius={3}
-            display="flex"
-            flexWrap="wrap"
-            justifyContent="center"
-            alignItems="center"
-            cursor="pointer"
-            onClick={onOpen}
-            height={180}
-            backgroundColor="white"
-          >
-            <Box textAlign="center">
-              <AddIcon />
-              <Text>Add NFT</Text>
-            </Box>
+          <ListItem mb={3} p={3}>
+            <Flex
+              height="100%"
+              minH="80px"
+              boxShadow="0 0 3px 2px lightgrey"
+              borderRadius={3}
+              flexWrap="wrap"
+              justifyContent="center"
+              alignItems="center"
+              cursor="pointer"
+              onClick={onOpen}
+              backgroundColor="white"
+            >
+              <Box textAlign="center">
+                <AddIcon />
+                <Text>Add NFT</Text>
+              </Box>
+            </Flex>
           </ListItem>
         </List>
       </Box>
 
-      <Button width="full" colorScheme="blue" type="submit" isLoading={loading}>
-        プロフィール生成
-      </Button>
+      <Box mb={5} backgroundColor="gray.200" p={3} borderRadius={10}>
+        <Heading size="md" as="h3" mb={2}>
+          POAPs
+        </Heading>
+
+        <ModalBase isOpen={poapIsOpen} onClose={poapOnClose} maxWidth="800">
+          <List
+            display="grid"
+            gridTemplateColumns="1fr 1fr 1fr"
+            gridGap={3}
+            py={10}
+          >
+            {holdingPOAPs?.ownedNfts.map((poap, index) => (
+              <Controller
+                key={`poap${index}`}
+                name="poaps"
+                control={control}
+                render={({ field: { value, onChange } }) => {
+                  const selected = !!find(value, {
+                    contractAddress: poap.contract.address,
+                    tokenId: poap.tokenId,
+                  })
+                  return (
+                    <ListItem
+                      mb={3}
+                      p={3}
+                      backgroundColor={selected ? 'blue.100' : 'white'}
+                      borderRadius={5}
+                      boxShadow="0 0 6px 0 lightgrey"
+                    >
+                      <label>
+                        <Checkbox
+                          size="lg"
+                          defaultChecked={selected}
+                          onChange={() => onChange(handlePoapCheck(poap))}
+                        />
+                        <NFTCard
+                          collectionName={poap.contract.name}
+                          title={poap.title}
+                          imageURI={poap.rawMetadata?.image_url}
+                        />
+                      </label>
+                    </ListItem>
+                  )
+                }}
+              />
+            ))}
+          </List>
+        </ModalBase>
+
+        <List
+          display="grid"
+          gridTemplateColumns="1fr 1fr 1fr 1fr 1fr"
+          gridGap={3}
+        >
+          {watch('poaps').map((poap) => (
+            <ListItem
+              mb={3}
+              p={3}
+              key={`${poap.contractAddress}${poap.tokenId}`}
+            >
+              <SinglePOAP poap={poap} />
+            </ListItem>
+          ))}
+          <ListItem mb={3} p={3}>
+            <Flex
+              height="100%"
+              minH="80px"
+              boxShadow="0 0 3px 2px lightgrey"
+              borderRadius={3}
+              flexWrap="wrap"
+              justifyContent="center"
+              alignItems="center"
+              cursor="pointer"
+              onClick={poapOnOpen}
+              backgroundColor="white"
+            >
+              <Box textAlign="center">
+                <AddIcon />
+                <Text>Add POAP</Text>
+              </Box>
+            </Flex>
+          </ListItem>
+        </List>
+      </Box>
     </form>
   )
 }

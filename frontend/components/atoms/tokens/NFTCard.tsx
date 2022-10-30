@@ -11,10 +11,16 @@ type Props = {
 const NFTCard: FC<Props> = ({ collectionName, title, imageURI }) => {
   return (
     <Box>
-      <Box textAlign="center">
-        <NFTImage size="sm" url={imageURI} />
+      <Box
+        height={0}
+        paddingBottom="100%"
+        overflow="hidden"
+        borderRadius={5}
+        position="relative"
+      >
+        <NFTImage size="auto" url={imageURI} />
       </Box>
-      <Text>{collectionName}</Text>
+      <Text mt={2}>{collectionName}</Text>
       <Text fontWeight="bold">{title}</Text>
     </Box>
   )

@@ -1,18 +1,18 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { AppProfile } from '../../../types/profile'
 import ProfileMain from './Main'
 import { useReward } from 'react-rewards'
 import { Box, Button, Container, Flex, Text } from '@chakra-ui/react'
 import { useCreateProfileNFT } from '../../../hooks/useProfileContract'
 import { useRouter } from 'next/router'
+import ProfileForm from './Form'
+import { useForm } from 'react-hook-form'
 
 type Props = {
   generatedData: AppProfile.FormData
 }
 
-const ProfileGenerated: FC<Props> = ({ generatedData }) => {
-  const { mintProfileNFT, loading, errors, result } = useCreateProfileNFT()
-  const router = useRouter()
+const Confetti = () => {
   const { reward: confettiReward } = useReward('confettiReward', 'confetti', {
     elementCount: 300,
     lifetime: 200,
@@ -23,6 +23,21 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
     confettiReward()
   }, [])
 
+  return (
+    <Box textAlign="center">
+      <span id="confettiReward" />
+    </Box>
+  )
+}
+
+const ProfileGenerated: FC<Props> = ({ generatedData }) => {
+  const [editMode, setEditMode] = useState(false)
+  const { mintProfileNFT, loading, errors, result } = useCreateProfileNFT()
+  const router = useRouter()
+
+  const { control, formState, watch, setValue, getValues } =
+    useForm<AppProfile.FormData>({ defaultValues: { ...generatedData } })
+
   useEffect(() => {
     if (result) {
       router.push(`/profile/${result.profileId.toNumber()}`)
@@ -31,12 +46,12 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
 
   const save = async () => {
     await mintProfileNFT(
-      generatedData.name,
-      generatedData.introduction,
-      generatedData.imageURI,
-      generatedData.nfts,
-      generatedData.poaps,
-      generatedData.snsAccounts
+      getValues().name,
+      getValues().introduction,
+      getValues().imageURI,
+      getValues().nfts,
+      getValues().poaps,
+      getValues().snsAccounts
     )
   }
 
@@ -48,7 +63,9 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
             <Text fontWeight="bold" mr={5}>
               オンチェーンデータからプロフィールが生成されました！
             </Text>
-            <Button mr={2}>編集する</Button>
+            <Button mr={2} onClick={() => setEditMode(!editMode)}>
+              {editMode ? 'プレビュー' : '編集する'}
+            </Button>
             <Button
               backgroundColor="blue.300"
               color="white"
@@ -62,19 +79,30 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
         </Container>
       </Box>
       <Container maxWidth="800px">
-        <ProfileMain
-          pfpURI={generatedData?.name}
-          name={generatedData?.name}
-          introduction={generatedData?.introduction}
-          modules={[
-            { type: 'snsAccounts', data: generatedData.snsAccounts },
-            { type: 'nftCollection', data: generatedData.nfts },
-            { type: 'poapCollection', data: generatedData.poaps },
-          ]}
-        />
-        <Box textAlign="center">
-          <span id="confettiReward" />
-        </Box>
+        {editMode ? (
+          <ProfileForm
+            watch={watch}
+            setValue={setValue}
+            getValues={getValues}
+            onSubmit={save}
+            control={control}
+            loading={loading}
+            formState={formState}
+          />
+        ) : (
+          <ProfileMain
+            pfpURI={getValues()?.name}
+            name={getValues()?.name}
+            introduction={getValues()?.introduction}
+            modules={[
+              { type: 'snsAccounts', data: getValues().snsAccounts },
+              { type: 'nftCollection', data: getValues().nfts },
+              { type: 'poapCollection', data: getValues().poaps },
+            ]}
+          />
+        )}
+
+        <Confetti />
       </Container>
     </>
   )
