@@ -10,10 +10,7 @@ interface INFTCollectionModule {
         address owner;
     }
 
-    function processCollect(
-        uint256 profileId,
-        NFTStruct[] calldata nfts
-    ) external;
+    function processCollect(uint256 profileId, NFTStruct[] calldata nfts) external;
 
     function getCollection(uint256 profileId) external view returns (NFTStruct[] memory);
 }

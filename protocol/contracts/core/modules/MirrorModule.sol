@@ -1,26 +1,14 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
 import {IMirrorModule} from "../../interfaces/IMirrorModule.sol";
+import {ModuleBase} from "../bases/ModuleBase.sol";
 
-contract MirrorModule is IMirrorModule, Ownable {
-    address internal _profile;
+contract MirrorModule is IMirrorModule, ModuleBase {
     mapping(uint256 => mapping(uint256 => MirrorStruct)) internal _mirrors;
     mapping(uint256 => uint256) internal _mirrorCount;
 
-    constructor(address owner) {
-        _transferOwnership(owner);
-    }
-
-    modifier onlyProfile() {
-        require(msg.sender == _profile, "MirrorModule: only profile");
-        _;
-    }
-
-    function setProfile(address profile) external onlyOwner {
-        _profile = profile;
-    }
+    constructor(address owner) ModuleBase(owner) {}
 
     function addMirror(uint256 profileId, MirrorStruct calldata mirror)
         external
@@ -28,16 +16,15 @@ contract MirrorModule is IMirrorModule, Ownable {
         onlyProfile
         returns (uint256)
     {
-        uint256 moduleId = _mirrorCount[profileId];
+        uint256 moduleId = ++_mirrorCount[profileId];
         _mirrors[profileId][_mirrorCount[profileId]] = mirror;
-        _mirrorCount[profileId]++;
         return moduleId;
     }
 
-    function getMirror(uint256 profileId) external view override onlyProfile returns (MirrorStruct[] memory) {
+    function getMirror(uint256 profileId) external view override returns (MirrorStruct[] memory) {
         MirrorStruct[] memory mirrorArray = new MirrorStruct[](_mirrorCount[profileId]);
         for (uint256 i = 0; i < _mirrorCount[profileId]; i++) {
-            mirrorArray[i] = _mirrors[profileId][i];
+            mirrorArray[i] = _mirrors[profileId][i + 1];
         }
         return mirrorArray;
     }

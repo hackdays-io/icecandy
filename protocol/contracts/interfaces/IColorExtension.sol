@@ -7,8 +7,6 @@ interface IColorExtension {
         bool active;
     }
 
-    function setProfile(address profile) external;
-
     function addColor(uint256 profileId, string memory color) external returns (uint256);
 
     function activate(uint256 profileId, uint256 moduleId) external;

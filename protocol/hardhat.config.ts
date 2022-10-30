@@ -6,6 +6,7 @@ import '@nomiclabs/hardhat-solhint'
 import 'solidity-coverage'
 import 'hardhat-gas-reporter'
 import 'hardhat-interface-generator'
+import 'hardhat-contract-sizer'
 import * as dotenv from 'dotenv'
 
 const PATH_TO_HARDHAT_ENV = `${__dirname}/.env`
@@ -19,7 +20,19 @@ const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
 const COIN_MARKET_CAP_API_KEY = process.env.COIN_MARKET_CAP_API_KEY
 
 module.exports = {
-  solidity: '0.8.10',
+  solidity: {
+    compilers: [
+      {
+        version: '0.8.10',
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 200,
+          },
+        },
+      },
+    ],
+  },
   networks: {
     mumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,

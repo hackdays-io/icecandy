@@ -13,47 +13,65 @@ async function main() {
   const profile = await fProfile.deploy(deployer.address)
   console.log('Profile address:', profile.address)
 
-  // NFTCollectionModule
-  const fNFTModule = await ethers.getContractFactory('NFTCollectionModule')
-  const nftModule = await fNFTModule.deploy(profile.address)
-  console.log('NFTCollectionModule address:', nftModule.address)
-
-  // POAPCollectionModule
-  const fPOAPModule = await ethers.getContractFactory('POAPCollectionModule')
-  const poapModule = await fPOAPModule.deploy(profile.address)
-  console.log('POAPCollectionModule address:', poapModule.address)
-
-  // SNSAccountModule
-  const fSNSAccount = await ethers.getContractFactory('SNSAccountModule')
-  const snsAccountModule = await fSNSAccount.deploy(profile.address)
-  console.log('SNSAccountModule address:', snsAccountModule.address)
+  // Globals
+  const fGlobals = await ethers.getContractFactory('Globals')
+  const globals = await fGlobals.deploy(deployer.address)
+  console.log('Globals address:', globals.address)
 
   // IceCandy
   const fIceCandy = await ethers.getContractFactory('IceCandy')
   const icecandy = await fIceCandy.deploy(deployer.address)
   console.log('IceCandy address:', icecandy.address)
 
-  // Score
+  // NFTCollectionModule
+  const fNFT = await ethers.getContractFactory('NFTCollectionModule')
+  const nft = await fNFT.deploy(deployer.address)
+  console.log('NFTCollectionModule address:', nft.address)
+
+  // POAPCollectionModule
+  const fPOAP = await ethers.getContractFactory('POAPCollectionModule')
+  const poap = await fPOAP.deploy(deployer.address)
+  console.log('POAPCollectionModule address:', poap.address)
+
+  // SNSAccountModule
+  const fSNS = await ethers.getContractFactory('SNSAccountModule')
+  const sns = await fSNS.deploy(deployer.address)
+  console.log('SNSAccountModule address:', sns.address)
+
+  // ScoreModule
   const fScore = await ethers.getContractFactory('ScoreModule')
   const score = await fScore.deploy(deployer.address)
+  console.log('ScoreModule address:', score.address)
 
-  //Mirror
+  // MirrorModule
   const fMirror = await ethers.getContractFactory('MirrorModule')
   const mirror = await fMirror.deploy(deployer.address)
+  console.log('MirrorModule address:', mirror.address)
 
-  // setup
-  await profile.setNFTCollectionModule(nftModule.address)
-  await profile.setPOAPCollectionModule(poapModule.address)
-  await profile.setSNSAccountModule(snsAccountModule.address)
-  await profile.setIceCandy(icecandy.address)
-  await profile.setScoreModule(score.address)
-  await profile.setMirrorModule(mirror.address)
+  // MirrorModule
+  const fColor = await ethers.getContractFactory('ColorExtension')
+  const color = await fColor.deploy(deployer.address)
+  console.log('ColorExtension address:', color.address)
 
-  await score.setProfile(profile.address)
-  await score.setNFTCollectionModule(nftModule.address)
-  await score.setPOAPCollectionModule(poapModule.address)
-  await icecandy.setProfile(profile.address)
-  await mirror.setProfile(profile.address)
+  // setup Globals
+  await globals.setIceCandy(icecandy.address)
+  await globals.setProfile(profile.address)
+  await globals.setNFTCollectionModule(nft.address)
+  await globals.setPOAPCollectionModule(poap.address)
+  await globals.setSNSAccountModule(sns.address)
+  await globals.setScoreModule(score.address)
+  await globals.setMirrorModule(mirror.address)
+  await globals.setColorExtension(color.address)
+
+  // set globals to other contracts
+  await icecandy.setGlobals(globals.address)
+  await profile.setGlobals(globals.address)
+  await nft.setGlobals(globals.address)
+  await poap.setGlobals(globals.address)
+  await sns.setGlobals(globals.address)
+  await score.setGlobals(globals.address)
+  await mirror.setGlobals(globals.address)
+  await color.setGlobals(globals.address)
 }
 
 main()

@@ -4,11 +4,12 @@ pragma solidity ^0.8.10;
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {IIceCandy} from "../interfaces/IIceCandy.sol";
+import {IGlobals} from "../interfaces/IGlobals.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
     uint256 internal _tokenCounter;
-    address internal _profile;
+    address internal _globals;
     mapping(uint256 => IIceCandy.IceCandyStruct) internal _iceCandy;
     mapping(address => uint256) private _eatenBalances;
     mapping(address => uint256) private _notEatenBalances;
@@ -17,8 +18,8 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         _transferOwnership(owner);
     }
 
-    function setProfile(address profile) external override onlyOwner {
-        _profile = profile;
+    function setGlobals(address globals) external override onlyOwner {
+        _globals = globals;
     }
 
     function eat(
@@ -59,7 +60,7 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
     }
 
     function isApprovedForAll(address owner, address operator) public view override returns (bool) {
-        if (operator == _profile) {
+        if (operator == IGlobals(_globals).getProfile()) {
             return true;
         }
         return super.isApprovedForAll(owner, operator);

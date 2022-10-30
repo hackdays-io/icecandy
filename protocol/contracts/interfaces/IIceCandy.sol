@@ -9,7 +9,7 @@ interface IIceCandy {
         uint256 eatenModuleId;
     }
 
-    function setProfile(address profile) external;
+    function setGlobals(address globals) external;
 
     function eat(
         uint256 tokenId,

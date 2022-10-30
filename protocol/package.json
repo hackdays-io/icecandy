@@ -1,9 +1,10 @@
 {
   "name": "icecandy",
   "scripts": {
-    "compile": "run-s compile:clean compile:build",
+    "compile": "run-s compile:clean compile:build compile:size",
     "compile:clean": "hardhat clean",
     "compile:build": "hardhat compile",
+    "compile:size": "hardhat size-contracts",
     "lint": "run-s lint:solhint lint:eslint lint:prettier",
     "lint:solhint": "solhint 'contracts/**/*.sol' && prettier -c 'contracts/**/*.sol'",
     "lint:eslint": "eslint --fix --ext .js,.ts",
@@ -44,6 +45,7 @@
     "ethereum-waffle": "^3.4.4",
     "ethers": "^5.6.8",
     "hardhat": "^2.9.9",
+    "hardhat-contract-sizer": "^2.6.1",
     "hardhat-gas-reporter": "^1.0.8",
     "hardhat-interface-generator": "^0.0.6",
     "husky": "^8.0.1",
