@@ -45,18 +45,17 @@ const ProfileMain: FC<Props> = ({
         </Flex>
         <Box borderRadius={10} backgroundColor="red.100" p={4}>
           <Text fontWeight="bold" fontSize="24px">
-            IceCandyScore: {iceCandyStats?.score || '????'}
+            IceCandyScore: {iceCandyStats?.score || '0'}
           </Text>
-          <Text>IceCandyを送った回数: {iceCandyStats?.sentNum || '????'}</Text>
+          <Text>IceCandyを送った回数: {iceCandyStats?.sentNum || '0'}</Text>
           <Text>
-            IceCandyを送った人数: {iceCandyStats?.sentNumOfPeople || '????'}
-          </Text>
-          <Text>
-            IceCandyをもらった回数: {iceCandyStats?.receiveNum || '????'}
+            IceCandyを送った人数: {iceCandyStats?.sentNumOfPeople || '0'}
           </Text>
           <Text>
-            IceCandyをもらった人数:{' '}
-            {iceCandyStats?.receiveNumOfPeople || '????'}
+            IceCandyをもらった回数: {iceCandyStats?.receiveNum || '0'}
+          </Text>
+          <Text>
+            IceCandyをもらった人数: {iceCandyStats?.receiveNumOfPeople || '0'}
           </Text>
         </Box>
       </Grid>

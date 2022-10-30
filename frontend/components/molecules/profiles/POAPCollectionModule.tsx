@@ -1,34 +1,10 @@
 import { Box, Grid, Text } from '@chakra-ui/react'
-import axios from 'axios'
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC } from 'react'
 import { INFTCollectionModule } from '../../../types/contracts'
-import NFTImage from '../../atoms/NFTImage'
+import SinglePOAP from '../../atoms/profile/SinglePOAP'
 
 type Props = {
   poaps: INFTCollectionModule.NFTStructStruct[]
-}
-
-const SingleNFT: FC<{ poap: INFTCollectionModule.NFTStructStruct }> = ({
-  poap,
-}) => {
-  const [tokenURI, setTokenURI] = useState<any>()
-
-  useEffect(() => {
-    const fetch = async () => {
-      const { data } = await axios.get(String(poap.tokenURI))
-      setTokenURI(data)
-    }
-    fetch()
-  }, [poap])
-
-  return (
-    <Box display="inline-block">
-      <NFTImage
-        size="auto"
-        url={tokenURI?.image || tokenURI?.image_url || ''}
-      />
-    </Box>
-  )
 }
 
 const ProfilePOAPCollectionModulePreview: FC<Props> = ({ poaps }) => {
@@ -37,9 +13,13 @@ const ProfilePOAPCollectionModulePreview: FC<Props> = ({ poaps }) => {
       <Text fontWeight="bold" fontSize="20px" mb={5}>
         POAPs
       </Text>
-      <Grid gridTemplateColumns="1fr 1fr 1fr 1fr" gridGap={2}>
+      <Grid
+        gridTemplateColumns="repeat(5, minmax(100px, 1fr))"
+        gridGap={4}
+        gridAutoRows="1fr"
+      >
         {poaps?.map((poap, index) => (
-          <SingleNFT key={index} {...{ poap }} />
+          <SinglePOAP key={index} {...{ poap }} />
         ))}
       </Grid>
     </Box>

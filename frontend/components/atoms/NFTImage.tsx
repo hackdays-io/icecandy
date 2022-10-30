@@ -1,4 +1,4 @@
-import { Box, Image } from '@chakra-ui/react'
+import { Box, Flex, Image, Text } from '@chakra-ui/react'
 import { FC, useMemo } from 'react'
 import { ipfs2http } from '../../utils/ipfs2https'
 
@@ -25,7 +25,7 @@ const NFTImage: FC<Props> = ({ url, size = 'md' }) => {
       case 'lg':
         return '160px'
       case 'auto':
-        return 'auto'
+        return '100%'
       default:
         return '75px'
     }
@@ -34,16 +34,28 @@ const NFTImage: FC<Props> = ({ url, size = 'md' }) => {
   if (url) {
     return (
       <Image
-        display="inline-block"
         width={imageSize}
         height={imageSize}
         src={parsedImageURL}
+        position="absolute"
         alt=""
         objectFit="cover"
       />
     )
   } else {
-    return <></>
+    return (
+      <Flex
+        justifyContent="center"
+        alignItems="center"
+        as="span"
+        width={imageSize}
+        height={imageSize}
+        position="absolute"
+        backgroundColor="gray.100"
+      >
+        <Text fontSize="12px">表示できません</Text>
+      </Flex>
+    )
   }
 }
 
