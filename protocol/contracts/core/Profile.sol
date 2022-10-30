@@ -9,73 +9,46 @@ import {IScoreModule} from "../interfaces/IScoreModule.sol";
 import {IMirrorModule} from "../interfaces/IMirrorModule.sol";
 import {IColorExtension} from "../interfaces/IColorExtension.sol";
 import {ISNSAccountModule} from "../interfaces/ISNSAccountModule.sol";
-import {NFTCollectionModule} from "./modules/NFTCollectionModule.sol";
-import {SNSAccountModule} from "./modules/SNSAccountModule.sol";
 import {IceCandy} from "./IceCandy.sol";
+import {IGlobals} from "../interfaces/IGlobals.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Profile is ERC721Enumerable, IProfile, Ownable {
     mapping(uint256 => IProfile.ProfileStruct) internal _profile;
     uint256 internal _profileCounter;
-    address internal _icecandy;
-    address internal _nftCollectionModule;
-    address internal _snsAccountModule;
-    address internal _poapCollectionModule;
-    address internal _scoreModule;
-    address internal _mirrorModule;
-    address internal _colorExtension;
+    address internal _globals;
 
     constructor(address owner) ERC721("Profile", "PROFILE") {
         _transferOwnership(owner);
     }
 
     modifier hasIceCandy() {
-        require(IceCandy(_icecandy).balanceOfNotEaten(msg.sender) > 0, "Profile: caller has no icecandy");
+        require(
+            IceCandy(IGlobals(_globals).getIceCandy()).balanceOfNotEaten(msg.sender) > 0,
+            "Profile: caller has no icecandy"
+        );
         _;
     }
 
-    function setIceCandy(address icecandy) external override onlyOwner {
-        _icecandy = icecandy;
-    }
-
-    function setNFTCollectionModule(address nftCollectionModule) external override onlyOwner {
-        _nftCollectionModule = nftCollectionModule;
-    }
-
-    function setSNSAccountModule(address snsAccountModule) external override onlyOwner {
-        _snsAccountModule = snsAccountModule;
-    }
-
-    function setPOAPCollectionModule(address poapCollectionModule) external override onlyOwner {
-        _poapCollectionModule = poapCollectionModule;
-    }
-
-    function setScoreModule(address scoreModule) external override onlyOwner {
-        _scoreModule = scoreModule;
-    }
-
-    function setMirrorModule(address mirrorModule) external override onlyOwner {
-        _mirrorModule = mirrorModule;
-    }
-
-    function setColorExtension(address colorExtension) external override onlyOwner {
-        _colorExtension = colorExtension;
+    function setGlobals(address globals) external override onlyOwner {
+        _globals = globals;
     }
 
     function createProfile(CreateProfileStructData calldata vars) external override returns (uint256) {
         uint256 profileId = ++_profileCounter;
 
         _createProfile(profileId, msg.sender, vars.name, vars.introduction, vars.imageURI);
-        _createNFTCollection(profileId, _nftCollectionModule, vars.nfts);
-        _createNFTCollection(profileId, _poapCollectionModule, vars.poaps);
+        _createNFTCollection(profileId, IGlobals(_globals).getNFTCollectionModule(), vars.nfts);
+        _createNFTCollection(profileId, IGlobals(_globals).getPOAPCollectionModule(), vars.poaps);
         _createSNSAccount(profileId, vars.snsAccounts);
+        _createScore(profileId);
 
         return profileId;
     }
 
     function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        _createNFTCollection(profileId, _nftCollectionModule, nfts);
+        _createNFTCollection(profileId, IGlobals(_globals).getNFTCollectionModule(), nfts);
     }
 
     function createPOAPCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata poaps)
@@ -83,7 +56,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         override
     {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        _createNFTCollection(profileId, _poapCollectionModule, poaps);
+        _createNFTCollection(profileId, IGlobals(_globals).getPOAPCollectionModule(), poaps);
     }
 
     function createScore(uint256 profileId) external override {
@@ -91,27 +64,29 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _createScore(profileId);
     }
 
-    /*
     function addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        _addMirror(profileId, mirror);
+        uint256 moduleId = IMirrorModule(IGlobals(_globals).getMirrorModule()).addMirror(profileId, mirror);
+        emit MirrorAdded(profileId, moduleId, block.number);
     }
 
     function addColor(uint256 profileId, string memory color) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        _addColor(profileId, color);
+        uint256 extensionId = IColorExtension(IGlobals(_globals).getColorExtension()).addColor(profileId, color);
+        emit ColorAdded(profileId, extensionId, block.number);
     }
 
     function activateColor(uint256 profileId, uint256 extensionId) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        _activateColor(profileId, extensionId);
+        IColorExtension(IGlobals(_globals).getColorExtension()).activate(profileId, extensionId);
+        emit ColorActivated(profileId, extensionId, block.number);
     }
 
     function deactivateColor(uint256 profileId, uint256 extensionId) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        _deactivateColor(profileId, extensionId);
+        IColorExtension(IGlobals(_globals).getColorExtension()).deactivate(profileId, extensionId);
+        emit ColorDeactivated(profileId, extensionId, block.number);
     }
-    */
 
     function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts)
         public
@@ -138,7 +113,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         override
         returns (INFTCollectionModule.NFTStruct[] memory)
     {
-        return _getNFTCollection(profileId, _nftCollectionModule);
+        return _getNFTCollection(profileId, IGlobals(_globals).getNFTCollectionModule());
     }
 
     function getPOAPCollection(uint256 profileId)
@@ -147,22 +122,29 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         override
         returns (INFTCollectionModule.NFTStruct[] memory)
     {
-        return _getNFTCollection(profileId, _poapCollectionModule);
+        return _getNFTCollection(profileId, IGlobals(_globals).getPOAPCollectionModule());
+    }
+
+    function getSNSAccounts(uint256 profileId)
+        external
+        view
+        override
+        returns (ISNSAccountModule.SNSAccountStruct[] memory)
+    {
+        return ISNSAccountModule(IGlobals(_globals).getSNSAccountModule()).getSNSAccounts(profileId);
     }
 
     function getScore(uint256 profileId) external view override returns (IScoreModule.ScoreStruct[] memory) {
-        return _getScore(profileId);
+        return IScoreModule(IGlobals(_globals).getScoreModule()).getScore(profileId);
     }
 
-    /*
     function getMirror(uint256 profileId) external view override returns (IMirrorModule.MirrorStruct[] memory) {
-        return _getMirror(profileId);
+        return IMirrorModule(IGlobals(_globals).getMirrorModule()).getMirror(profileId);
     }
 
     function getColor(uint256 profileId) external view override returns (IColorExtension.ColorStruct[] memory) {
-        return _getColor(profileId);
+        return IColorExtension(IGlobals(_globals).getColorExtension()).getColor(profileId);
     }
-    */
 
     function _createProfile(
         uint256 profileId,
@@ -171,10 +153,8 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         string memory introduction,
         string memory imageURI
     ) internal {
-        // mint
         _mint(msg.sender, profileId);
 
-        // create Profile
         _profile[profileId].wallets.push(owner);
         _profile[profileId].name = name;
         _profile[profileId].introduction = introduction;
@@ -193,34 +173,12 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     }
 
     function _createScore(uint256 profileId) internal {
-        IScoreModule(_scoreModule).processScore(profileId);
+        IScoreModule(IGlobals(_globals).getScoreModule()).processScore(profileId);
         emit ScoreCreated(profileId, block.number);
     }
 
-    /*
-    function _addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) internal {
-        uint256 moduleId = IMirrorModule(_mirrorModule).addMirror(profileId, mirror);
-        emit MirrorAdded(profileId, moduleId, block.number);
-    }
-
-    function _addColor(uint256 profileId, string memory color) internal {
-        uint256 extensionId = IColorExtension(_colorExtension).addColor(profileId, color);
-        emit ColorAdded(profileId, extensionId, block.number);
-    }
-
-    function _activateColor(uint256 profileId, uint256 extensionId) internal {
-        IColorExtension(_colorExtension).activate(profileId, extensionId);
-        emit ColorActivated(profileId, extensionId, block.number);
-    }
-
-    function _deactivateColor(uint256 profileId, uint256 extensionId) internal {
-        IColorExtension(_colorExtension).deactivate(profileId, extensionId);
-        emit ColorDeactivated(profileId, extensionId, block.number);
-    }
-    */
-
     function _createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) internal {
-        ISNSAccountModule(_snsAccountModule).processSNSAccount(profileId, snsAccounts);
+        ISNSAccountModule(IGlobals(_globals).getSNSAccountModule()).processSNSAccount(profileId, snsAccounts);
         emit SNSAccountCreated(profileId, block.number);
     }
 
@@ -230,29 +188,6 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         returns (INFTCollectionModule.NFTStruct[] memory)
     {
         return INFTCollectionModule(module).getCollection(profileId);
-    }
-
-    function _getScore(uint256 profileId) internal view returns (IScoreModule.ScoreStruct[] memory) {
-        return IScoreModule(_scoreModule).getScore(profileId);
-    }
-
-    /*
-    function _getMirror(uint256 profileId) internal view returns (IMirrorModule.MirrorStruct[] memory) {
-        return IMirrorModule(_mirrorModule).getMirror(profileId);
-    }
-
-    function _getColor(uint256 profileId) internal view returns (IColorExtension.ColorStruct[] memory) {
-        return IColorExtension(_colorExtension).getColor(profileId);
-    }
-    */
-
-    function getSNSAccounts(uint256 profileId)
-        external
-        view
-        override
-        returns (ISNSAccountModule.SNSAccountStruct[] memory)
-    {
-        return SNSAccountModule(_snsAccountModule).getSNSAccounts(profileId);
     }
 
     function _baseURI() internal pure override returns (string memory) {

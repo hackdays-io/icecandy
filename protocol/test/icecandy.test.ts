@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { IceCandy } from '../typechain-types'
+import { IceCandy, Globals, Profile } from '../typechain-types'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 
 describe('icecandy test', () => {
@@ -9,6 +9,8 @@ describe('icecandy test', () => {
   let bob: SignerWithAddress
   let carol: SignerWithAddress
   let icecandy: IceCandy
+  let profile: Profile
+  let globals: Globals
 
   before(async () => {
     // signers
@@ -21,6 +23,14 @@ describe('icecandy test', () => {
     // deploy contracts
     const fIceCandy = await ethers.getContractFactory('IceCandy')
     icecandy = await fIceCandy.deploy(owner.address)
+    const fProfile = await ethers.getContractFactory('Profile')
+    profile = await fProfile.deploy(owner.address)
+    const fGlobals = await ethers.getContractFactory('Globals')
+    globals = await fGlobals.deploy(owner.address)
+
+    // setup
+    await icecandy.setGlobals(globals.address)
+    await globals.setProfile(profile.address)
   })
 
   it('mint()', async () => {
@@ -43,6 +53,7 @@ describe('icecandy test', () => {
     const _tx = await icecandy.connect(alice).eat(1, 2, '0x1111111111111111111111111111111111111111', 3)
     await expect(_tx)
       .to.emit(icecandy, 'Eaten')
+
       .withArgs(
         1,
         alice.address,
@@ -117,39 +128,12 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(0)
   })
 
-  it('eat() from Profile pattern', async () => {
-    // mint
-    await expect(icecandy.connect(owner).mint(alice.address))
-      .to.emit(icecandy, 'Transfer')
-      .withArgs(ethers.constants.AddressZero, alice.address, 4)
-    expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(4)
-    expect(await icecandy.connect(alice).balanceOfEaten(alice.address)).to.be.equals(3)
-    expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(1)
-
-    // before setProfile transaction is reverted
-    await expect(icecandy.connect(owner).eat(4, 2, '0x1111111111111111111111111111111111111111', 3)).to.be.revertedWith(
-      'IceCandy: caller is not owner or approved'
-    )
-
-    // set owner address as profile
-    await expect(icecandy.connect(owner).setProfile(owner.address))
-
-    // after setting transaction is success
-    await expect(icecandy.connect(owner).eat(4, 2, '0x1111111111111111111111111111111111111111', 3)).to.emit(
-      icecandy,
-      'Eaten'
-    )
-    expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(4)
-    expect(await icecandy.connect(alice).balanceOfEaten(alice.address)).to.be.equals(4)
-    expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(0)
-  })
-
   it('transfer() eaten icecandy', async () => {
     await expect(icecandy.connect(alice).transferFrom(alice.address, bob.address, 1))
       .to.emit(icecandy, 'Transfer')
       .withArgs(alice.address, bob.address, 1)
-    expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(3)
-    expect(await icecandy.connect(alice).balanceOfEaten(alice.address)).to.be.equals(3)
+    expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(2)
+    expect(await icecandy.connect(alice).balanceOfEaten(alice.address)).to.be.equals(2)
     expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(0)
     expect(await icecandy.connect(bob).balanceOf(bob.address)).to.be.equals(1)
     expect(await icecandy.connect(bob).balanceOfEaten(bob.address)).to.be.equals(1)
@@ -160,13 +144,13 @@ describe('icecandy test', () => {
     // mint
     await expect(icecandy.connect(owner).mint(alice.address))
       .to.emit(icecandy, 'Transfer')
-      .withArgs(ethers.constants.AddressZero, alice.address, 5)
+      .withArgs(ethers.constants.AddressZero, alice.address, 4)
 
-    await expect(icecandy.connect(alice).transferFrom(alice.address, bob.address, 5))
+    await expect(icecandy.connect(alice).transferFrom(alice.address, bob.address, 4))
       .to.emit(icecandy, 'Transfer')
-      .withArgs(alice.address, bob.address, 5)
-    expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(3)
-    expect(await icecandy.connect(alice).balanceOfEaten(alice.address)).to.be.equals(3)
+      .withArgs(alice.address, bob.address, 4)
+    expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(2)
+    expect(await icecandy.connect(alice).balanceOfEaten(alice.address)).to.be.equals(2)
     expect(await icecandy.connect(alice).balanceOfNotEaten(alice.address)).to.be.equals(0)
     expect(await icecandy.connect(bob).balanceOf(bob.address)).to.be.equals(2)
     expect(await icecandy.connect(bob).balanceOfEaten(bob.address)).to.be.equals(1)
