@@ -14,6 +14,7 @@ dotenv.config({ path: PATH_TO_HARDHAT_ENV })
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY
 const PRIVATE_KEY = process.env.PRIVATE_KEY
 const LOCAL_PRIVATE_KEY = process.env.LOCAL_PRIVATE_KEY
+const LOCAL_PRIVATE_KEY_2 = process.env.LOCAL_PRIVATE_KEY_2
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
 const COIN_MARKET_CAP_API_KEY = process.env.COIN_MARKET_CAP_API_KEY
 

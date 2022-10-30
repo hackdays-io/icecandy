@@ -11,6 +11,7 @@ import { ProfileCreatedEvent } from '../types/contracts/contracts/core/Profile'
 import { ProfileCreatedEventObject } from '../types/contracts/contracts/interfaces/IProfile'
 import { AppProfile } from '../types/profile'
 import { useProfileNFTContractClient } from './useContractClient'
+import { useENSName } from './useENS'
 import { useFirstHoldNFTs, useHoldingPOAPs, usePickupNFTs } from './useToken'
 
 export const useGenerateProfile = () => {
@@ -18,15 +19,12 @@ export const useGenerateProfile = () => {
   const [generatedData, setGeneratedData] = useState<AppProfile.FormData>()
   const { firstHoldNFTs, loading: firstNFTLoading } = useFirstHoldNFTs()
   const { pickedNFTs, loading: pickedNFTLoading } = usePickupNFTs()
-  const { holdingPOAPs, loading: poapLoading } = useHoldingPOAPs(5)
+  const { holdingPOAPs, loading: poapLoading } = useHoldingPOAPs()
+  const { ensName, ensDescription, ensPFP, loading: ensLoading } = useENSName()
   const address = useAddress()
 
   useEffect(() => {
-    if (
-      !pickedNFTLoading &&
-      !firstNFTLoading &&
-      (!poapLoading || Number(holdingPOAPs?.ownedNfts?.length) > 5)
-    ) {
+    if (address && !(pickedNFTLoading || firstNFTLoading || poapLoading)) {
       const _firstHoldNfts: INFTCollectionModule.NFTStructStruct[] =
         firstHoldNFTs.map((nft) => {
           return {
@@ -64,9 +62,9 @@ export const useGenerateProfile = () => {
         }) || []
 
       setGeneratedData({
-        name: 'From ENS',
-        introduction: 'From ENS',
-        imageURI: 'From ENS',
+        name: ensName || '未入力',
+        introduction: ensDescription || '',
+        imageURI: ensPFP || '',
         nfts,
         poaps,
         snsAccounts: [],
@@ -74,7 +72,7 @@ export const useGenerateProfile = () => {
 
       setLoading(false)
     }
-  }, [pickedNFTs, firstHoldNFTs, poapLoading, holdingPOAPs])
+  }, [pickedNFTLoading, firstNFTLoading, poapLoading, ensLoading, address])
 
   return { generatedData, loading }
 }
@@ -113,6 +111,7 @@ export const useCreateProfileNFT = () => {
     introduction: string,
     imageURI: string,
     nfts: INFTCollectionModule.NFTStructStruct[],
+    poaps: INFTCollectionModule.NFTStructStruct[],
     snsAccounts: ISNSAccountModule.SNSAccountStructStruct[]
   ) => {
     try {
@@ -127,7 +126,7 @@ export const useCreateProfileNFT = () => {
         introduction,
         imageURI,
         nfts,
-        poaps: [],
+        poaps,
         snsAccounts,
       })
       success.current = true
@@ -141,11 +140,13 @@ export const useCreateProfileNFT = () => {
 }
 
 export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
-  const [profile, setProfile] = useState<IProfile.ProfileStructStructOutput>()
+  const [profile, setProfile] = useState<IProfile.ProfileStructStruct>()
   const [nftCollection, setNFTCollection] =
-    useState<INFTCollectionModule.NFTStructStructOutput[]>()
+    useState<INFTCollectionModule.NFTStructStruct[]>()
   const [snsAccounts, setSNSAccounts] =
-    useState<ISNSAccountModule.SNSAccountStructStructOutput[]>()
+    useState<ISNSAccountModule.SNSAccountStructStruct[]>()
+  const [poapCollection, setPOAPCollection] =
+    useState<INFTCollectionModule.NFTStructStruct[]>()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>(null)
   const profileNFTContract = useProfileNFTContractClient()
@@ -167,6 +168,10 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
             Number(tokenId)
           )
           setSNSAccounts(snsAccounts)
+          const poapCollection = await profileNFTContract.getPOAPCollection(
+            Number(tokenId)
+          )
+          setPOAPCollection(poapCollection)
           setLoading(false)
         }
       } catch (error) {
@@ -181,5 +186,12 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
     }
   }, [tokenId])
 
-  return { profile, nftCollection, snsAccounts, loading, errors }
+  return {
+    profile,
+    nftCollection,
+    snsAccounts,
+    poapCollection,
+    loading,
+    errors,
+  }
 }

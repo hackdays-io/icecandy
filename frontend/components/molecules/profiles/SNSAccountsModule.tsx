@@ -3,11 +3,11 @@ import { FC } from 'react'
 import { ISNSAccountModule } from '../../../types/contracts'
 
 type Props = {
-  snsAccounts?: ISNSAccountModule.SNSAccountStructStructOutput[]
+  snsAccounts?: ISNSAccountModule.SNSAccountStructStruct[]
 }
 
 const ProfileSNSAccountsModule: FC<Props> = ({ snsAccounts }) => {
-  const SNSPageButton: FC<ISNSAccountModule.SNSAccountStructStructOutput> = ({
+  const SNSPageButton: FC<ISNSAccountModule.SNSAccountStructStruct> = ({
     service,
     userId,
     userPageURL,
@@ -15,18 +15,20 @@ const ProfileSNSAccountsModule: FC<Props> = ({ snsAccounts }) => {
     switch (service) {
       case 'twitter':
         return (
-          <Link href={userPageURL} target="_blank">
+          <Link href={String(userPageURL)} target="_blank">
             <Button rounded="full" backgroundColor="#1C9BF0" color="white">
-              Twitter: {userId}
+              <>Twitter: {userId}</>
             </Button>
           </Link>
         )
 
       default:
         return (
-          <Link href={userPageURL} target="_blank">
+          <Link href={String(userPageURL)} target="_blank">
             <Button rounded="full">
-              {service}: {userId}
+              <>
+                {service}: {userId}
+              </>
             </Button>
           </Link>
         )

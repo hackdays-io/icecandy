@@ -13,6 +13,7 @@
     "@chakra-ui/react": "^2.3.6",
     "@emotion/react": "^11.10.4",
     "@emotion/styled": "^11.10.4",
+    "@ensdomains/ensjs": "^3.0.0-alpha.32",
     "@thirdweb-dev/react": "^3.4.0",
     "@thirdweb-dev/sdk": "^3.4.0",
     "alchemy-sdk": "^2.2.0",
@@ -28,6 +29,7 @@
     "react-chartjs-2": "^4.3.1",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.38.0",
+    "react-rewards": "^2.0.4",
     "twitter-api-sdk": "^1.2.1"
   },
   "devDependencies": {

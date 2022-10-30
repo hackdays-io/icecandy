@@ -185,7 +185,7 @@ export const useHoldingNFTs = () => {
   const [holdingNFTsOnEth, setTokensEth] = useState<OwnedNftsResponse>()
   const [holdingNFTsOnPolygon, setTokensPolygon] = useState<OwnedNftsResponse>()
   const [holdingNFTsOnArb, setTokensArb] = useState<OwnedNftsResponse>()
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [errors, setErrors] = useState<any>(null)
 
   const address = useAddress()
@@ -197,7 +197,6 @@ export const useHoldingNFTs = () => {
     const fetch = async () => {
       if (!address) return
       try {
-        setLoading(true)
         const nftsOnEth = await ethAlchemy.nft.getNftsForOwner(address)
         const nftsOnPolygon = await polygonAlchemy.nft.getNftsForOwner(address)
         const nftsOnArb = await arbAlchemy.nft.getNftsForOwner(address)
@@ -222,38 +221,33 @@ export const useHoldingNFTs = () => {
   }
 }
 
-export const useHoldingPOAPs = (limit?: number) => {
+export const useHoldingPOAPs = () => {
   const [holdingPOAPs, setPOAPs] = useState<OwnedNftsResponse>()
-  const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
+  const address = '0x28721ef9c918dadd500420a14eb62e403ae659d8'
+  const POAPContractAddress = process.env.NEXT_PUBLIC_CONTRACT_POAP!
   const poapContract = usePOAPContractClient()
-  const address = useAddress()
 
   useEffect(() => {
     const fetch = async () => {
-      if (!address) return
-      try {
-        if (!poapContract) throw new Error('Cannot find contract')
-        setLoading(true)
-        const holdingNum: BigNumber = await poapContract.balanceOf(address)
-        const poaps: OwnedNft[] = []
-        for (
-          let index = 0;
-          index < (limit || new Array(holdingNum.toNumber()).fill('').length);
-          index++
-        ) {
-          const reverseIndex = holdingNum.toNumber() - index
-          const tokenId = await poapContract.tokenOfOwnerByIndex(
-            address,
-            reverseIndex
-          )
+      if (!poapContract) return
+      const poaps: OwnedNft[] = []
+      const { data: holdingNum } = await axios.get(
+        `https://blockscout.com/xdai/mainnet/api?module=account&action=tokenbalance&contractaddress=${POAPContractAddress}&address=${address}`
+      )
+      const getCount =
+        Number(holdingNum.result) > 4 ? 5 : Number(holdingNum.result)
+      for (let i = 0; i < getCount; i++) {
+        try {
+          const index = getCount - i - 1
+          const tokenId = await poapContract.tokenOfOwnerByIndex(address, index)
           const tokenURI = await poapContract.tokenURI(tokenId)
           const { data: metadata } = await axios.get(tokenURI)
           const poap: OwnedNft = {
             balance: 1,
             contract: {
               tokenType: NftTokenType.ERC721,
-              address: process.env.NEXT_PUBLIC_CONTRACT_POAP!,
+              address: POAPContractAddress,
             },
             title: 'POAP',
             description: metadata.description,
@@ -266,19 +260,18 @@ export const useHoldingPOAPs = (limit?: number) => {
             tokenType: NftTokenType.ERC721,
           }
           poaps.push(poap)
-          setPOAPs({
-            ownedNfts: poaps,
-            totalCount: holdingNum.toNumber(),
-          })
+        } catch (error) {
+          break
         }
-        setLoading(false)
-      } catch (error) {
-        setErrors(error)
-        setLoading(false)
       }
+      setPOAPs({
+        ownedNfts: poaps,
+        totalCount: Number(holdingNum.result),
+      })
+      setLoading(false)
     }
     fetch()
-  }, [address])
+  }, [poapContract])
 
-  return { holdingPOAPs, loading, errors }
+  return { holdingPOAPs, loading }
 }

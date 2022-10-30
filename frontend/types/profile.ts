@@ -13,14 +13,16 @@ export namespace AppProfile {
   }
 
   export type Module<T> = T extends 'nftCollection' | 'poapCollection'
-    ? { type: T; data: INFTCollectionModule.NFTStructStructOutput[] }
+    ? {
+        type: T
+        data: INFTCollectionModule.NFTStructStruct[]
+        loading?: boolean
+      }
     : T extends 'snsAccounts'
-    ? { type: T; data: ISNSAccountModule.SNSAccountStructStructOutput[] }
-    : any
-
-  export type ModulePreview<T> = T extends 'nftCollection' | 'poapCollection'
-    ? { type: T; data: INFTCollectionModule.NFTStructStruct[] }
-    : T extends 'snsAccounts'
-    ? { type: T; data: ISNSAccountModule.SNSAccountStructStruct[] }
+    ? {
+        type: T
+        data: ISNSAccountModule.SNSAccountStructStruct[]
+        loading?: boolean
+      }
     : any
 }
