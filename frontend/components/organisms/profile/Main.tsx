@@ -1,56 +1,83 @@
-import { Box, Heading, Text } from "@chakra-ui/react";
-import { FC } from "react";
-import { AppProfile } from "../../../types/profile";
-import PFP from "../../atoms/profile/PFP";
-import ProfileENSNameModule from "../../molecules/profiles/ENSNameModule";
-import ProfileNFTCollectionModule from "../../molecules/profiles/NFTCollectionModule";
-import ProfileSNSAccountsModule from "../../molecules/profiles/SNSAccountsModule";
+import { Box, Flex, Grid, Heading, Text } from '@chakra-ui/react'
+import { FC } from 'react'
+import { AppProfile } from '../../../types/profile'
+import PFP from '../../atoms/profile/PFP'
+import ProfileNFTCollectionModule from '../../molecules/profiles/NFTCollectionModule'
+import ProfilePOAPCollectionModule from '../../molecules/profiles/POAPCollectionModule'
+import ProfileSNSAccountsModule from '../../molecules/profiles/SNSAccountsModule'
 
 type Props = {
-  pfpURI?: string;
-  name?: string;
-  introduction?: string;
+  pfpURI?: string
+  name?: string
+  introduction?: string
+  iceCandyStats?: {
+    score: number
+    sentNumOfPeople: number
+    receiveNumOfPeople: number
+    sentNum: number
+    receiveNum: number
+  }
   modules: [
-    AppProfile.Module<"ensName">,
-    AppProfile.Module<"snsAccounts">,
-    AppProfile.Module<"nftCollection">
-  ];
-};
+    AppProfile.Module<'snsAccounts'>,
+    AppProfile.Module<'nftCollection'>,
+    AppProfile.Module<'poapCollection'>
+  ]
+}
 
-const ProfileMain: FC<Props> = ({ pfpURI, name, introduction, modules }) => {
+const ProfileMain: FC<Props> = ({
+  pfpURI,
+  name,
+  introduction,
+  modules,
+  iceCandyStats,
+}) => {
   return (
     <Box>
-      <Box textAlign="center" mb={3}>
-        <PFP imgURI={pfpURI} />
-      </Box>
-      <Heading fontSize="24px" textAlign="center" mb={3}>
-        {name}
-      </Heading>
-      <Text mb={4}>{introduction}</Text>
+      <Grid gridTemplateColumns="1fr 300px">
+        <Flex mb={3}>
+          <PFP imgURI={pfpURI} />
+          <Box ml={5} mt={3}>
+            <Heading fontSize="24px" mb={2}>
+              {name}
+            </Heading>
+            <Text mb={4}>{introduction}</Text>
+          </Box>
+        </Flex>
+        <Box borderRadius={10} backgroundColor="red.100" p={4}>
+          <Text fontWeight="bold" fontSize="24px">
+            IceCandyScore: {iceCandyStats?.score || '????'}
+          </Text>
+          <Text>IceCandyを送った回数: {iceCandyStats?.sentNum || '????'}</Text>
+          <Text>
+            IceCandyを送った人数: {iceCandyStats?.sentNumOfPeople || '????'}
+          </Text>
+          <Text>
+            IceCandyをもらった回数: {iceCandyStats?.receiveNum || '????'}
+          </Text>
+          <Text>
+            IceCandyをもらった人数:{' '}
+            {iceCandyStats?.receiveNumOfPeople || '????'}
+          </Text>
+        </Box>
+      </Grid>
       {modules.map((module, index) => {
         switch (module.type) {
-          case "nftCollection":
+          case 'nftCollection':
+            return <ProfileNFTCollectionModule nfts={module.data} key={index} />
+          case 'poapCollection':
             return (
-              <ProfileNFTCollectionModule nfts={module.data} key={index} />
-            );
-          case "snsAccounts":
+              <ProfilePOAPCollectionModule poaps={module.data} key={index} />
+            )
+          case 'snsAccounts':
             return (
               <ProfileSNSAccountsModule snsAccounts={module.data} key={index} />
-            );
-          case "ensName":
-            return (
-              <ProfileENSNameModule
-                name={module.data}
-                key={index}
-                loading={module.loading}
-              />
-            );
+            )
           default:
-            return <></>;
+            return <></>
         }
       })}
     </Box>
-  );
-};
+  )
+}
 
-export default ProfileMain;
+export default ProfileMain

@@ -31,33 +31,30 @@ export declare namespace IMirrorModule {
 
 export interface IMirrorModuleInterface extends utils.Interface {
   functions: {
+    "addMirror(uint256,(string))": FunctionFragment;
     "getMirror(uint256)": FunctionFragment;
-    "processRegist(uint256,(string))": FunctionFragment;
     "setProfile(address)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "getMirror" | "processRegist" | "setProfile"
+    nameOrSignatureOrTopic: "addMirror" | "getMirror" | "setProfile"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "getMirror",
-    values: [PromiseOrValue<BigNumberish>]
+    functionFragment: "addMirror",
+    values: [PromiseOrValue<BigNumberish>, IMirrorModule.MirrorStructStruct]
   ): string;
   encodeFunctionData(
-    functionFragment: "processRegist",
-    values: [PromiseOrValue<BigNumberish>, IMirrorModule.MirrorStructStruct]
+    functionFragment: "getMirror",
+    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "setProfile",
     values: [PromiseOrValue<string>]
   ): string;
 
+  decodeFunctionResult(functionFragment: "addMirror", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getMirror", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "processRegist",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
 
   events: {};
@@ -90,16 +87,16 @@ export interface IMirrorModule extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    getMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[IMirrorModule.MirrorStructStructOutput[]]>;
-
-    processRegist(
+    addMirror(
       profileId: PromiseOrValue<BigNumberish>,
       mirror: IMirrorModule.MirrorStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[IMirrorModule.MirrorStructStructOutput[]]>;
 
     setProfile(
       profile: PromiseOrValue<string>,
@@ -107,16 +104,16 @@ export interface IMirrorModule extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  getMirror(
-    profileId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
-
-  processRegist(
+  addMirror(
     profileId: PromiseOrValue<BigNumberish>,
     mirror: IMirrorModule.MirrorStructStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
+
+  getMirror(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
 
   setProfile(
     profile: PromiseOrValue<string>,
@@ -124,16 +121,16 @@ export interface IMirrorModule extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    addMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getMirror(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
-
-    processRegist(
-      profileId: PromiseOrValue<BigNumberish>,
-      mirror: IMirrorModule.MirrorStructStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     setProfile(
       profile: PromiseOrValue<string>,
@@ -144,15 +141,15 @@ export interface IMirrorModule extends BaseContract {
   filters: {};
 
   estimateGas: {
-    getMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    processRegist(
+    addMirror(
       profileId: PromiseOrValue<BigNumberish>,
       mirror: IMirrorModule.MirrorStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     setProfile(
@@ -162,15 +159,15 @@ export interface IMirrorModule extends BaseContract {
   };
 
   populateTransaction: {
-    getMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    processRegist(
+    addMirror(
       profileId: PromiseOrValue<BigNumberish>,
       mirror: IMirrorModule.MirrorStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     setProfile(

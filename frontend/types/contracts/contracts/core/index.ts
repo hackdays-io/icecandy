@@ -3,6 +3,8 @@
 /* eslint-disable */
 import type * as bases from "./bases";
 export type { bases };
+import type * as extensions from "./extensions";
+export type { extensions };
 import type * as modules from "./modules";
 export type { modules };
 export type { IceCandy } from "./IceCandy";

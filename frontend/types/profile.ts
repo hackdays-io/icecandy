@@ -7,19 +7,22 @@ export namespace AppProfile {
     name: string
     introduction: string
     imageURI: string
-    nfts: { chain: ChainId; index: number }[]
+    nfts: INFTCollectionModule.NFTStructStruct[]
+    poaps: INFTCollectionModule.NFTStructStruct[]
     snsAccounts: ISNSAccountModule.SNSAccountStructStruct[]
   }
 
-  export type Module<T> = {
-    type: T
-    data?: WhichModule<T>
-    loading?: boolean
-  }
-
-  export type WhichModule<T> = T extends 'nftCollection'
-    ? INFTCollectionModule.NFTStructStructOutput[]
+  export type Module<T> = T extends 'nftCollection' | 'poapCollection'
+    ? {
+        type: T
+        data: INFTCollectionModule.NFTStructStruct[]
+        loading?: boolean
+      }
     : T extends 'snsAccounts'
-    ? ISNSAccountModule.SNSAccountStructStructOutput[]
+    ? {
+        type: T
+        data: ISNSAccountModule.SNSAccountStructStruct[]
+        loading?: boolean
+      }
     : any
 }
