@@ -9,10 +9,7 @@ interface ISNSAccountModule {
         address wallet;
     }
 
-    function processSNSAccount(
-        uint256 profileId,
-        SNSAccountStruct[] calldata snsAccounts
-    ) external;
+    function processSNSAccount(uint256 profileId, SNSAccountStruct[] calldata snsAccounts) external;
 
     function getSNSAccounts(uint256 profileId) external view returns (SNSAccountStruct[] memory);
 }

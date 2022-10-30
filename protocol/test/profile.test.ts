@@ -1,19 +1,18 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
 import {
+  IceCandy,
   Profile,
+  Globals,
   NFTCollectionModule,
   POAPCollectionModule,
-  ISNSAccountModule,
   SNSAccountModule,
-  IceCandy,
   ScoreModule,
   MirrorModule,
   ColorExtension,
 } from '../typechain-types'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { BigNumber } from 'ethers'
-import { IProfile } from '../typechain-types/contracts/core/Profile'
 
 describe('profile test', () => {
   let owner: SignerWithAddress
@@ -23,6 +22,7 @@ describe('profile test', () => {
   let daniel: SignerWithAddress
   let profile: Profile
   let icecandy: IceCandy
+  let globals: Globals
   let nftCollection: NFTCollectionModule
   let snsAccount: SNSAccountModule
   let poapCollection: POAPCollectionModule
@@ -44,12 +44,14 @@ describe('profile test', () => {
     profile = await fProfile.deploy(owner.address)
     const fIceCandy = await ethers.getContractFactory('IceCandy')
     icecandy = await fIceCandy.deploy(owner.address)
+    const fGlobals = await ethers.getContractFactory('Globals')
+    globals = await fGlobals.deploy(owner.address)
     const fNFTCollection = await ethers.getContractFactory('NFTCollectionModule')
-    nftCollection = await fNFTCollection.deploy(profile.address)
-    const fSNSAccount = await ethers.getContractFactory('SNSAccountModule')
-    snsAccount = await fSNSAccount.deploy(profile.address)
+    nftCollection = await fNFTCollection.deploy(owner.address)
     const fPOAPCollection = await ethers.getContractFactory('POAPCollectionModule')
-    poapCollection = await fPOAPCollection.deploy(profile.address)
+    poapCollection = await fPOAPCollection.deploy(owner.address)
+    const fSNSAccount = await ethers.getContractFactory('SNSAccountModule')
+    snsAccount = await fSNSAccount.deploy(owner.address)
     const fScore = await ethers.getContractFactory('ScoreModule')
     score = await fScore.deploy(owner.address)
     const fMirror = await ethers.getContractFactory('MirrorModule')
@@ -58,81 +60,22 @@ describe('profile test', () => {
     color = await fColor.deploy(owner.address)
 
     // setup
-    await icecandy.setProfile(profile.address)
-    await score.setProfile(profile.address)
-    await score.setNFTCollectionModule(nftCollection.address)
-    await score.setPOAPCollectionModule(poapCollection.address)
-    await mirror.setProfile(profile.address)
-    await color.setProfile(profile.address)
-  })
-
-  it('setIceCandy()', async () => {
-    // revert transaction
-    await expect(profile.connect(alice).setIceCandy(icecandy.address)).to.be.revertedWith(
-      'Ownable: caller is not the owner'
-    )
-
-    // success transaction
-    await expect(profile.connect(owner).setIceCandy(icecandy.address)).to.be.not.reverted
-  })
-
-  it('setNFTCollectionModule()', async () => {
-    // revert transaction
-    await expect(profile.connect(alice).setNFTCollectionModule(nftCollection.address)).to.be.revertedWith(
-      'Ownable: caller is not the owner'
-    )
-
-    // success transaction
-    await expect(profile.connect(owner).setNFTCollectionModule(nftCollection.address)).to.be.not.reverted
-  })
-
-  it('setSNSAccountModule()', async () => {
-    await expect(profile.connect(alice).setSNSAccountModule(snsAccount.address)).to.be.revertedWith(
-      'Ownable: caller is not the owner'
-    )
-
-    // success transaction
-    await expect(profile.connect(owner).setSNSAccountModule(snsAccount.address)).to.be.not.reverted
-  })
-
-  it('setPOAPCollectionModule()', async () => {
-    // revert transaction
-    await expect(profile.connect(alice).setPOAPCollectionModule(poapCollection.address)).to.be.revertedWith(
-      'Ownable: caller is not the owner'
-    )
-
-    // success transaction
-    await expect(profile.connect(owner).setPOAPCollectionModule(poapCollection.address)).to.be.not.reverted
-  })
-
-  it('setScoreModule()', async () => {
-    // revert transaction
-    await expect(profile.connect(alice).setScoreModule(score.address)).to.be.revertedWith(
-      'Ownable: caller is not the owner'
-    )
-
-    // success transaction
-    await expect(profile.connect(owner).setScoreModule(score.address)).to.be.not.reverted
-  })
-
-  it('setMirrorModule()', async () => {
-    // revert transaction
-    await expect(profile.connect(alice).setMirrorModule(mirror.address)).to.be.revertedWith(
-      'Ownable: caller is not the owner'
-    )
-
-    // success transaction
-    await expect(profile.connect(owner).setMirrorModule(mirror.address)).to.be.not.reverted
-  })
-
-  it('setColorExtension()', async () => {
-    // revert transaction
-    await expect(profile.connect(alice).setColorExtension(color.address)).to.be.revertedWith(
-      'Ownable: caller is not the owner'
-    )
-
-    // success transaction
-    await expect(profile.connect(owner).setColorExtension(color.address)).to.be.not.reverted
+    await icecandy.setGlobals(globals.address)
+    await profile.setGlobals(globals.address)
+    await nftCollection.setGlobals(globals.address)
+    await poapCollection.setGlobals(globals.address)
+    await snsAccount.setGlobals(globals.address)
+    await score.setGlobals(globals.address)
+    await mirror.setGlobals(globals.address)
+    await color.setGlobals(globals.address)
+    await globals.setIceCandy(icecandy.address)
+    await globals.setProfile(profile.address)
+    await globals.setNFTCollectionModule(nftCollection.address)
+    await globals.setPOAPCollectionModule(poapCollection.address)
+    await globals.setSNSAccountModule(snsAccount.address)
+    await globals.setScoreModule(score.address)
+    await globals.setMirrorModule(mirror.address)
+    await globals.setColorExtension(color.address)
   })
 
   it('createProfile()', async () => {
@@ -212,12 +155,6 @@ describe('profile test', () => {
     expect(nfts_[1]?.tokenId).to.equal(BigNumber.from(_profile.nfts[1]?.tokenId))
     expect(nfts_[1]?.tokenURI).to.equal(_profile.nfts[1]?.tokenURI)
 
-    // get snsAccount struct
-    const snsAccounts_ = await profile.connect(alice).getSNSAccounts(1)
-    expect(snsAccounts_[0]?.service).to.equal('twitter')
-    expect(snsAccounts_[0]?.userId).to.equal('hello')
-    expect(snsAccounts_[0]?.userPageURL).to.equal('https://hoge.com')
-
     // get poaps
     const poaps_ = await profile.connect(alice).getPOAPCollection(1)
     expect(poaps_[0]?.chainId).to.equal(BigNumber.from(_profile.poaps[0]?.chainId))
@@ -228,6 +165,12 @@ describe('profile test', () => {
     expect(poaps_[1]?.contractAddress).to.equal(_profile.poaps[1]?.contractAddress)
     expect(poaps_[1]?.tokenId).to.equal(BigNumber.from(_profile.poaps[1]?.tokenId))
     expect(poaps_[1]?.tokenURI).to.equal(_profile.poaps[1]?.tokenURI)
+
+    // get snsAccount
+    const snsAccounts_ = await profile.connect(alice).getSNSAccounts(1)
+    expect(snsAccounts_[0]?.service).to.equal('twitter')
+    expect(snsAccounts_[0]?.userId).to.equal('hello')
+    expect(snsAccounts_[0]?.userPageURL).to.equal('https://hoge.com')
 
     // get profile token
     expect(await profile.connect(alice).balanceOf(alice.address)).to.be.equals(1)
@@ -322,7 +265,6 @@ describe('profile test', () => {
     expect(scores_[2]?.point).to.equal(200)
   })
 
-  /*
   it('addMirror()', async () => {
     const _mirror = {
       hoge: 'fuga',
@@ -374,7 +316,6 @@ describe('profile test', () => {
     const mirror_ = await profile.connect(alice).getColor(1)
     expect(mirror_[0]?.active).to.equal(false)
   })
-  */
 
   it('createSNS()', async () => {
     const _github: ISNSAccountModule.SNSAccountStructStruct = {
