@@ -20,13 +20,94 @@ const _abi = [
         type: "uint256",
       },
       {
+        indexed: true,
+        internalType: "uint256",
+        name: "extensionId",
+        type: "uint256",
+      },
+      {
         indexed: false,
         internalType: "uint256",
         name: "blockNumber",
         type: "uint256",
       },
     ],
-    name: "MirrorCreated",
+    name: "ColorActivated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "extensionId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blockNumber",
+        type: "uint256",
+      },
+    ],
+    name: "ColorAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "extensionId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blockNumber",
+        type: "uint256",
+      },
+    ],
+    name: "ColorDeactivated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "moduleId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blockNumber",
+        type: "uint256",
+      },
+    ],
+    name: "MirrorAdded",
     type: "event",
   },
   {
@@ -59,15 +140,15 @@ const _abi = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        indexed: false,
         internalType: "uint256",
         name: "profileId",
         type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "owner",
+        type: "address",
       },
       {
         indexed: false,
@@ -135,31 +216,6 @@ const _abi = [
     ],
     name: "WalletAdded",
     type: "event",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "string",
-            name: "hoge",
-            type: "string",
-          },
-        ],
-        internalType: "struct IMirrorModule.MirrorStruct",
-        name: "mirror",
-        type: "tuple",
-      },
-    ],
-    name: "addMirror",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
   },
   {
     inputs: [
@@ -457,32 +513,6 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "getMirror",
-    outputs: [
-      {
-        components: [
-          {
-            internalType: "string",
-            name: "hoge",
-            type: "string",
-          },
-        ],
-        internalType: "struct IMirrorModule.MirrorStruct[]",
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-    ],
     name: "getNFTCollection",
     outputs: [
       {
@@ -683,6 +713,19 @@ const _abi = [
       },
     ],
     stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "colorExtension",
+        type: "address",
+      },
+    ],
+    name: "setColorExtension",
+    outputs: [],
+    stateMutability: "nonpayable",
     type: "function",
   },
   {

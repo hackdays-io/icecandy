@@ -2,6 +2,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export * as assetstore from "./assetstore";
+export { IColorExtension__factory } from "./IColorExtension__factory";
 export { IIceCandy__factory } from "./IIceCandy__factory";
 export { IMirrorModule__factory } from "./IMirrorModule__factory";
 export { INFTCollectionModule__factory } from "./INFTCollectionModule__factory";

@@ -12,7 +12,7 @@
     "test": "hardhat test",
     "coverage": "hardhat coverage",
     "deploy": "hardhat run scripts/deploy.ts --network mumbai",
-    "deploy:local": "hardhat run scripts/deploy.ts --network local",
+    "deploy:local": "hardhat run scripts/deploy_local.ts --network local",
     "verify": "hardhat verify --network mumbai",
     "geninterface": "hardhat gen-interface",
     "uml": "sol2uml class ./contracts",
@@ -24,6 +24,7 @@
     "copy:mv-type": "mv ../frontend/types/typechain-types/ ../frontend/types/contracts/"
   },
   "devDependencies": {
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.6",
     "@nomiclabs/hardhat-ethers": "^2.0.6",
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "@nomiclabs/hardhat-solhint": "^2.0.1",

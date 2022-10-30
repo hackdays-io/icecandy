@@ -1,7 +1,7 @@
 import type { AppProps } from 'next/app'
 import { ThirdwebProvider } from '@thirdweb-dev/react'
 import { chakraTheme } from '../utils/theme'
-import { ChakraProvider } from '@chakra-ui/react'
+import { ChakraProvider, Grid } from '@chakra-ui/react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
@@ -11,9 +11,15 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ThirdwebProvider desiredChainId={activeChainId}>
       <ChakraProvider theme={chakraTheme}>
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
+        <Grid
+          gridTemplateColumns="100%"
+          gridTemplateRows="auto 1fr auto"
+          minHeight="100vh"
+        >
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
+        </Grid>
       </ChakraProvider>
     </ThirdwebProvider>
   )

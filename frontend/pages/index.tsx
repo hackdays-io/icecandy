@@ -1,23 +1,41 @@
-import { Button } from '@chakra-ui/react'
+import { Button, Flex } from '@chakra-ui/react'
+import { useAddress, useMetamask } from '@thirdweb-dev/react'
 import type { NextPage } from 'next'
-import Link from 'next/link'
-import Erc20TokenCurveChart from '../components/molecules/Erc20TokenCurveChart'
-import Erc20TokenListModal from '../components/molecules/Erc20TokenListModal'
-import NFTListModal from '../components/molecules/NFTListModal'
+import { useRouter } from 'next/router'
+import { useCallback, useState } from 'react'
 
 const Home: NextPage = () => {
+  const [loading, setLoading] = useState(false)
+  const address = useAddress()
+  const connectWithMetamask = useMetamask()
+  const router = useRouter()
+
+  const connectAndGenerate = useCallback(async () => {
+    try {
+      if (!address) {
+        setLoading(true)
+        await connectWithMetamask()
+        setLoading(false)
+      }
+      router.push('/profile/new')
+    } catch (error) {
+      setLoading(false)
+    }
+  }, [address])
+
   return (
-    <div>
-      <Link href="/profile/new">
-        <Button>プロフィール作成ページ</Button>
-      </Link>
-
-      <Erc20TokenListModal />
-      <NFTListModal />
-
-      {/* 自分のアドレスと、みたいトークンアドレスをいれるとチャート表示 */}
-      <Erc20TokenCurveChart ownerAddr={undefined} tokenAddr={undefined} />
-    </div>
+    <Flex justifyContent="center" alignItems="center">
+      <Button
+        backgroundColor="primary.400"
+        py={8}
+        px={20}
+        isLoading={loading}
+        disabled={loading}
+        onClick={() => connectAndGenerate()}
+      >
+        {address ? 'プロフィール生成' : 'ウォレットを接続してプロフィール作成'}
+      </Button>
+    </Flex>
   )
 }
 

@@ -8,21 +8,28 @@ const ProfilePage: NextPage = () => {
   const router = useRouter()
   const { profileId } = router.query
 
-  const { profile, loading, errors, snsAccounts, nftCollection } =
-    useRetrieveProfileNFTByTokenId(profileId as string)
+  const {
+    profile,
+    loading,
+    errors,
+    snsAccounts,
+    nftCollection,
+    poapCollection,
+  } = useRetrieveProfileNFTByTokenId(profileId as string)
 
   return (
     <Box>
       {loading ? (
         <Spinner />
       ) : (
-        <Container>
+        <Container maxW="800px">
           <ProfileMain
-            name={profile?.name}
-            pfpURI={profile?.imageURI}
+            name={profile?.name.toString()}
+            pfpURI={profile?.imageURI.toString()}
             modules={[
-              { type: 'snsAccounts', data: snsAccounts },
-              { type: 'nftCollection', data: nftCollection },
+              { type: 'snsAccounts', data: snsAccounts || [] },
+              { type: 'nftCollection', data: nftCollection || [] },
+              { type: 'poapCollection', data: poapCollection || [] },
             ]}
           />
         </Container>
