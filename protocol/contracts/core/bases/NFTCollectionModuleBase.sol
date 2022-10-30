@@ -11,11 +11,11 @@ abstract contract NFTCollectionModuleBase is INFTCollectionModule, ModuleBase {
     function processCollect(uint256 profileId, NFTStruct[] calldata nfts) external override onlyProfile {
         // reset NFTs
         for (uint256 i = 0; i < _nftCount[profileId]; i++) {
-            delete _nfts[profileId][i];
+            delete _nfts[profileId][i + 1];
         }
         // set NFTs
         for (uint256 i = 0; i < nfts.length; i++) {
-            _nfts[profileId][i] = nfts[i];
+            _nfts[profileId][i + 1] = nfts[i];
         }
         _nftCount[profileId] = nfts.length;
     }
@@ -23,7 +23,7 @@ abstract contract NFTCollectionModuleBase is INFTCollectionModule, ModuleBase {
     function getCollection(uint256 profileId) external view override returns (NFTStruct[] memory) {
         NFTStruct[] memory nftArray = new NFTStruct[](_nftCount[profileId]);
         for (uint256 i = 0; i < _nftCount[profileId]; i++) {
-            nftArray[i] = _nfts[profileId][i];
+            nftArray[i] = _nfts[profileId][i + 1];
         }
         return nftArray;
     }
