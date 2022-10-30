@@ -1,6 +1,8 @@
 import { Box, Container, List, Spinner, Text } from '@chakra-ui/react'
+import { BigNumber } from 'ethers'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import { useMemo } from 'react'
 import ProfileMain from '../../components/organisms/profile/Main'
 import { useRetrieveProfileNFTByTokenId } from '../../hooks/useProfileContract'
 
@@ -15,7 +17,19 @@ const ProfilePage: NextPage = () => {
     snsAccounts,
     nftCollection,
     poapCollection,
+    score,
   } = useRetrieveProfileNFTByTokenId(profileId as string)
+
+  const stats = useMemo(() => {
+    if (!score) return
+    return {
+      score: Number(score[0].point.toString()),
+      sentNumOfPeople: 0,
+      receiveNumOfPeople: 0,
+      sentNum: 0,
+      receiveNum: 0,
+    }
+  }, [score])
 
   return (
     <Box>
@@ -26,6 +40,7 @@ const ProfilePage: NextPage = () => {
           <ProfileMain
             name={profile?.name.toString()}
             pfpURI={profile?.imageURI.toString()}
+            iceCandyStats={stats}
             modules={[
               { type: 'snsAccounts', data: snsAccounts || [] },
               { type: 'nftCollection', data: nftCollection || [] },

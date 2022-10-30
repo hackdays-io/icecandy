@@ -25,7 +25,7 @@ const NFTImage: FC<Props> = ({ url, size = 'md' }) => {
       case 'lg':
         return '160px'
       case 'auto':
-        return 'auto'
+        return '100%'
       default:
         return '75px'
     }
@@ -38,6 +38,7 @@ const NFTImage: FC<Props> = ({ url, size = 'md' }) => {
         width={imageSize}
         height={imageSize}
         src={parsedImageURL}
+        position="absolute"
         alt=""
         objectFit="cover"
       />

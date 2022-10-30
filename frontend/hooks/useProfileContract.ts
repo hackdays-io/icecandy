@@ -4,10 +4,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   INFTCollectionModule,
   IProfile,
+  IScoreModule,
   ISNSAccountModule,
 } from '../types/contracts'
 import { TypedListener } from '../types/contracts/common'
-import { ProfileCreatedEvent } from '../types/contracts/contracts/core/Profile'
+import {
+  ProfileCreatedEvent,
+  ScoreCreatedEvent,
+} from '../types/contracts/contracts/core/Profile'
 import { ProfileCreatedEventObject } from '../types/contracts/contracts/interfaces/IProfile'
 import { AppProfile } from '../types/profile'
 import { useProfileNFTContractClient } from './useContractClient'
@@ -147,6 +151,7 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
     useState<ISNSAccountModule.SNSAccountStructStruct[]>()
   const [poapCollection, setPOAPCollection] =
     useState<INFTCollectionModule.NFTStructStruct[]>()
+  const [score, setScore] = useState<IScoreModule.ScoreStructStruct[]>()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>(null)
   const profileNFTContract = useProfileNFTContractClient()
@@ -172,6 +177,8 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
             Number(tokenId)
           )
           setPOAPCollection(poapCollection)
+          const score = await profileNFTContract.getScore(Number(tokenId))
+          setScore(score)
           setLoading(false)
         }
       } catch (error) {
@@ -191,6 +198,7 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
     nftCollection,
     snsAccounts,
     poapCollection,
+    score,
     loading,
     errors,
   }
