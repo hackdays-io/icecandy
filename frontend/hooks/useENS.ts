@@ -1,36 +1,36 @@
 import { useAddress } from "@thirdweb-dev/react";
 import { ethers } from "ethers";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 
 export const useENSName = () => {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>(null)
-  const [ensName, setResult] = useState<string | null>(null)
+  const [ensName, setENSName] = useState<string | null>(null)
   const address = useAddress()
+  const getENSName = () => {
+    const { ethereum } = window
+    setLoading(true)
+    const provider = new ethers.providers.Web3Provider(ethereum as any)
+    provider.lookupAddress(String(address)).then((name) => {
+      console.log(`got ENS name: ${name}`)
+      setENSName(name)
+    }).catch((err: any) => {
+      console.log(err)
+      setErrors(err)
+    }
+    ).finally(() => { setLoading(false) });
+  }
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const { ethereum } = window
       if (!address) {
-        return
+        setENSName(null)
       } else if (ethereum) {
         getENSName()
       }
     }
   }, [address])
-  const getENSName = () => {
-    console.log(address)
-    const { ethereum } = window
-    setLoading(true)
-    const provider = new ethers.providers.Web3Provider(ethereum as any)
-    provider.lookupAddress(address).then((name) => {
-      console.log(name)
-      setResult(name)
-    }).catch((err: any) => {
-      console.log(err)
-      setErrors(err)
-    }
-    );
-  }
+
   return { ensName, loading, errors };
 }
