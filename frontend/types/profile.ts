@@ -14,6 +14,7 @@ export namespace AppProfile {
   export type Module<T> = {
     type: T
     data?: WhichModule<T>
+    loading?: boolean
   }
 
   export type WhichModule<T> = T extends 'nftCollection'

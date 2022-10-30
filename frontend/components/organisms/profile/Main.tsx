@@ -1,19 +1,21 @@
-import { Box, Heading, Text } from '@chakra-ui/react'
-import { FC } from 'react'
-import { AppProfile } from '../../../types/profile'
-import PFP from '../../atoms/profile/PFP'
-import ProfileNFTCollectionModule from '../../molecules/profiles/NFTCollectionModule'
-import ProfileSNSAccountsModule from '../../molecules/profiles/SNSAccountsModule'
+import { Box, Heading, Text } from "@chakra-ui/react";
+import { FC } from "react";
+import { AppProfile } from "../../../types/profile";
+import PFP from "../../atoms/profile/PFP";
+import ProfileENSNameModule from "../../molecules/profiles/ENSNameModule";
+import ProfileNFTCollectionModule from "../../molecules/profiles/NFTCollectionModule";
+import ProfileSNSAccountsModule from "../../molecules/profiles/SNSAccountsModule";
 
 type Props = {
-  pfpURI?: string
-  name?: string
-  introduction?: string
+  pfpURI?: string;
+  name?: string;
+  introduction?: string;
   modules: [
-    AppProfile.Module<'snsAccounts'>,
-    AppProfile.Module<'nftCollection'>
-  ]
-}
+    AppProfile.Module<"ensName">,
+    AppProfile.Module<"snsAccounts">,
+    AppProfile.Module<"nftCollection">
+  ];
+};
 
 const ProfileMain: FC<Props> = ({ pfpURI, name, introduction, modules }) => {
   return (
@@ -27,18 +29,28 @@ const ProfileMain: FC<Props> = ({ pfpURI, name, introduction, modules }) => {
       <Text mb={4}>{introduction}</Text>
       {modules.map((module, index) => {
         switch (module.type) {
-          case 'nftCollection':
-            return <ProfileNFTCollectionModule nfts={module.data} key={index} />
-          case 'snsAccounts':
+          case "nftCollection":
+            return (
+              <ProfileNFTCollectionModule nfts={module.data} key={index} />
+            );
+          case "snsAccounts":
             return (
               <ProfileSNSAccountsModule snsAccounts={module.data} key={index} />
-            )
+            );
+          case "ensName":
+            return (
+              <ProfileENSNameModule
+                name={module.data}
+                key={index}
+                loading={module.loading}
+              />
+            );
           default:
-            return <></>
+            return <></>;
         }
       })}
     </Box>
-  )
-}
+  );
+};
 
-export default ProfileMain
+export default ProfileMain;
