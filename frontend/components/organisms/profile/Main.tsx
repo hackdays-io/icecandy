@@ -38,7 +38,13 @@ const ProfileMain: FC<Props> = ({ pfpURI, name, introduction, modules }) => {
               <ProfileSNSAccountsModule snsAccounts={module.data} key={index} />
             );
           case "ensName":
-            return <ProfileENSNameModule name={module.data} key={index} />;
+            return (
+              <ProfileENSNameModule
+                name={module.data}
+                key={index}
+                loading={module.loading}
+              />
+            );
           default:
             return <></>;
         }

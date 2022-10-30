@@ -112,6 +112,7 @@ const ProfileNewPage: NextPage = () => {
               {
                 type: "nftCollection",
                 data: parseNFTsForm2Contract(watch("nfts")) as any,
+                loading: loadingENS,
               },
             ]}
           />
