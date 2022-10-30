@@ -36,6 +36,8 @@ export type { IceCandyAssetStoreRegistory } from "./contracts/assetstore/IceCand
 export { IceCandyAssetStoreRegistory__factory } from "./factories/contracts/assetstore/IceCandyAssetStore.sol/IceCandyAssetStoreRegistory__factory";
 export type { NFTCollectionModuleBase } from "./contracts/core/bases/NFTCollectionModuleBase";
 export { NFTCollectionModuleBase__factory } from "./factories/contracts/core/bases/NFTCollectionModuleBase__factory";
+export type { ColorExtension } from "./contracts/core/extensions/ColorExtension";
+export { ColorExtension__factory } from "./factories/contracts/core/extensions/ColorExtension__factory";
 export type { IceCandy } from "./contracts/core/IceCandy";
 export { IceCandy__factory } from "./factories/contracts/core/IceCandy__factory";
 export type { MirrorModule } from "./contracts/core/modules/MirrorModule";
@@ -52,6 +54,8 @@ export type { Profile } from "./contracts/core/Profile";
 export { Profile__factory } from "./factories/contracts/core/Profile__factory";
 export type { IIceCandyAssetStore } from "./contracts/interfaces/assetstore/IIceCandyAssetStore";
 export { IIceCandyAssetStore__factory } from "./factories/contracts/interfaces/assetstore/IIceCandyAssetStore__factory";
+export type { IColorExtension } from "./contracts/interfaces/IColorExtension";
+export { IColorExtension__factory } from "./factories/contracts/interfaces/IColorExtension__factory";
 export type { IIceCandy } from "./contracts/interfaces/IIceCandy";
 export { IIceCandy__factory } from "./factories/contracts/interfaces/IIceCandy__factory";
 export type { IMirrorModule } from "./contracts/interfaces/IMirrorModule";

@@ -27,16 +27,24 @@ import type {
   PromiseOrValue,
 } from "../../../common";
 
-export declare namespace IMirrorModule {
-  export type MirrorStructStruct = { hoge: PromiseOrValue<string> };
+export declare namespace IColorExtension {
+  export type ColorStructStruct = {
+    color: PromiseOrValue<string>;
+    active: PromiseOrValue<boolean>;
+  };
 
-  export type MirrorStructStructOutput = [string] & { hoge: string };
+  export type ColorStructStructOutput = [string, boolean] & {
+    color: string;
+    active: boolean;
+  };
 }
 
-export interface MirrorModuleInterface extends utils.Interface {
+export interface ColorExtensionInterface extends utils.Interface {
   functions: {
-    "addMirror(uint256,(string))": FunctionFragment;
-    "getMirror(uint256)": FunctionFragment;
+    "activate(uint256,uint256)": FunctionFragment;
+    "addColor(uint256,string)": FunctionFragment;
+    "deactivate(uint256,uint256)": FunctionFragment;
+    "getColor(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setProfile(address)": FunctionFragment;
@@ -45,8 +53,10 @@ export interface MirrorModuleInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "addMirror"
-      | "getMirror"
+      | "activate"
+      | "addColor"
+      | "deactivate"
+      | "getColor"
       | "owner"
       | "renounceOwnership"
       | "setProfile"
@@ -54,11 +64,19 @@ export interface MirrorModuleInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "addMirror",
-    values: [PromiseOrValue<BigNumberish>, IMirrorModule.MirrorStructStruct]
+    functionFragment: "activate",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getMirror",
+    functionFragment: "addColor",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "deactivate",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getColor",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -75,8 +93,10 @@ export interface MirrorModuleInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
-  decodeFunctionResult(functionFragment: "addMirror", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "getMirror", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "activate", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "addColor", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "deactivate", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getColor", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -107,12 +127,12 @@ export type OwnershipTransferredEvent = TypedEvent<
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
 
-export interface MirrorModule extends BaseContract {
+export interface ColorExtension extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: MirrorModuleInterface;
+  interface: ColorExtensionInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,
@@ -134,16 +154,28 @@ export interface MirrorModule extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    addMirror(
+    activate(
       profileId: PromiseOrValue<BigNumberish>,
-      mirror: IMirrorModule.MirrorStructStruct,
+      extensionId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    getMirror(
+    addColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      color: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    deactivate(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    getColor(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[IMirrorModule.MirrorStructStructOutput[]]>;
+    ): Promise<[IColorExtension.ColorStructStructOutput[]]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -162,16 +194,28 @@ export interface MirrorModule extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  addMirror(
+  activate(
     profileId: PromiseOrValue<BigNumberish>,
-    mirror: IMirrorModule.MirrorStructStruct,
+    extensionId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  getMirror(
+  addColor(
+    profileId: PromiseOrValue<BigNumberish>,
+    color: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  deactivate(
+    profileId: PromiseOrValue<BigNumberish>,
+    extensionId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  getColor(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
+  ): Promise<IColorExtension.ColorStructStructOutput[]>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -190,16 +234,28 @@ export interface MirrorModule extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    addMirror(
+    activate(
       profileId: PromiseOrValue<BigNumberish>,
-      mirror: IMirrorModule.MirrorStructStruct,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    addColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      color: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getMirror(
+    deactivate(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    getColor(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
+    ): Promise<IColorExtension.ColorStructStructOutput[]>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -228,13 +284,25 @@ export interface MirrorModule extends BaseContract {
   };
 
   estimateGas: {
-    addMirror(
+    activate(
       profileId: PromiseOrValue<BigNumberish>,
-      mirror: IMirrorModule.MirrorStructStruct,
+      extensionId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    getMirror(
+    addColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      color: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    deactivate(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    getColor(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -257,13 +325,25 @@ export interface MirrorModule extends BaseContract {
   };
 
   populateTransaction: {
-    addMirror(
+    activate(
       profileId: PromiseOrValue<BigNumberish>,
-      mirror: IMirrorModule.MirrorStructStruct,
+      extensionId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    getMirror(
+    addColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      color: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    deactivate(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getColor(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

@@ -1,4 +1,4 @@
-import { Image } from '@chakra-ui/react'
+import { Box, Image } from '@chakra-ui/react'
 import { FC, useMemo } from 'react'
 import { ipfs2http } from '../../utils/ipfs2https'
 
@@ -9,7 +9,7 @@ type Props = {
 
 const NFTImage: FC<Props> = ({ url, size = 'md' }) => {
   const parsedImageURL = useMemo(() => {
-    if (url?.includes('ipfs')) {
+    if (url?.includes('ipfs://')) {
       return ipfs2http(url)
     } else {
       return url

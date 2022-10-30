@@ -1,5 +1,6 @@
 import { useAddress } from '@thirdweb-dev/react'
-import { useEffect, useRef, useState } from 'react'
+import { orderBy, uniq, uniqBy } from 'lodash'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   INFTCollectionModule,
   IProfile,
@@ -8,7 +9,75 @@ import {
 import { TypedListener } from '../types/contracts/common'
 import { ProfileCreatedEvent } from '../types/contracts/contracts/core/Profile'
 import { ProfileCreatedEventObject } from '../types/contracts/contracts/interfaces/IProfile'
+import { AppProfile } from '../types/profile'
 import { useProfileNFTContractClient } from './useContractClient'
+import { useFirstHoldNFTs, useHoldingPOAPs, usePickupNFTs } from './useToken'
+
+export const useGenerateProfile = () => {
+  const [loading, setLoading] = useState(true)
+  const [generatedData, setGeneratedData] = useState<AppProfile.FormData>()
+  const { firstHoldNFTs, loading: firstNFTLoading } = useFirstHoldNFTs()
+  const { pickedNFTs, loading: pickedNFTLoading } = usePickupNFTs()
+  const { holdingPOAPs, loading: poapLoading } = useHoldingPOAPs(5)
+  const address = useAddress()
+
+  useEffect(() => {
+    if (
+      !pickedNFTLoading &&
+      !firstNFTLoading &&
+      (!poapLoading || Number(holdingPOAPs?.ownedNfts?.length) > 5)
+    ) {
+      const _firstHoldNfts: INFTCollectionModule.NFTStructStruct[] =
+        firstHoldNFTs.map((nft) => {
+          return {
+            chainId: nft.chainId,
+            contractAddress: nft.asset.contract.address,
+            tokenId: nft.asset.tokenId,
+            tokenURI: nft.asset.tokenUri?.raw || '',
+            owner: address || '',
+          }
+        })
+      const _pickedNFTs: INFTCollectionModule.NFTStructStruct[] =
+        pickedNFTs.map((nft) => {
+          return {
+            chainId: nft.chainId,
+            contractAddress: nft.asset.contract.address,
+            tokenId: nft.asset.tokenId,
+            tokenURI: nft.asset.tokenUri?.raw || '',
+            owner: address || '',
+          }
+        })
+
+      const nfts = uniqBy(_firstHoldNfts.concat(_pickedNFTs), (nft) => {
+        return `${nft.chainId}${nft.contractAddress}${nft.tokenId}`
+      })
+
+      const poaps: INFTCollectionModule.NFTStructStruct[] =
+        holdingPOAPs?.ownedNfts.map((poap) => {
+          return {
+            chainId: 100,
+            contractAddress: poap.contract.address,
+            tokenId: poap.tokenId,
+            tokenURI: poap.tokenUri?.raw || '',
+            owner: address || '',
+          }
+        }) || []
+
+      setGeneratedData({
+        name: 'From ENS',
+        introduction: 'From ENS',
+        imageURI: 'From ENS',
+        nfts,
+        poaps,
+        snsAccounts: [],
+      })
+
+      setLoading(false)
+    }
+  }, [pickedNFTs, firstHoldNFTs, poapLoading, holdingPOAPs])
+
+  return { generatedData, loading }
+}
 
 export const useCreateProfileNFT = () => {
   const [loading, setLoading] = useState(false)
@@ -23,19 +92,19 @@ export const useCreateProfileNFT = () => {
 
   useEffect(() => {
     const transitionCreatedProfilePage: TypedListener<ProfileCreatedEvent> = (
-      owner,
       profileId,
+      owner,
       blockNumber
     ) => {
       if (success.current) {
         setLoading(false)
-        setResult({ owner, profileId, blockNumber })
+        setResult({ profileId, owner, blockNumber })
       }
     }
 
     if (!profileNFTContract || !address) return
 
-    const filter = profileNFTContract.filters.ProfileCreated(address)
+    const filter = profileNFTContract.filters.ProfileCreated(null, address)
     profileNFTContract.on(filter, transitionCreatedProfilePage)
   }, [profileNFTContract, address])
 

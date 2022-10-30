@@ -1,14 +1,14 @@
 import { Box, Grid, Text } from '@chakra-ui/react'
-import { FC } from 'react'
+import { FC, useMemo } from 'react'
 import { INFTCollectionModule } from '../../../types/contracts'
 import NFTImage from '../../atoms/NFTImage'
 
 type Props = {
-  nfts?: INFTCollectionModule.NFTStructStructOutput[]
+  nfts?: INFTCollectionModule.NFTStructStruct[]
 }
 
 const ProfileNFTCollectionModule: FC<Props> = ({ nfts }) => {
-  const SingleNFT: FC<{ nft: INFTCollectionModule.NFTStructStructOutput }> = ({
+  const SingleNFT: FC<{ nft: INFTCollectionModule.NFTStructStruct }> = ({
     nft,
   }) => {
     return (

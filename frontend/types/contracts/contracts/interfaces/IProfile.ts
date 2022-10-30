@@ -27,12 +27,6 @@ import type {
   PromiseOrValue,
 } from "../../common";
 
-export declare namespace IMirrorModule {
-  export type MirrorStructStruct = { hoge: PromiseOrValue<string> };
-
-  export type MirrorStructStructOutput = [string] & { hoge: string };
-}
-
 export declare namespace INFTCollectionModule {
   export type NFTStructStruct = {
     chainId: PromiseOrValue<BigNumberish>;
@@ -136,19 +130,18 @@ export declare namespace IScoreModule {
 
 export interface IProfileInterface extends utils.Interface {
   functions: {
-    "addMirror(uint256,(string))": FunctionFragment;
     "addWallet(uint256,address)": FunctionFragment;
     "createNFTCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
     "createPOAPCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
     "createProfile((string,string,string,(uint256,address,uint256,string,address)[],(uint256,address,uint256,string,address)[],(string,string,string,address)[]))": FunctionFragment;
     "createSNSAccount(uint256,(string,string,string,address)[])": FunctionFragment;
     "createScore(uint256)": FunctionFragment;
-    "getMirror(uint256)": FunctionFragment;
     "getNFTCollection(uint256)": FunctionFragment;
     "getPOAPCollection(uint256)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
     "getSNSAccounts(uint256)": FunctionFragment;
     "getScore(uint256)": FunctionFragment;
+    "setColorExtension(address)": FunctionFragment;
     "setIceCandy(address)": FunctionFragment;
     "setMirrorModule(address)": FunctionFragment;
     "setNFTCollectionModule(address)": FunctionFragment;
@@ -159,19 +152,18 @@ export interface IProfileInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "addMirror"
       | "addWallet"
       | "createNFTCollection"
       | "createPOAPCollection"
       | "createProfile"
       | "createSNSAccount"
       | "createScore"
-      | "getMirror"
       | "getNFTCollection"
       | "getPOAPCollection"
       | "getProfile"
       | "getSNSAccounts"
       | "getScore"
+      | "setColorExtension"
       | "setIceCandy"
       | "setMirrorModule"
       | "setNFTCollectionModule"
@@ -180,10 +172,6 @@ export interface IProfileInterface extends utils.Interface {
       | "setScoreModule"
   ): FunctionFragment;
 
-  encodeFunctionData(
-    functionFragment: "addMirror",
-    values: [PromiseOrValue<BigNumberish>, IMirrorModule.MirrorStructStruct]
-  ): string;
   encodeFunctionData(
     functionFragment: "addWallet",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
@@ -218,10 +206,6 @@ export interface IProfileInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getMirror",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
     functionFragment: "getNFTCollection",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -240,6 +224,10 @@ export interface IProfileInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getScore",
     values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setColorExtension",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "setIceCandy",
@@ -266,7 +254,6 @@ export interface IProfileInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
-  decodeFunctionResult(functionFragment: "addMirror", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "addWallet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createNFTCollection",
@@ -288,7 +275,6 @@ export interface IProfileInterface extends utils.Interface {
     functionFragment: "createScore",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "getMirror", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getNFTCollection",
     data: BytesLike
@@ -303,6 +289,10 @@ export interface IProfileInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getScore", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "setColorExtension",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "setIceCandy",
     data: BytesLike
@@ -329,15 +319,21 @@ export interface IProfileInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "MirrorCreated(uint256,uint256)": EventFragment;
+    "ColorActivated(uint256,uint256,uint256)": EventFragment;
+    "ColorAdded(uint256,uint256,uint256)": EventFragment;
+    "ColorDeactivated(uint256,uint256,uint256)": EventFragment;
+    "MirrorAdded(uint256,uint256,uint256)": EventFragment;
     "NFTCollectionCreated(uint256,address,uint256)": EventFragment;
-    "ProfileCreated(address,uint256,uint256)": EventFragment;
+    "ProfileCreated(uint256,address,uint256)": EventFragment;
     "SNSAccountCreated(uint256,uint256)": EventFragment;
     "ScoreCreated(uint256,uint256)": EventFragment;
     "WalletAdded(uint256,address)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "MirrorCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ColorActivated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ColorAdded"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ColorDeactivated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "MirrorAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NFTCollectionCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SNSAccountCreated"): EventFragment;
@@ -345,16 +341,54 @@ export interface IProfileInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "WalletAdded"): EventFragment;
 }
 
-export interface MirrorCreatedEventObject {
+export interface ColorActivatedEventObject {
   profileId: BigNumber;
+  extensionId: BigNumber;
   blockNumber: BigNumber;
 }
-export type MirrorCreatedEvent = TypedEvent<
-  [BigNumber, BigNumber],
-  MirrorCreatedEventObject
+export type ColorActivatedEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber],
+  ColorActivatedEventObject
 >;
 
-export type MirrorCreatedEventFilter = TypedEventFilter<MirrorCreatedEvent>;
+export type ColorActivatedEventFilter = TypedEventFilter<ColorActivatedEvent>;
+
+export interface ColorAddedEventObject {
+  profileId: BigNumber;
+  extensionId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type ColorAddedEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber],
+  ColorAddedEventObject
+>;
+
+export type ColorAddedEventFilter = TypedEventFilter<ColorAddedEvent>;
+
+export interface ColorDeactivatedEventObject {
+  profileId: BigNumber;
+  extensionId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type ColorDeactivatedEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber],
+  ColorDeactivatedEventObject
+>;
+
+export type ColorDeactivatedEventFilter =
+  TypedEventFilter<ColorDeactivatedEvent>;
+
+export interface MirrorAddedEventObject {
+  profileId: BigNumber;
+  moduleId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type MirrorAddedEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber],
+  MirrorAddedEventObject
+>;
+
+export type MirrorAddedEventFilter = TypedEventFilter<MirrorAddedEvent>;
 
 export interface NFTCollectionCreatedEventObject {
   profileId: BigNumber;
@@ -370,12 +404,12 @@ export type NFTCollectionCreatedEventFilter =
   TypedEventFilter<NFTCollectionCreatedEvent>;
 
 export interface ProfileCreatedEventObject {
-  owner: string;
   profileId: BigNumber;
+  owner: string;
   blockNumber: BigNumber;
 }
 export type ProfileCreatedEvent = TypedEvent<
-  [string, BigNumber, BigNumber],
+  [BigNumber, string, BigNumber],
   ProfileCreatedEventObject
 >;
 
@@ -442,12 +476,6 @@ export interface IProfile extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    addMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      mirror: IMirrorModule.MirrorStructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -482,11 +510,6 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    getMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[IMirrorModule.MirrorStructStructOutput[]]>;
-
     getNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -511,6 +534,11 @@ export interface IProfile extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[IScoreModule.ScoreStructStructOutput[]]>;
+
+    setColorExtension(
+      colorExtension: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
 
     setIceCandy(
       icecandy: PromiseOrValue<string>,
@@ -542,12 +570,6 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
-
-  addMirror(
-    profileId: PromiseOrValue<BigNumberish>,
-    mirror: IMirrorModule.MirrorStructStruct,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
 
   addWallet(
     profileId: PromiseOrValue<BigNumberish>,
@@ -583,11 +605,6 @@ export interface IProfile extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  getMirror(
-    profileId: PromiseOrValue<BigNumberish>,
-    overrides?: CallOverrides
-  ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
-
   getNFTCollection(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -612,6 +629,11 @@ export interface IProfile extends BaseContract {
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<IScoreModule.ScoreStructStructOutput[]>;
+
+  setColorExtension(
+    colorExtension: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   setIceCandy(
     icecandy: PromiseOrValue<string>,
@@ -644,12 +666,6 @@ export interface IProfile extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    addMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      mirror: IMirrorModule.MirrorStructStruct,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -684,11 +700,6 @@ export interface IProfile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    getMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
-
     getNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -713,6 +724,11 @@ export interface IProfile extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<IScoreModule.ScoreStructStructOutput[]>;
+
+    setColorExtension(
+      colorExtension: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     setIceCandy(
       icecandy: PromiseOrValue<string>,
@@ -746,14 +762,49 @@ export interface IProfile extends BaseContract {
   };
 
   filters: {
-    "MirrorCreated(uint256,uint256)"(
+    "ColorActivated(uint256,uint256,uint256)"(
       profileId?: PromiseOrValue<BigNumberish> | null,
+      extensionId?: PromiseOrValue<BigNumberish> | null,
       blockNumber?: null
-    ): MirrorCreatedEventFilter;
-    MirrorCreated(
+    ): ColorActivatedEventFilter;
+    ColorActivated(
       profileId?: PromiseOrValue<BigNumberish> | null,
+      extensionId?: PromiseOrValue<BigNumberish> | null,
       blockNumber?: null
-    ): MirrorCreatedEventFilter;
+    ): ColorActivatedEventFilter;
+
+    "ColorAdded(uint256,uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      extensionId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): ColorAddedEventFilter;
+    ColorAdded(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      extensionId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): ColorAddedEventFilter;
+
+    "ColorDeactivated(uint256,uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      extensionId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): ColorDeactivatedEventFilter;
+    ColorDeactivated(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      extensionId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): ColorDeactivatedEventFilter;
+
+    "MirrorAdded(uint256,uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): MirrorAddedEventFilter;
+    MirrorAdded(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): MirrorAddedEventFilter;
 
     "NFTCollectionCreated(uint256,address,uint256)"(
       profileId?: PromiseOrValue<BigNumberish> | null,
@@ -766,14 +817,14 @@ export interface IProfile extends BaseContract {
       blockNumber?: null
     ): NFTCollectionCreatedEventFilter;
 
-    "ProfileCreated(address,uint256,uint256)"(
+    "ProfileCreated(uint256,address,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
       owner?: PromiseOrValue<string> | null,
-      profileId?: null,
       blockNumber?: null
     ): ProfileCreatedEventFilter;
     ProfileCreated(
+      profileId?: PromiseOrValue<BigNumberish> | null,
       owner?: PromiseOrValue<string> | null,
-      profileId?: null,
       blockNumber?: null
     ): ProfileCreatedEventFilter;
 
@@ -803,12 +854,6 @@ export interface IProfile extends BaseContract {
   };
 
   estimateGas: {
-    addMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      mirror: IMirrorModule.MirrorStructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -843,11 +888,6 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    getMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
     getNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -871,6 +911,11 @@ export interface IProfile extends BaseContract {
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    setColorExtension(
+      colorExtension: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
     setIceCandy(
@@ -905,12 +950,6 @@ export interface IProfile extends BaseContract {
   };
 
   populateTransaction: {
-    addMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      mirror: IMirrorModule.MirrorStructStruct,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -945,11 +984,6 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    getMirror(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     getNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -973,6 +1007,11 @@ export interface IProfile extends BaseContract {
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    setColorExtension(
+      colorExtension: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
     setIceCandy(

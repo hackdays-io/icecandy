@@ -17,6 +17,37 @@ const _abi = [
         name: "profileId",
         type: "uint256",
       },
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "hoge",
+            type: "string",
+          },
+        ],
+        internalType: "struct IMirrorModule.MirrorStruct",
+        name: "mirror",
+        type: "tuple",
+      },
+    ],
+    name: "addMirror",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
     ],
     name: "getMirror",
     outputs: [
@@ -34,31 +65,6 @@ const _abi = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "string",
-            name: "hoge",
-            type: "string",
-          },
-        ],
-        internalType: "struct IMirrorModule.MirrorStruct",
-        name: "mirror",
-        type: "tuple",
-      },
-    ],
-    name: "processRegist",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
