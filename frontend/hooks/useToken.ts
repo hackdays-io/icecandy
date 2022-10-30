@@ -240,7 +240,10 @@ export const useHoldingPOAPs = () => {
       for (let i = 0; i < getCount; i++) {
         try {
           const index = getCount - i - 1
-          const tokenId = await poapContract.tokenOfOwnerByIndex(address, index)
+          const tokenId: BigNumber = await poapContract.tokenOfOwnerByIndex(
+            address,
+            index
+          )
           const tokenURI = await poapContract.tokenURI(tokenId)
           const { data: metadata } = await axios.get(tokenURI)
           const poap: OwnedNft = {
@@ -255,7 +258,7 @@ export const useHoldingPOAPs = () => {
             metadataError: '',
             rawMetadata: metadata,
             tokenUri: { raw: tokenURI, gateway: '' },
-            tokenId: tokenId,
+            tokenId: tokenId.toString(),
             media: [],
             tokenType: NftTokenType.ERC721,
           }

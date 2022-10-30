@@ -39,6 +39,7 @@ const ProfilePage: NextPage = () => {
         <Container maxW="800px">
           <ProfileMain
             name={profile?.name.toString()}
+            introduction={profile?.introduction.toString()}
             pfpURI={profile?.imageURI.toString()}
             iceCandyStats={stats}
             modules={[
