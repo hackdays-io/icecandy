@@ -28,7 +28,10 @@ export const useGenerateProfile = () => {
   const address = useAddress()
 
   useEffect(() => {
-    if (address && !(pickedNFTLoading || firstNFTLoading || poapLoading)) {
+    if (
+      address &&
+      !(pickedNFTLoading || firstNFTLoading || poapLoading || ensLoading)
+    ) {
       const _firstHoldNfts: INFTCollectionModule.NFTStructStruct[] =
         firstHoldNFTs.map((nft) => {
           return {
