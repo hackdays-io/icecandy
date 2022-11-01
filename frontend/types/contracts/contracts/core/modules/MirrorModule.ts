@@ -39,7 +39,7 @@ export interface MirrorModuleInterface extends utils.Interface {
     "getMirror(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "setProfile(address)": FunctionFragment;
+    "setGlobals(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
@@ -49,7 +49,7 @@ export interface MirrorModuleInterface extends utils.Interface {
       | "getMirror"
       | "owner"
       | "renounceOwnership"
-      | "setProfile"
+      | "setGlobals"
       | "transferOwnership"
   ): FunctionFragment;
 
@@ -67,7 +67,7 @@ export interface MirrorModuleInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "setProfile",
+    functionFragment: "setGlobals",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -82,7 +82,7 @@ export interface MirrorModuleInterface extends utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setGlobals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -151,8 +151,8 @@ export interface MirrorModule extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -179,8 +179,8 @@ export interface MirrorModule extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setProfile(
-    profile: PromiseOrValue<string>,
+  setGlobals(
+    globals: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -205,8 +205,8 @@ export interface MirrorModule extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -245,8 +245,8 @@ export interface MirrorModule extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -274,8 +274,8 @@ export interface MirrorModule extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

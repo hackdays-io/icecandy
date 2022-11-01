@@ -41,16 +41,10 @@ export interface IColorExtensionInterface extends utils.Interface {
     "addColor(uint256,string)": FunctionFragment;
     "deactivate(uint256,uint256)": FunctionFragment;
     "getColor(uint256)": FunctionFragment;
-    "setProfile(address)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic:
-      | "activate"
-      | "addColor"
-      | "deactivate"
-      | "getColor"
-      | "setProfile"
+    nameOrSignatureOrTopic: "activate" | "addColor" | "deactivate" | "getColor"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -69,16 +63,11 @@ export interface IColorExtensionInterface extends utils.Interface {
     functionFragment: "getColor",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "setProfile",
-    values: [PromiseOrValue<string>]
-  ): string;
 
   decodeFunctionResult(functionFragment: "activate", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "addColor", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "deactivate", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getColor", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
 
   events: {};
 }
@@ -132,11 +121,6 @@ export interface IColorExtension extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[IColorExtension.ColorStructStructOutput[]]>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
   };
 
   activate(
@@ -162,11 +146,6 @@ export interface IColorExtension extends BaseContract {
     overrides?: CallOverrides
   ): Promise<IColorExtension.ColorStructStructOutput[]>;
 
-  setProfile(
-    profile: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   callStatic: {
     activate(
       profileId: PromiseOrValue<BigNumberish>,
@@ -190,11 +169,6 @@ export interface IColorExtension extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<IColorExtension.ColorStructStructOutput[]>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
   };
 
   filters: {};
@@ -222,11 +196,6 @@ export interface IColorExtension extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -251,11 +220,6 @@ export interface IColorExtension extends BaseContract {
     getColor(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

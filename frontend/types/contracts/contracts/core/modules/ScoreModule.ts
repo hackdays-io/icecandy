@@ -45,9 +45,7 @@ export interface ScoreModuleInterface extends utils.Interface {
     "owner()": FunctionFragment;
     "processScore(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "setNFTCollectionModule(address)": FunctionFragment;
-    "setPOAPCollectionModule(address)": FunctionFragment;
-    "setProfile(address)": FunctionFragment;
+    "setGlobals(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
@@ -57,9 +55,7 @@ export interface ScoreModuleInterface extends utils.Interface {
       | "owner"
       | "processScore"
       | "renounceOwnership"
-      | "setNFTCollectionModule"
-      | "setPOAPCollectionModule"
-      | "setProfile"
+      | "setGlobals"
       | "transferOwnership"
   ): FunctionFragment;
 
@@ -77,15 +73,7 @@ export interface ScoreModuleInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "setNFTCollectionModule",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setPOAPCollectionModule",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setProfile",
+    functionFragment: "setGlobals",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -103,15 +91,7 @@ export interface ScoreModuleInterface extends utils.Interface {
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "setNFTCollectionModule",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setPOAPCollectionModule",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setGlobals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
@@ -179,18 +159,8 @@ export interface ScoreModule extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -216,18 +186,8 @@ export interface ScoreModule extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setNFTCollectionModule(
-    nftCollectionModule: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setPOAPCollectionModule(
-    poapCollectionModule: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setProfile(
-    profile: PromiseOrValue<string>,
+  setGlobals(
+    globals: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -251,18 +211,8 @@ export interface ScoreModule extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -300,18 +250,8 @@ export interface ScoreModule extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -338,18 +278,8 @@ export interface ScoreModule extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

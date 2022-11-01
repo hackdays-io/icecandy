@@ -107,7 +107,7 @@ export interface ISNSAccountModule extends BaseContract {
 
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+      sns: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
@@ -119,7 +119,7 @@ export interface ISNSAccountModule extends BaseContract {
 
   processSNSAccount(
     profileId: PromiseOrValue<BigNumberish>,
-    snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+    sns: ISNSAccountModule.SNSAccountStructStruct[],
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -131,7 +131,7 @@ export interface ISNSAccountModule extends BaseContract {
 
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+      sns: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -146,7 +146,7 @@ export interface ISNSAccountModule extends BaseContract {
 
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+      sns: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
@@ -159,7 +159,7 @@ export interface ISNSAccountModule extends BaseContract {
 
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+      sns: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

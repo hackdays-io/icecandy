@@ -225,6 +225,67 @@ const _abi = [
         type: "uint256",
       },
       {
+        internalType: "uint256",
+        name: "extensionId",
+        type: "uint256",
+      },
+    ],
+    name: "activateColor",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        internalType: "string",
+        name: "color",
+        type: "string",
+      },
+    ],
+    name: "addColor",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "hoge",
+            type: "string",
+          },
+        ],
+        internalType: "struct IMirrorModule.MirrorStruct",
+        name: "mirror",
+        type: "tuple",
+      },
+    ],
+    name: "addMirror",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
         internalType: "address",
         name: "wallet",
         type: "address",
@@ -512,6 +573,81 @@ const _abi = [
         name: "profileId",
         type: "uint256",
       },
+      {
+        internalType: "uint256",
+        name: "extensionId",
+        type: "uint256",
+      },
+    ],
+    name: "deactivateColor",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getColor",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "color",
+            type: "string",
+          },
+          {
+            internalType: "bool",
+            name: "active",
+            type: "bool",
+          },
+        ],
+        internalType: "struct IColorExtension.ColorStruct[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getMirror",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "hoge",
+            type: "string",
+          },
+        ],
+        internalType: "struct IMirrorModule.MirrorStruct[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
     ],
     name: "getNFTCollection",
     outputs: [
@@ -719,89 +855,11 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "colorExtension",
+        name: "globals",
         type: "address",
       },
     ],
-    name: "setColorExtension",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "icecandy",
-        type: "address",
-      },
-    ],
-    name: "setIceCandy",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "mirrorModule",
-        type: "address",
-      },
-    ],
-    name: "setMirrorModule",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "nftCollectionModule",
-        type: "address",
-      },
-    ],
-    name: "setNFTCollectionModule",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "poapCollectionModule",
-        type: "address",
-      },
-    ],
-    name: "setPOAPCollectionModule",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "snsAccountModule",
-        type: "address",
-      },
-    ],
-    name: "setSNSAccountModule",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "scoreModule",
-        type: "address",
-      },
-    ],
-    name: "setScoreModule",
+    name: "setGlobals",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

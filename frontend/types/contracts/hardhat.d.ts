@@ -69,6 +69,14 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IceCandyAssetStoreRegistory__factory>;
     getContractFactory(
+      name: "ExtensionBase",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ExtensionBase__factory>;
+    getContractFactory(
+      name: "ModuleBase",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ModuleBase__factory>;
+    getContractFactory(
       name: "NFTCollectionModuleBase",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.NFTCollectionModuleBase__factory>;
@@ -76,6 +84,10 @@ declare module "hardhat/types/runtime" {
       name: "ColorExtension",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ColorExtension__factory>;
+    getContractFactory(
+      name: "Globals",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.Globals__factory>;
     getContractFactory(
       name: "IceCandy",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -112,6 +124,10 @@ declare module "hardhat/types/runtime" {
       name: "IColorExtension",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IColorExtension__factory>;
+    getContractFactory(
+      name: "IGlobals",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.IGlobals__factory>;
     getContractFactory(
       name: "IIceCandy",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -208,6 +224,16 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.IceCandyAssetStoreRegistory>;
     getContractAt(
+      name: "ExtensionBase",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ExtensionBase>;
+    getContractAt(
+      name: "ModuleBase",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ModuleBase>;
+    getContractAt(
       name: "NFTCollectionModuleBase",
       address: string,
       signer?: ethers.Signer
@@ -217,6 +243,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.ColorExtension>;
+    getContractAt(
+      name: "Globals",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.Globals>;
     getContractAt(
       name: "IceCandy",
       address: string,
@@ -262,6 +293,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IColorExtension>;
+    getContractAt(
+      name: "IGlobals",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.IGlobals>;
     getContractAt(
       name: "IIceCandy",
       address: string,

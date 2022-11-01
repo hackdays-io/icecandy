@@ -4,5 +4,6 @@
 export * as bases from "./bases";
 export * as extensions from "./extensions";
 export * as modules from "./modules";
+export { Globals__factory } from "./Globals__factory";
 export { IceCandy__factory } from "./IceCandy__factory";
 export { Profile__factory } from "./Profile__factory";

@@ -82,7 +82,7 @@ const _abi = [
           },
         ],
         internalType: "struct ISNSAccountModule.SNSAccountStruct[]",
-        name: "snsAccounts",
+        name: "sns",
         type: "tuple[]",
       },
     ],
