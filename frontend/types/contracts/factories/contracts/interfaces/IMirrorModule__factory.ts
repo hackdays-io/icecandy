@@ -67,19 +67,6 @@ const _abi = [
     stateMutability: "view",
     type: "function",
   },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "profile",
-        type: "address",
-      },
-    ],
-    name: "setProfile",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
 ];
 
 export class IMirrorModule__factory {

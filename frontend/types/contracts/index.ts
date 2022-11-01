@@ -34,10 +34,16 @@ export type { IceCandyAssetStoreCore } from "./contracts/assetstore/IceCandyAsse
 export { IceCandyAssetStoreCore__factory } from "./factories/contracts/assetstore/IceCandyAssetStore.sol/IceCandyAssetStoreCore__factory";
 export type { IceCandyAssetStoreRegistory } from "./contracts/assetstore/IceCandyAssetStore.sol/IceCandyAssetStoreRegistory";
 export { IceCandyAssetStoreRegistory__factory } from "./factories/contracts/assetstore/IceCandyAssetStore.sol/IceCandyAssetStoreRegistory__factory";
+export type { ExtensionBase } from "./contracts/core/bases/ExtensionBase";
+export { ExtensionBase__factory } from "./factories/contracts/core/bases/ExtensionBase__factory";
+export type { ModuleBase } from "./contracts/core/bases/ModuleBase";
+export { ModuleBase__factory } from "./factories/contracts/core/bases/ModuleBase__factory";
 export type { NFTCollectionModuleBase } from "./contracts/core/bases/NFTCollectionModuleBase";
 export { NFTCollectionModuleBase__factory } from "./factories/contracts/core/bases/NFTCollectionModuleBase__factory";
 export type { ColorExtension } from "./contracts/core/extensions/ColorExtension";
 export { ColorExtension__factory } from "./factories/contracts/core/extensions/ColorExtension__factory";
+export type { Globals } from "./contracts/core/Globals";
+export { Globals__factory } from "./factories/contracts/core/Globals__factory";
 export type { IceCandy } from "./contracts/core/IceCandy";
 export { IceCandy__factory } from "./factories/contracts/core/IceCandy__factory";
 export type { MirrorModule } from "./contracts/core/modules/MirrorModule";
@@ -56,6 +62,8 @@ export type { IIceCandyAssetStore } from "./contracts/interfaces/assetstore/IIce
 export { IIceCandyAssetStore__factory } from "./factories/contracts/interfaces/assetstore/IIceCandyAssetStore__factory";
 export type { IColorExtension } from "./contracts/interfaces/IColorExtension";
 export { IColorExtension__factory } from "./factories/contracts/interfaces/IColorExtension__factory";
+export type { IGlobals } from "./contracts/interfaces/IGlobals";
+export { IGlobals__factory } from "./factories/contracts/interfaces/IGlobals__factory";
 export type { IIceCandy } from "./contracts/interfaces/IIceCandy";
 export { IIceCandy__factory } from "./factories/contracts/interfaces/IIceCandy__factory";
 export type { IMirrorModule } from "./contracts/interfaces/IMirrorModule";

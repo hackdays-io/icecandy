@@ -91,6 +91,7 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
           />
         ) : (
           <ProfileMain
+            isPreview
             pfpURI={getValues()?.name}
             name={getValues()?.name}
             introduction={getValues()?.introduction}

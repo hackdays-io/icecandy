@@ -155,11 +155,11 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "profile",
+        name: "globals",
         type: "address",
       },
     ],
-    name: "setProfile",
+    name: "setGlobals",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

@@ -54,45 +54,6 @@ const _abi = [
     stateMutability: "nonpayable",
     type: "function",
   },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "nftCollectionModule",
-        type: "address",
-      },
-    ],
-    name: "setNFTCollectionModule",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "poapCollectionModule",
-        type: "address",
-      },
-    ],
-    name: "setPOAPCollectionModule",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "profile",
-        type: "address",
-      },
-    ],
-    name: "setProfile",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
 ];
 
 export class IScoreModule__factory {

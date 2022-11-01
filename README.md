@@ -42,6 +42,7 @@ $ yarn dev
 | NEXT_PUBLIC_ALCHEMY_API_KEY_POLYGON     | AlchemyAPIKey for polygon             |                                                                                                      |
 | NEXT_PUBLIC_ALCHEMY_API_KEY_ARBITRUM    | AlchemyAPIKey for arbitrum            |                                                                                                      |
 | NEXT_PUBLIC_CONTRACT_PROFILENFT_ADDRESS | プロフィール NFT コントラクトアドレス |                                                                                                      |
+| NEXT_PUBLIC_CONTRACT_ICECANDY_ADDRESS   | IceCandy コントラクトアドレス         |                                                                                                      |
 | NEXT_PUBLIC_CONTRACT_POAP               | POAP コントラクトアドレス             | 0x22c1f6050e56d2876009903609a2cc3fef83b415                                                           |
 | NEXT_PUBLIC_XDAI_PROVIDER_RPC           | xDAI チェーン RPC                     | https://thrumming-orbital-brook.xdai.discover.quiknode.pro/7ec7d424b29c0bf3f78e73af5bb41986efab5bb3/ |
 | TWITTER_CONSUMER_KEY                    | twitter API                           |                                                                                                      |

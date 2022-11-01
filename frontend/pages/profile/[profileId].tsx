@@ -1,5 +1,4 @@
-import { Box, Container, List, Spinner, Text } from '@chakra-ui/react'
-import { BigNumber } from 'ethers'
+import { Box, Container, Spinner } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
@@ -13,7 +12,6 @@ const ProfilePage: NextPage = () => {
   const {
     profile,
     loading,
-    errors,
     snsAccounts,
     nftCollection,
     poapCollection,
