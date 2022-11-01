@@ -138,6 +138,10 @@ describe('profile test', () => {
       .withArgs(1, poapCollection.address, await ethers.provider.getBlockNumber())
 
     // get profile
+    const profileId_ = await profile.getProfileId(alice.address)
+    expect(profileId_).to.equal(1)
+
+    // get profileId
     const profile_ = await profile.connect(alice).getProfile(1)
     expect(profile_.wallets[0]).to.equal(alice.address)
     expect(profile_.name).to.equal(_profile.name)
@@ -347,8 +351,12 @@ describe('profile test', () => {
     // send transaction
     await expect(profile.connect(alice).addWallet(1, bob.address)).to.emit(profile, 'WalletAdded')
 
+    // get profileId
+    const profileId_ = await profile.getProfileId(alice.address)
+    expect(profileId_).to.equal(1)
+
     // get profile
-    const profile_ = await profile.connect(alice).getProfile(1)
+    const profile_ = await profile.connect(alice).getProfile(profileId_)
     expect(profile_.wallets[0]).to.equal(alice.address)
     expect(profile_.wallets[1]).to.equal(bob.address)
   })
