@@ -45,7 +45,7 @@ export interface IceCandyInterface extends utils.Interface {
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
-    "setProfile(address)": FunctionFragment;
+    "setGlobals(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
@@ -74,7 +74,7 @@ export interface IceCandyInterface extends utils.Interface {
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
-      | "setProfile"
+      | "setGlobals"
       | "supportsInterface"
       | "symbol"
       | "tokenByIndex"
@@ -158,7 +158,7 @@ export interface IceCandyInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(
-    functionFragment: "setProfile",
+    functionFragment: "setGlobals",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -235,7 +235,7 @@ export interface IceCandyInterface extends utils.Interface {
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "setGlobals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
@@ -452,8 +452,8 @@ export interface IceCandy extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -579,8 +579,8 @@ export interface IceCandy extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setProfile(
-    profile: PromiseOrValue<string>,
+  setGlobals(
+    globals: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -701,8 +701,8 @@ export interface IceCandy extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -890,8 +890,8 @@ export interface IceCandy extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1018,8 +1018,8 @@ export interface IceCandy extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    setProfile(
-      profile: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

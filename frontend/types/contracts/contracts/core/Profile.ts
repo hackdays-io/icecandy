@@ -27,6 +27,12 @@ import type {
   PromiseOrValue,
 } from "../../common";
 
+export declare namespace IMirrorModule {
+  export type MirrorStructStruct = { hoge: PromiseOrValue<string> };
+
+  export type MirrorStructStructOutput = [string] & { hoge: string };
+}
+
 export declare namespace INFTCollectionModule {
   export type NFTStructStruct = {
     chainId: PromiseOrValue<BigNumberish>;
@@ -116,6 +122,18 @@ export declare namespace IProfile {
   };
 }
 
+export declare namespace IColorExtension {
+  export type ColorStructStruct = {
+    color: PromiseOrValue<string>;
+    active: PromiseOrValue<boolean>;
+  };
+
+  export type ColorStructStructOutput = [string, boolean] & {
+    color: string;
+    active: boolean;
+  };
+}
+
 export declare namespace IScoreModule {
   export type ScoreStructStruct = {
     name: PromiseOrValue<string>;
@@ -130,6 +148,9 @@ export declare namespace IScoreModule {
 
 export interface ProfileInterface extends utils.Interface {
   functions: {
+    "activateColor(uint256,uint256)": FunctionFragment;
+    "addColor(uint256,string)": FunctionFragment;
+    "addMirror(uint256,(string))": FunctionFragment;
     "addWallet(uint256,address)": FunctionFragment;
     "approve(address,uint256)": FunctionFragment;
     "balanceOf(address)": FunctionFragment;
@@ -138,7 +159,10 @@ export interface ProfileInterface extends utils.Interface {
     "createProfile((string,string,string,(uint256,address,uint256,string,address)[],(uint256,address,uint256,string,address)[],(string,string,string,address)[]))": FunctionFragment;
     "createSNSAccount(uint256,(string,string,string,address)[])": FunctionFragment;
     "createScore(uint256)": FunctionFragment;
+    "deactivateColor(uint256,uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
+    "getColor(uint256)": FunctionFragment;
+    "getMirror(uint256)": FunctionFragment;
     "getNFTCollection(uint256)": FunctionFragment;
     "getPOAPCollection(uint256)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
@@ -152,13 +176,7 @@ export interface ProfileInterface extends utils.Interface {
     "safeTransferFrom(address,address,uint256)": FunctionFragment;
     "safeTransferFrom(address,address,uint256,bytes)": FunctionFragment;
     "setApprovalForAll(address,bool)": FunctionFragment;
-    "setColorExtension(address)": FunctionFragment;
-    "setIceCandy(address)": FunctionFragment;
-    "setMirrorModule(address)": FunctionFragment;
-    "setNFTCollectionModule(address)": FunctionFragment;
-    "setPOAPCollectionModule(address)": FunctionFragment;
-    "setSNSAccountModule(address)": FunctionFragment;
-    "setScoreModule(address)": FunctionFragment;
+    "setGlobals(address)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
     "tokenByIndex(uint256)": FunctionFragment;
@@ -171,6 +189,9 @@ export interface ProfileInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "activateColor"
+      | "addColor"
+      | "addMirror"
       | "addWallet"
       | "approve"
       | "balanceOf"
@@ -179,7 +200,10 @@ export interface ProfileInterface extends utils.Interface {
       | "createProfile"
       | "createSNSAccount"
       | "createScore"
+      | "deactivateColor"
       | "getApproved"
+      | "getColor"
+      | "getMirror"
       | "getNFTCollection"
       | "getPOAPCollection"
       | "getProfile"
@@ -193,13 +217,7 @@ export interface ProfileInterface extends utils.Interface {
       | "safeTransferFrom(address,address,uint256)"
       | "safeTransferFrom(address,address,uint256,bytes)"
       | "setApprovalForAll"
-      | "setColorExtension"
-      | "setIceCandy"
-      | "setMirrorModule"
-      | "setNFTCollectionModule"
-      | "setPOAPCollectionModule"
-      | "setSNSAccountModule"
-      | "setScoreModule"
+      | "setGlobals"
       | "supportsInterface"
       | "symbol"
       | "tokenByIndex"
@@ -210,6 +228,18 @@ export interface ProfileInterface extends utils.Interface {
       | "transferOwnership"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "activateColor",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addColor",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addMirror",
+    values: [PromiseOrValue<BigNumberish>, IMirrorModule.MirrorStructStruct]
+  ): string;
   encodeFunctionData(
     functionFragment: "addWallet",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
@@ -252,7 +282,19 @@ export interface ProfileInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "deactivateColor",
+    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getApproved",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getColor",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMirror",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -311,31 +353,7 @@ export interface ProfileInterface extends utils.Interface {
     values: [PromiseOrValue<string>, PromiseOrValue<boolean>]
   ): string;
   encodeFunctionData(
-    functionFragment: "setColorExtension",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setIceCandy",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setMirrorModule",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setNFTCollectionModule",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setPOAPCollectionModule",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setSNSAccountModule",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setScoreModule",
+    functionFragment: "setGlobals",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -372,6 +390,12 @@ export interface ProfileInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "activateColor",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "addColor", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "addMirror", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "addWallet", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "approve", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
@@ -396,9 +420,15 @@ export interface ProfileInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "deactivateColor",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getColor", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getMirror", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getNFTCollection",
     data: BytesLike
@@ -436,34 +466,7 @@ export interface ProfileInterface extends utils.Interface {
     functionFragment: "setApprovalForAll",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "setColorExtension",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setIceCandy",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setMirrorModule",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setNFTCollectionModule",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setPOAPCollectionModule",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setSNSAccountModule",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setScoreModule",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "setGlobals", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
@@ -705,6 +708,24 @@ export interface Profile extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    activateColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    addColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      color: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    addMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -750,10 +771,26 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    deactivateColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[string]>;
+
+    getColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[IColorExtension.ColorStructStructOutput[]]>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[IMirrorModule.MirrorStructStructOutput[]]>;
 
     getNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
@@ -820,38 +857,8 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setColorExtension(
-      colorExtension: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setIceCandy(
-      icecandy: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setMirrorModule(
-      mirrorModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setSNSAccountModule(
-      snsAccountModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setScoreModule(
-      scoreModule: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -892,6 +899,24 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
+
+  activateColor(
+    profileId: PromiseOrValue<BigNumberish>,
+    extensionId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  addColor(
+    profileId: PromiseOrValue<BigNumberish>,
+    color: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  addMirror(
+    profileId: PromiseOrValue<BigNumberish>,
+    mirror: IMirrorModule.MirrorStructStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   addWallet(
     profileId: PromiseOrValue<BigNumberish>,
@@ -938,10 +963,26 @@ export interface Profile extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  deactivateColor(
+    profileId: PromiseOrValue<BigNumberish>,
+    extensionId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   getApproved(
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<string>;
+
+  getColor(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<IColorExtension.ColorStructStructOutput[]>;
+
+  getMirror(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
 
   getNFTCollection(
     profileId: PromiseOrValue<BigNumberish>,
@@ -1008,38 +1049,8 @@ export interface Profile extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setColorExtension(
-    colorExtension: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setIceCandy(
-    icecandy: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setMirrorModule(
-    mirrorModule: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setNFTCollectionModule(
-    nftCollectionModule: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setPOAPCollectionModule(
-    poapCollectionModule: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setSNSAccountModule(
-    snsAccountModule: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setScoreModule(
-    scoreModule: PromiseOrValue<string>,
+  setGlobals(
+    globals: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1081,6 +1092,24 @@ export interface Profile extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    activateColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    addColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      color: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    addMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -1126,10 +1155,26 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    deactivateColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<string>;
+
+    getColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<IColorExtension.ColorStructStructOutput[]>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
 
     getNFTCollection(
       profileId: PromiseOrValue<BigNumberish>,
@@ -1194,38 +1239,8 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    setColorExtension(
-      colorExtension: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setIceCandy(
-      icecandy: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setMirrorModule(
-      mirrorModule: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setSNSAccountModule(
-      snsAccountModule: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setScoreModule(
-      scoreModule: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1402,6 +1417,24 @@ export interface Profile extends BaseContract {
   };
 
   estimateGas: {
+    activateColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    addColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      color: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    addMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -1447,8 +1480,24 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    deactivateColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -1517,38 +1566,8 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setColorExtension(
-      colorExtension: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setIceCandy(
-      icecandy: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setMirrorModule(
-      mirrorModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setSNSAccountModule(
-      snsAccountModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setScoreModule(
-      scoreModule: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1591,6 +1610,24 @@ export interface Profile extends BaseContract {
   };
 
   populateTransaction: {
+    activateColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    addColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      color: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    addMirror(
+      profileId: PromiseOrValue<BigNumberish>,
+      mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -1636,8 +1673,24 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    deactivateColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      extensionId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     getApproved(
       tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getColor(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getMirror(
+      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -1706,38 +1759,8 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    setColorExtension(
-      colorExtension: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setIceCandy(
-      icecandy: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setMirrorModule(
-      mirrorModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setSNSAccountModule(
-      snsAccountModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setScoreModule(
-      scoreModule: PromiseOrValue<string>,
+    setGlobals(
+      globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

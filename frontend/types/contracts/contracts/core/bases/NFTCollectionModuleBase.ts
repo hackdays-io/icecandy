@@ -13,7 +13,11 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -50,17 +54,28 @@ export declare namespace INFTCollectionModule {
 export interface NFTCollectionModuleBaseInterface extends utils.Interface {
   functions: {
     "getCollection(uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
     "processCollect(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "setGlobals(address)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "getCollection" | "processCollect"
+    nameOrSignatureOrTopic:
+      | "getCollection"
+      | "owner"
+      | "processCollect"
+      | "renounceOwnership"
+      | "setGlobals"
+      | "transferOwnership"
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "getCollection",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "processCollect",
     values: [
@@ -68,18 +83,56 @@ export interface NFTCollectionModuleBaseInterface extends utils.Interface {
       INFTCollectionModule.NFTStructStruct[]
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setGlobals",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [PromiseOrValue<string>]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "getCollection",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "processCollect",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setGlobals", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
 
-  events: {};
+  events: {
+    "OwnershipTransferred(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
+}
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  OwnershipTransferredEventObject
+>;
+
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface NFTCollectionModuleBase extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -113,9 +166,25 @@ export interface NFTCollectionModuleBase extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[INFTCollectionModule.NFTStructStructOutput[]]>;
 
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
     processCollect(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setGlobals(
+      globals: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
@@ -125,9 +194,25 @@ export interface NFTCollectionModuleBase extends BaseContract {
     overrides?: CallOverrides
   ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
   processCollect(
     profileId: PromiseOrValue<BigNumberish>,
     nfts: INFTCollectionModule.NFTStructStruct[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setGlobals(
+    globals: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -137,14 +222,37 @@ export interface NFTCollectionModuleBase extends BaseContract {
       overrides?: CallOverrides
     ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
 
+    owner(overrides?: CallOverrides): Promise<string>;
+
     processCollect(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    setGlobals(
+      globals: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+  };
 
   estimateGas: {
     getCollection(
@@ -152,9 +260,25 @@ export interface NFTCollectionModuleBase extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
     processCollect(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setGlobals(
+      globals: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
@@ -165,9 +289,25 @@ export interface NFTCollectionModuleBase extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     processCollect(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setGlobals(
+      globals: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

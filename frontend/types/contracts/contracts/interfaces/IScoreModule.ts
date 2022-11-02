@@ -39,18 +39,10 @@ export interface IScoreModuleInterface extends utils.Interface {
   functions: {
     "getScore(uint256)": FunctionFragment;
     "processScore(uint256)": FunctionFragment;
-    "setNFTCollectionModule(address)": FunctionFragment;
-    "setPOAPCollectionModule(address)": FunctionFragment;
-    "setProfile(address)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic:
-      | "getScore"
-      | "processScore"
-      | "setNFTCollectionModule"
-      | "setPOAPCollectionModule"
-      | "setProfile"
+    nameOrSignatureOrTopic: "getScore" | "processScore"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -61,33 +53,12 @@ export interface IScoreModuleInterface extends utils.Interface {
     functionFragment: "processScore",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "setNFTCollectionModule",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setPOAPCollectionModule",
-    values: [PromiseOrValue<string>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "setProfile",
-    values: [PromiseOrValue<string>]
-  ): string;
 
   decodeFunctionResult(functionFragment: "getScore", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "processScore",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "setNFTCollectionModule",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "setPOAPCollectionModule",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "setProfile", data: BytesLike): Result;
 
   events: {};
 }
@@ -128,21 +99,6 @@ export interface IScoreModule extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
   };
 
   getScore(
@@ -155,21 +111,6 @@ export interface IScoreModule extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setNFTCollectionModule(
-    nftCollectionModule: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setPOAPCollectionModule(
-    poapCollectionModule: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  setProfile(
-    profile: PromiseOrValue<string>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   callStatic: {
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
@@ -178,21 +119,6 @@ export interface IScoreModule extends BaseContract {
 
     processScore(
       profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -209,21 +135,6 @@ export interface IScoreModule extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -234,21 +145,6 @@ export interface IScoreModule extends BaseContract {
 
     processScore(
       profileId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setNFTCollectionModule(
-      nftCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setPOAPCollectionModule(
-      poapCollectionModule: PromiseOrValue<string>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    setProfile(
-      profile: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

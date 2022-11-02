@@ -1,7 +1,9 @@
 import { Box, Flex, Grid, Heading, Text } from '@chakra-ui/react'
+import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { AppProfile } from '../../../types/profile'
 import PFP from '../../atoms/profile/PFP'
+import SendIceCandyButton from '../../atoms/profile/SendIceCandyButton'
 import ProfileNFTCollectionModule from '../../molecules/profiles/NFTCollectionModule'
 import ProfilePOAPCollectionModule from '../../molecules/profiles/POAPCollectionModule'
 import ProfileSNSAccountsModule from '../../molecules/profiles/SNSAccountsModule'
@@ -22,6 +24,7 @@ type Props = {
     AppProfile.Module<'nftCollection'>,
     AppProfile.Module<'poapCollection'>
   ]
+  isPreview?: boolean
 }
 
 const ProfileMain: FC<Props> = ({
@@ -30,7 +33,11 @@ const ProfileMain: FC<Props> = ({
   introduction,
   modules,
   iceCandyStats,
+  isPreview,
 }) => {
+  const router = useRouter()
+  const { profileId } = router.query
+
   return (
     <Box>
       <Grid gridTemplateColumns="1fr 300px">
@@ -45,21 +52,23 @@ const ProfileMain: FC<Props> = ({
         </Flex>
         <Box borderRadius={10} backgroundColor="red.100" p={4}>
           <Text fontWeight="bold" fontSize="24px">
-            IceCandyScore: {iceCandyStats?.score || '????'}
+            IceCandyScore: {iceCandyStats?.score || '0'}
           </Text>
-          <Text>IceCandyを送った回数: {iceCandyStats?.sentNum || '????'}</Text>
+          <Text>IceCandyを送った回数: {iceCandyStats?.sentNum || '0'}</Text>
           <Text>
-            IceCandyを送った人数: {iceCandyStats?.sentNumOfPeople || '????'}
-          </Text>
-          <Text>
-            IceCandyをもらった回数: {iceCandyStats?.receiveNum || '????'}
+            IceCandyを送った人数: {iceCandyStats?.sentNumOfPeople || '0'}
           </Text>
           <Text>
-            IceCandyをもらった人数:{' '}
-            {iceCandyStats?.receiveNumOfPeople || '????'}
+            IceCandyをもらった回数: {iceCandyStats?.receiveNum || '0'}
+          </Text>
+          <Text>
+            IceCandyをもらった人数: {iceCandyStats?.receiveNumOfPeople || '0'}
           </Text>
         </Box>
       </Grid>
+
+      {!isPreview && <SendIceCandyButton profileId={Number(profileId)} />}
+
       {modules.map((module, index) => {
         switch (module.type) {
           case 'nftCollection':

@@ -13,7 +13,11 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -42,17 +46,28 @@ export declare namespace ISNSAccountModule {
 export interface SNSAccountModuleInterface extends utils.Interface {
   functions: {
     "getSNSAccounts(uint256)": FunctionFragment;
+    "owner()": FunctionFragment;
     "processSNSAccount(uint256,(string,string,string,address)[])": FunctionFragment;
+    "renounceOwnership()": FunctionFragment;
+    "setGlobals(address)": FunctionFragment;
+    "transferOwnership(address)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "getSNSAccounts" | "processSNSAccount"
+    nameOrSignatureOrTopic:
+      | "getSNSAccounts"
+      | "owner"
+      | "processSNSAccount"
+      | "renounceOwnership"
+      | "setGlobals"
+      | "transferOwnership"
   ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "getSNSAccounts",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "processSNSAccount",
     values: [
@@ -60,18 +75,56 @@ export interface SNSAccountModuleInterface extends utils.Interface {
       ISNSAccountModule.SNSAccountStructStruct[]
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "renounceOwnership",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setGlobals",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "transferOwnership",
+    values: [PromiseOrValue<string>]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "getSNSAccounts",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "processSNSAccount",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "renounceOwnership",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "setGlobals", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "transferOwnership",
+    data: BytesLike
+  ): Result;
 
-  events: {};
+  events: {
+    "OwnershipTransferred(address,address)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export interface OwnershipTransferredEventObject {
+  previousOwner: string;
+  newOwner: string;
+}
+export type OwnershipTransferredEvent = TypedEvent<
+  [string, string],
+  OwnershipTransferredEventObject
+>;
+
+export type OwnershipTransferredEventFilter =
+  TypedEventFilter<OwnershipTransferredEvent>;
 
 export interface SNSAccountModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -105,9 +158,25 @@ export interface SNSAccountModule extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[ISNSAccountModule.SNSAccountStructStructOutput[]]>;
 
+    owner(overrides?: CallOverrides): Promise<[string]>;
+
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+      sns: ISNSAccountModule.SNSAccountStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    setGlobals(
+      globals: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
   };
@@ -117,9 +186,25 @@ export interface SNSAccountModule extends BaseContract {
     overrides?: CallOverrides
   ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
 
+  owner(overrides?: CallOverrides): Promise<string>;
+
   processSNSAccount(
     profileId: PromiseOrValue<BigNumberish>,
-    snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+    sns: ISNSAccountModule.SNSAccountStructStruct[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  renounceOwnership(
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  setGlobals(
+    globals: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  transferOwnership(
+    newOwner: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -129,14 +214,37 @@ export interface SNSAccountModule extends BaseContract {
       overrides?: CallOverrides
     ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
 
+    owner(overrides?: CallOverrides): Promise<string>;
+
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+      sns: ISNSAccountModule.SNSAccountStructStruct[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    renounceOwnership(overrides?: CallOverrides): Promise<void>;
+
+    setGlobals(
+      globals: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    "OwnershipTransferred(address,address)"(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+    OwnershipTransferred(
+      previousOwner?: PromiseOrValue<string> | null,
+      newOwner?: PromiseOrValue<string> | null
+    ): OwnershipTransferredEventFilter;
+  };
 
   estimateGas: {
     getSNSAccounts(
@@ -144,9 +252,25 @@ export interface SNSAccountModule extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    owner(overrides?: CallOverrides): Promise<BigNumber>;
+
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+      sns: ISNSAccountModule.SNSAccountStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setGlobals(
+      globals: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
@@ -157,9 +281,25 @@ export interface SNSAccountModule extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     processSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
-      snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+      sns: ISNSAccountModule.SNSAccountStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    renounceOwnership(
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setGlobals(
+      globals: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    transferOwnership(
+      newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

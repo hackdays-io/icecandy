@@ -213,4 +213,13 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
     function _baseURI() internal pure override returns (string memory) {
         return "http://example.com/";
     }
+
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        IIceCandy.IceCandyStruct memory iceCandy = _iceCandy[tokenId];
+        if (iceCandy.isEaten) {
+            return "ipfs://bafybeia6z47fclyvyladuzfu5srqhthuu2l6uw2yxxsankpmatygrgiazm/iceCandy_eaten.json";
+        } else {
+            return "ipfs://bafybeieqpdxscoeheazxwnj2jq4n3n6hfkmzvfb7dytya62fay6z2zqrua/iceCandy_notEaten.json";
+        }
+    }
 }

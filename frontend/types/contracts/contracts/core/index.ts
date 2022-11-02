@@ -7,5 +7,6 @@ import type * as extensions from "./extensions";
 export type { extensions };
 import type * as modules from "./modules";
 export type { modules };
+export type { Globals } from "./Globals";
 export type { IceCandy } from "./IceCandy";
 export type { Profile } from "./Profile";
