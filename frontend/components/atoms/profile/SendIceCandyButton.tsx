@@ -1,50 +1,25 @@
-import { Box, Button, Grid, useDisclosure } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { useAddress } from '@thirdweb-dev/react'
 import { FC } from 'react'
-import { useHoldingIceCandy, useSendIceCandy } from '../../../hooks/useIceCandy'
-import SingleIceCandy from '../icecandy/SingleIceCandy'
-import ModalBase from '../ModalBase'
+import { useSendIceCandy } from '../../../hooks/useIceCandy'
+import { ethers } from 'ethers'
 
 type Props = {
   profileId: number
 }
 
-const IceCandySelector: FC<Props> = ({ profileId }) => {
+const SendIceCandyButton: FC<Props> = ({ profileId }) => {
   const { loading, send, errors } = useSendIceCandy()
   const address = useAddress()
-  const { holdingIceCandy } = useHoldingIceCandy(address)
-
-  return (
-    <Grid gridTemplateColumns="1fr 1fr 1fr" gap={3}>
-      {holdingIceCandy?.notEatenIceCandy.map((iceCandy, index) => (
-        <Box key={index} border="1px solid grey">
-          <SingleIceCandy
-            canEat={false}
-            tokenId={iceCandy.tokenId.toNumber()}
-            tokenURI={iceCandy.tokenURI}
-          />
-          <Button
-            width="full"
-            isLoading={loading}
-            onClick={() => send(profileId, iceCandy.tokenId.toNumber())}
-          >
-            このIceCandyを送る
-          </Button>
-        </Box>
-      ))}
-    </Grid>
-  )
-}
-
-const SendIceCandyButton: FC<Props> = ({ profileId }) => {
-  const { isOpen, onClose, onOpen } = useDisclosure()
 
   return (
     <>
-      <Button onClick={() => onOpen()}>IceCandyを送る</Button>
-      <ModalBase isOpen={isOpen} onClose={onClose}>
-        <IceCandySelector profileId={profileId} />
-      </ModalBase>
+      <Button
+        onClick={() => send(profileId, ethers.constants.AddressZero, 0)}
+        isLoading={loading}
+      >
+        IceCandyを送る
+      </Button>
     </>
   )
 }
