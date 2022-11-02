@@ -5,14 +5,23 @@ import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/
 import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {IIceCandy} from "../interfaces/IIceCandy.sol";
 import {IGlobals} from "../interfaces/IGlobals.sol";
+import {IProfile} from "../interfaces/IProfile.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
+import "hardhat/console.sol";
 
 contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
-    uint256 internal _tokenCounter;
-    address internal _globals;
-    mapping(uint256 => IIceCandy.IceCandyStruct) internal _iceCandy;
-    mapping(address => uint256) private _eatenBalances;
-    mapping(address => uint256) private _notEatenBalances;
+    uint256 private _tokenCounter;
+    address private _globals;
+    mapping(uint256 => IIceCandy.IceCandyStruct) private _iceCandy;
+    mapping(address => uint256) private _revealed;
+    mapping(address => uint256) private _notRevealed;
+    mapping(address => uint256) private _luckey;
+    mapping(address => uint256) private _unluckey;
+    mapping(uint256 => uint256) private _sender;
+    mapping(uint256 => uint256) private _receiver;
+    mapping(uint256 => uint256) private _sent;
+    mapping(uint256 => uint256) private _received;
+    mapping(address => uint256) private _availableTokenId;
 
     constructor(address owner) ERC721("IceCandy", "ICE") {
         _transferOwnership(owner);
@@ -22,63 +31,124 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         _globals = globals;
     }
 
-    function eat(
-        uint256 tokenId,
+    function send(
         uint256 profileId,
         address module,
         uint256 moduleId
     ) external override {
-        require(_isApprovedOrOwner(msg.sender, tokenId), "IceCandy: caller is not owner or approved");
-        require(_iceCandy[tokenId].isEaten == false, "IceCandy: already eaten");
+        uint256 tokenId = _availableTokenId[msg.sender];
+        require(tokenId > 0, "IceCandy: you don't have a IceCandy");
+        require(
+            _iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.NOT_REVEALED,
+            "IceCandy: only not revealed can send"
+        );
 
-        _iceCandy[tokenId].isEaten = true;
-        _iceCandy[tokenId].eatenProfileId = profileId;
-        _iceCandy[tokenId].eatenModule = module;
-        _iceCandy[tokenId].eatenModuleId = moduleId;
+        // update states and counters
+        _iceCandy[tokenId].iceCandyType = IIceCandy.IceCandyType.REVEALED;
+        _iceCandy[tokenId].sentProfileId = profileId;
+        _iceCandy[tokenId].sentModule = module;
+        _iceCandy[tokenId].sentModuleId = moduleId;
 
-        _eatenBalances[ownerOf(tokenId)] += 1;
-        _notEatenBalances[ownerOf(tokenId)] -= 1;
+        _availableTokenId[msg.sender] = 0;
 
-        emit Eaten(tokenId, msg.sender, profileId, module, moduleId, block.number);
+        unchecked {
+            _notRevealed[ownerOf(tokenId)] -= 1;
+            _revealed[ownerOf(tokenId)] += 1;
+        }
+
+        // transfer revealed icecandy
+        _transfer(msg.sender, IProfile(IGlobals(_globals).getProfile()).getProfile(profileId).wallets[0], tokenId);
+
+        // mint lucky or unlucky icecandy to sender
+        ++_tokenCounter;
+        if (_tokenCounter % 2 == 0) {
+            _mint(msg.sender, _tokenCounter, IIceCandy.IceCandyType.LUCKY);
+        } else {
+            _mint(msg.sender, _tokenCounter, IIceCandy.IceCandyType.UNLUCKY);
+        }
+
+        emit Sent(
+            tokenId,
+            IProfile(IGlobals(_globals).getProfile()).getProfileId(msg.sender),
+            profileId,
+            module,
+            moduleId,
+            block.number
+        );
     }
 
     function mint(address to) external override onlyOwner {
         uint256 tokenId = ++_tokenCounter;
-        _mint(to, tokenId);
+        require(_availableTokenId[to] == 0, "IceCandy: only one mint per address");
+        _mint(to, tokenId, IIceCandy.IceCandyType.NOT_REVEALED);
     }
 
-    function isEaten(uint256 tokenId) external view override returns (bool) {
-        return _iceCandy[tokenId].isEaten;
+    function getIceCandy(uint256 tokenId) external view override returns (IceCandyStruct memory) {
+        return _iceCandy[tokenId];
     }
 
-    function balanceOfEaten(address owner) external view override returns (uint256) {
-        return _eatenBalances[owner];
+    function balanceOfRevealed(address owner) external view override returns (uint256) {
+        return _revealed[owner];
     }
 
-    function balanceOfNotEaten(address owner) external view override returns (uint256) {
-        return _notEatenBalances[owner];
+    function balanceOfNotRevealed(address owner) external view override returns (uint256) {
+        return _notRevealed[owner];
     }
 
-    function isApprovedForAll(address owner, address operator) public view override returns (bool) {
-        if (operator == IGlobals(_globals).getProfile()) {
-            return true;
-        }
-        return super.isApprovedForAll(owner, operator);
+    function balanceOfLucky(address owner) external view override returns (uint256) {
+        return _luckey[owner];
     }
 
-    function _mint(address to, uint256 tokenId) internal override {
+    function balanceOfUnlucky(address owner) external view override returns (uint256) {
+        return _unluckey[owner];
+    }
+
+    function numberOfSender(uint256 profileId) external view override returns (uint256) {
+        return _sender[profileId];
+    }
+
+    function numberOfReceiver(uint256 profileId) external view override returns (uint256) {
+        return _receiver[profileId];
+    }
+
+    function numberOfSent(uint256 profileId) external view override returns (uint256) {
+        return _sent[profileId];
+    }
+
+    function numberOfReceived(uint256 profileId) external view override returns (uint256) {
+        return _received[profileId];
+    }
+
+    function _mint(
+        address to,
+        uint256 tokenId,
+        IIceCandy.IceCandyType iceCandyType
+    ) internal {
+        _iceCandy[tokenId].iceCandyType = iceCandyType;
         unchecked {
-            _notEatenBalances[to] += 1;
+            if (iceCandyType == IIceCandy.IceCandyType.NOT_REVEALED) {
+                _notRevealed[to] += 1;
+                _availableTokenId[to] = tokenId;
+            } else if (iceCandyType == IIceCandy.IceCandyType.LUCKY) {
+                _luckey[to] += 1;
+            } else if (iceCandyType == IIceCandy.IceCandyType.UNLUCKY) {
+                _unluckey[to] += 1;
+            }
         }
         super._mint(to, tokenId);
+        emit Mint(tokenId, to, iceCandyType, block.number);
     }
 
     function _burn(uint256 tokenId) internal override {
         unchecked {
-            if (_iceCandy[tokenId].isEaten) {
-                _eatenBalances[ownerOf(tokenId)] -= 1;
-            } else {
-                _notEatenBalances[ownerOf(tokenId)] -= 1;
+            if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.NOT_REVEALED) {
+                _notRevealed[ownerOf(tokenId)] -= 1;
+            } else if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.REVEALED) {
+                _revealed[ownerOf(tokenId)] -= 1;
+            } else if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.LUCKY) {
+                _luckey[ownerOf(tokenId)] -= 1;
+            } else if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.UNLUCKY) {
+                _unluckey[ownerOf(tokenId)] -= 1;
             }
         }
         super._burn(tokenId);
@@ -89,45 +159,23 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         address to,
         uint256 tokenId
     ) internal override {
+        require(
+            _iceCandy[tokenId].iceCandyType != IIceCandy.IceCandyType.NOT_REVEALED,
+            "IceCandy: not revealed can't transfer"
+        );
         unchecked {
-            if (_iceCandy[tokenId].isEaten) {
-                _eatenBalances[from] -= 1;
-                _eatenBalances[to] += 1;
-            } else {
-                _notEatenBalances[from] -= 1;
-                _notEatenBalances[to] += 1;
+            if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.REVEALED) {
+                _revealed[from] -= 1;
+                _revealed[to] += 1;
+            } else if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.LUCKY) {
+                _luckey[from] -= 1;
+                _luckey[to] += 1;
+            } else if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.UNLUCKY) {
+                _unluckey[from] -= 1;
+                _unluckey[to] += 1;
             }
         }
         super._transfer(from, to, tokenId);
-    }
-
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 firstTokenId,
-        uint256 batchSize
-    ) internal {
-        if (batchSize > 1) {
-            if (from != address(0)) {
-                unchecked {
-                    if (_iceCandy[firstTokenId].isEaten) {
-                        _eatenBalances[from] -= batchSize;
-                    } else {
-                        _notEatenBalances[from] -= batchSize;
-                    }
-                }
-            }
-            if (to != address(0)) {
-                unchecked {
-                    if (_iceCandy[firstTokenId].isEaten) {
-                        _eatenBalances[to] += batchSize;
-                    } else {
-                        _notEatenBalances[to] += batchSize;
-                    }
-                }
-            }
-        }
-        super._beforeTokenTransfer(from, to, batchSize);
     }
 
     function _baseURI() internal pure override returns (string memory) {

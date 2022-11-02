@@ -2,17 +2,23 @@
 pragma solidity ^0.8.10;
 
 interface IIceCandy {
+    enum IceCandyType {
+        NOT_REVEALED,
+        REVEALED,
+        LUCKY,
+        UNLUCKY
+    }
+
     struct IceCandyStruct {
-        bool isEaten;
-        uint256 eatenProfileId;
-        address eatenModule;
-        uint256 eatenModuleId;
+        IceCandyType iceCandyType;
+        uint256 sentProfileId;
+        address sentModule;
+        uint256 sentModuleId;
     }
 
     function setGlobals(address globals) external;
 
-    function eat(
-        uint256 tokenId,
+    function send(
         uint256 profileId,
         address module,
         uint256 moduleId
@@ -20,18 +26,32 @@ interface IIceCandy {
 
     function mint(address to) external;
 
-    function isEaten(uint256 tokenId) external view returns (bool);
+    function getIceCandy(uint256 tokenId) external view returns (IceCandyStruct memory);
 
-    function balanceOfEaten(address owner) external view returns (uint256);
+    function balanceOfRevealed(address owner) external view returns (uint256);
 
-    function balanceOfNotEaten(address owner) external view returns (uint256);
+    function balanceOfNotRevealed(address owner) external view returns (uint256);
 
-    event Eaten(
+    function balanceOfLucky(address owner) external view returns (uint256);
+
+    function balanceOfUnlucky(address owner) external view returns (uint256);
+
+    function numberOfSender(uint256 profileId) external view returns (uint256);
+
+    function numberOfReceiver(uint256 profileId) external view returns (uint256);
+
+    function numberOfSent(uint256 profileId) external view returns (uint256);
+
+    function numberOfReceived(uint256 profileId) external view returns (uint256);
+
+    event Sent(
         uint256 indexed tokenId,
-        address indexed from,
-        uint256 indexed profileId,
+        uint256 indexed from,
+        uint256 indexed to,
         address module,
         uint256 moduleId,
         uint256 blockNumber
     );
+
+    event Mint(uint256 indexed tokenId, address indexed to, IceCandyType indexed iceCandyType, uint256 blockNumber);
 }
