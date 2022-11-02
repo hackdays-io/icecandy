@@ -17,10 +17,10 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
     mapping(address => uint256) private _notRevealed;
     mapping(address => uint256) private _luckey;
     mapping(address => uint256) private _unluckey;
-    mapping(uint256 => uint256) private _sender;
-    mapping(uint256 => uint256) private _receiver;
-    mapping(uint256 => uint256) private _sent;
-    mapping(uint256 => uint256) private _received;
+    mapping(uint256 => uint256[]) private _senders;
+    mapping(uint256 => uint256[]) private _receivers;
+    mapping(uint256 => HistoryStruct[]) private _sentHistories;
+    mapping(uint256 => HistoryStruct[]) private _receivedHistories;
     mapping(address => uint256) private _availableTokenId;
 
     constructor(address owner) ERC721("IceCandy", "ICE") {
@@ -37,17 +37,49 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         uint256 moduleId
     ) external override {
         uint256 tokenId = _availableTokenId[msg.sender];
+        uint256 fromProfileId = IProfile(IGlobals(_globals).getProfile()).getProfileId(msg.sender);
+
         require(tokenId > 0, "IceCandy: you don't have a IceCandy");
         require(
             _iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.NOT_REVEALED,
             "IceCandy: only not revealed can send"
         );
 
-        // update states and counters
+        // update IceCandyStruct
         _iceCandy[tokenId].iceCandyType = IIceCandy.IceCandyType.REVEALED;
         _iceCandy[tokenId].sentProfileId = profileId;
         _iceCandy[tokenId].sentModule = module;
         _iceCandy[tokenId].sentModuleId = moduleId;
+
+        // update _senders
+        bool isExist = false;
+        for (uint256 i = 0; i < _senders[fromProfileId].length; i++) {
+            if (_senders[fromProfileId][i] == profileId) {
+                isExist = true;
+                break;
+            }
+        }
+        if (!isExist) _senders[fromProfileId].push(profileId);
+
+        // update _receivers
+        isExist = false;
+        for (uint256 i = 0; i < _receivers[profileId].length; i++) {
+            if (_receivers[profileId][i] == profileId) {
+                isExist = true;
+                break;
+            }
+        }
+        if (!isExist) _receivers[profileId].push(fromProfileId);
+
+        // update _sentHistory
+        _sentHistories[fromProfileId].push(
+            HistoryStruct({tokenId: tokenId, profileId: profileId, module: module, moduleId: moduleId})
+        );
+
+        // update _receivedHistory
+        _receivedHistories[profileId].push(
+            HistoryStruct({tokenId: tokenId, profileId: fromProfileId, module: module, moduleId: moduleId})
+        );
 
         _availableTokenId[msg.sender] = 0;
 
@@ -104,19 +136,19 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
     }
 
     function numberOfSender(uint256 profileId) external view override returns (uint256) {
-        return _sender[profileId];
+        return _senders[profileId].length;
     }
 
     function numberOfReceiver(uint256 profileId) external view override returns (uint256) {
-        return _receiver[profileId];
+        return _receivers[profileId].length;
     }
 
     function numberOfSent(uint256 profileId) external view override returns (uint256) {
-        return _sent[profileId];
+        return _sentHistories[profileId].length;
     }
 
     function numberOfReceived(uint256 profileId) external view override returns (uint256) {
-        return _received[profileId];
+        return _receivedHistories[profileId].length;
     }
 
     function _mint(

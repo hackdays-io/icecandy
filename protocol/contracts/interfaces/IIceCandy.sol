@@ -16,6 +16,13 @@ interface IIceCandy {
         uint256 sentModuleId;
     }
 
+    struct HistoryStruct {
+        uint256 tokenId;
+        uint256 profileId; // on _sentHistories it means to, on _receivedHistories it means from
+        address module;
+        uint256 moduleId;
+    }
+
     function setGlobals(address globals) external;
 
     function send(
