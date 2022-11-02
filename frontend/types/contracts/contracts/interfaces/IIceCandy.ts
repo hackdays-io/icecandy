@@ -27,45 +27,77 @@ import type {
   PromiseOrValue,
 } from "../../common";
 
+export declare namespace IIceCandy {
+  export type IceCandyStructStruct = {
+    iceCandyType: PromiseOrValue<BigNumberish>;
+    sentProfileId: PromiseOrValue<BigNumberish>;
+    sentModule: PromiseOrValue<string>;
+    sentModuleId: PromiseOrValue<BigNumberish>;
+  };
+
+  export type IceCandyStructStructOutput = [
+    number,
+    BigNumber,
+    string,
+    BigNumber
+  ] & {
+    iceCandyType: number;
+    sentProfileId: BigNumber;
+    sentModule: string;
+    sentModuleId: BigNumber;
+  };
+}
+
 export interface IIceCandyInterface extends utils.Interface {
   functions: {
-    "balanceOfEaten(address)": FunctionFragment;
-    "balanceOfNotEaten(address)": FunctionFragment;
-    "eat(uint256,uint256,address,uint256)": FunctionFragment;
-    "isEaten(uint256)": FunctionFragment;
+    "balanceOfLucky(address)": FunctionFragment;
+    "balanceOfNotRevealed(address)": FunctionFragment;
+    "balanceOfRevealed(address)": FunctionFragment;
+    "balanceOfUnlucky(address)": FunctionFragment;
+    "getIceCandy(uint256)": FunctionFragment;
     "mint(address)": FunctionFragment;
+    "numberOfReceived(uint256)": FunctionFragment;
+    "numberOfReceiver(uint256)": FunctionFragment;
+    "numberOfSender(uint256)": FunctionFragment;
+    "numberOfSent(uint256)": FunctionFragment;
+    "send(uint256,address,uint256)": FunctionFragment;
     "setGlobals(address)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "balanceOfEaten"
-      | "balanceOfNotEaten"
-      | "eat"
-      | "isEaten"
+      | "balanceOfLucky"
+      | "balanceOfNotRevealed"
+      | "balanceOfRevealed"
+      | "balanceOfUnlucky"
+      | "getIceCandy"
       | "mint"
+      | "numberOfReceived"
+      | "numberOfReceiver"
+      | "numberOfSender"
+      | "numberOfSent"
+      | "send"
       | "setGlobals"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "balanceOfEaten",
+    functionFragment: "balanceOfLucky",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "balanceOfNotEaten",
+    functionFragment: "balanceOfNotRevealed",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "eat",
-    values: [
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<BigNumberish>,
-      PromiseOrValue<string>,
-      PromiseOrValue<BigNumberish>
-    ]
+    functionFragment: "balanceOfRevealed",
+    values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
-    functionFragment: "isEaten",
+    functionFragment: "balanceOfUnlucky",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getIceCandy",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -73,44 +105,110 @@ export interface IIceCandyInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "numberOfReceived",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "numberOfReceiver",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "numberOfSender",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "numberOfSent",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "send",
+    values: [
+      PromiseOrValue<BigNumberish>,
+      PromiseOrValue<string>,
+      PromiseOrValue<BigNumberish>
+    ]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setGlobals",
     values: [PromiseOrValue<string>]
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "balanceOfEaten",
+    functionFragment: "balanceOfLucky",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "balanceOfNotEaten",
+    functionFragment: "balanceOfNotRevealed",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "eat", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "isEaten", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "balanceOfRevealed",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "balanceOfUnlucky",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getIceCandy",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "numberOfReceived",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "numberOfReceiver",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "numberOfSender",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "numberOfSent",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(functionFragment: "send", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setGlobals", data: BytesLike): Result;
 
   events: {
-    "Eaten(uint256,address,uint256,address,uint256,uint256)": EventFragment;
+    "Mint(uint256,address,uint8,uint256)": EventFragment;
+    "Sent(uint256,uint256,uint256,address,uint256,uint256)": EventFragment;
   };
 
-  getEvent(nameOrSignatureOrTopic: "Eaten"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Sent"): EventFragment;
 }
 
-export interface EatenEventObject {
+export interface MintEventObject {
   tokenId: BigNumber;
-  from: string;
-  profileId: BigNumber;
+  to: string;
+  iceCandyType: number;
+  blockNumber: BigNumber;
+}
+export type MintEvent = TypedEvent<
+  [BigNumber, string, number, BigNumber],
+  MintEventObject
+>;
+
+export type MintEventFilter = TypedEventFilter<MintEvent>;
+
+export interface SentEventObject {
+  tokenId: BigNumber;
+  from: BigNumber;
+  to: BigNumber;
   module: string;
   moduleId: BigNumber;
   blockNumber: BigNumber;
 }
-export type EatenEvent = TypedEvent<
-  [BigNumber, string, BigNumber, string, BigNumber, BigNumber],
-  EatenEventObject
+export type SentEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber, string, BigNumber, BigNumber],
+  SentEventObject
 >;
 
-export type EatenEventFilter = TypedEventFilter<EatenEvent>;
+export type SentEventFilter = TypedEventFilter<SentEvent>;
 
 export interface IIceCandy extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -139,31 +237,60 @@ export interface IIceCandy extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    balanceOfEaten(
+    balanceOfLucky(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    balanceOfNotEaten(
+    balanceOfNotRevealed(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    eat(
-      tokenId: PromiseOrValue<BigNumberish>,
-      profileId: PromiseOrValue<BigNumberish>,
-      module: PromiseOrValue<string>,
-      moduleId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
+    balanceOfRevealed(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
 
-    isEaten(
+    balanceOfUnlucky(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    getIceCandy(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[boolean]>;
+    ): Promise<[IIceCandy.IceCandyStructStructOutput]>;
 
     mint(
       to: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    numberOfReceived(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    numberOfReceiver(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    numberOfSender(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    numberOfSent(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
+    send(
+      profileId: PromiseOrValue<BigNumberish>,
+      module: PromiseOrValue<string>,
+      moduleId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -173,31 +300,60 @@ export interface IIceCandy extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  balanceOfEaten(
+  balanceOfLucky(
     owner: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  balanceOfNotEaten(
+  balanceOfNotRevealed(
     owner: PromiseOrValue<string>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  eat(
-    tokenId: PromiseOrValue<BigNumberish>,
-    profileId: PromiseOrValue<BigNumberish>,
-    module: PromiseOrValue<string>,
-    moduleId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
+  balanceOfRevealed(
+    owner: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
 
-  isEaten(
+  balanceOfUnlucky(
+    owner: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  getIceCandy(
     tokenId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<boolean>;
+  ): Promise<IIceCandy.IceCandyStructStructOutput>;
 
   mint(
     to: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  numberOfReceived(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  numberOfReceiver(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  numberOfSender(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  numberOfSent(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
+  send(
+    profileId: PromiseOrValue<BigNumberish>,
+    module: PromiseOrValue<string>,
+    moduleId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -207,30 +363,59 @@ export interface IIceCandy extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    balanceOfEaten(
+    balanceOfLucky(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    balanceOfNotEaten(
+    balanceOfNotRevealed(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    eat(
+    balanceOfRevealed(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    balanceOfUnlucky(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getIceCandy(
       tokenId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<IIceCandy.IceCandyStructStructOutput>;
+
+    mint(to: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
+
+    numberOfReceived(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    numberOfReceiver(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    numberOfSender(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    numberOfSent(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    send(
       profileId: PromiseOrValue<BigNumberish>,
       module: PromiseOrValue<string>,
       moduleId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
-
-    isEaten(
-      tokenId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    mint(to: PromiseOrValue<string>, overrides?: CallOverrides): Promise<void>;
 
     setGlobals(
       globals: PromiseOrValue<string>,
@@ -239,50 +424,92 @@ export interface IIceCandy extends BaseContract {
   };
 
   filters: {
-    "Eaten(uint256,address,uint256,address,uint256,uint256)"(
+    "Mint(uint256,address,uint8,uint256)"(
       tokenId?: PromiseOrValue<BigNumberish> | null,
-      from?: PromiseOrValue<string> | null,
-      profileId?: PromiseOrValue<BigNumberish> | null,
+      to?: PromiseOrValue<string> | null,
+      iceCandyType?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): MintEventFilter;
+    Mint(
+      tokenId?: PromiseOrValue<BigNumberish> | null,
+      to?: PromiseOrValue<string> | null,
+      iceCandyType?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): MintEventFilter;
+
+    "Sent(uint256,uint256,uint256,address,uint256,uint256)"(
+      tokenId?: PromiseOrValue<BigNumberish> | null,
+      from?: PromiseOrValue<BigNumberish> | null,
+      to?: PromiseOrValue<BigNumberish> | null,
       module?: null,
       moduleId?: null,
       blockNumber?: null
-    ): EatenEventFilter;
-    Eaten(
+    ): SentEventFilter;
+    Sent(
       tokenId?: PromiseOrValue<BigNumberish> | null,
-      from?: PromiseOrValue<string> | null,
-      profileId?: PromiseOrValue<BigNumberish> | null,
+      from?: PromiseOrValue<BigNumberish> | null,
+      to?: PromiseOrValue<BigNumberish> | null,
       module?: null,
       moduleId?: null,
       blockNumber?: null
-    ): EatenEventFilter;
+    ): SentEventFilter;
   };
 
   estimateGas: {
-    balanceOfEaten(
+    balanceOfLucky(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    balanceOfNotEaten(
+    balanceOfNotRevealed(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    eat(
-      tokenId: PromiseOrValue<BigNumberish>,
-      profileId: PromiseOrValue<BigNumberish>,
-      module: PromiseOrValue<string>,
-      moduleId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    balanceOfRevealed(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    isEaten(
+    balanceOfUnlucky(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getIceCandy(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     mint(
       to: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    numberOfReceived(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    numberOfReceiver(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    numberOfSender(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    numberOfSent(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    send(
+      profileId: PromiseOrValue<BigNumberish>,
+      module: PromiseOrValue<string>,
+      moduleId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -293,31 +520,60 @@ export interface IIceCandy extends BaseContract {
   };
 
   populateTransaction: {
-    balanceOfEaten(
+    balanceOfLucky(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    balanceOfNotEaten(
+    balanceOfNotRevealed(
       owner: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    eat(
-      tokenId: PromiseOrValue<BigNumberish>,
-      profileId: PromiseOrValue<BigNumberish>,
-      module: PromiseOrValue<string>,
-      moduleId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    balanceOfRevealed(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    isEaten(
+    balanceOfUnlucky(
+      owner: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getIceCandy(
       tokenId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     mint(
       to: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    numberOfReceived(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    numberOfReceiver(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    numberOfSender(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    numberOfSent(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    send(
+      profileId: PromiseOrValue<BigNumberish>,
+      module: PromiseOrValue<string>,
+      moduleId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -22,13 +22,44 @@ const _abi = [
       {
         indexed: true,
         internalType: "address",
-        name: "from",
+        name: "to",
         type: "address",
       },
       {
         indexed: true,
+        internalType: "enum IIceCandy.IceCandyType",
+        name: "iceCandyType",
+        type: "uint8",
+      },
+      {
+        indexed: false,
         internalType: "uint256",
-        name: "profileId",
+        name: "blockNumber",
+        type: "uint256",
+      },
+    ],
+    name: "Mint",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "tokenId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "from",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "to",
         type: "uint256",
       },
       {
@@ -50,7 +81,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "Eaten",
+    name: "Sent",
     type: "event",
   },
   {
@@ -61,7 +92,7 @@ const _abi = [
         type: "address",
       },
     ],
-    name: "balanceOfEaten",
+    name: "balanceOfLucky",
     outputs: [
       {
         internalType: "uint256",
@@ -80,7 +111,45 @@ const _abi = [
         type: "address",
       },
     ],
-    name: "balanceOfNotEaten",
+    name: "balanceOfNotRevealed",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "balanceOfRevealed",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "owner",
+        type: "address",
+      },
+    ],
+    name: "balanceOfUnlucky",
     outputs: [
       {
         internalType: "uint256",
@@ -98,6 +167,131 @@ const _abi = [
         name: "tokenId",
         type: "uint256",
       },
+    ],
+    name: "getIceCandy",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "enum IIceCandy.IceCandyType",
+            name: "iceCandyType",
+            type: "uint8",
+          },
+          {
+            internalType: "uint256",
+            name: "sentProfileId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "sentModule",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "sentModuleId",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct IIceCandy.IceCandyStruct",
+        name: "",
+        type: "tuple",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+    ],
+    name: "mint",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "numberOfReceived",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "numberOfReceiver",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "numberOfSender",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "numberOfSent",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
       {
         internalType: "uint256",
         name: "profileId",
@@ -114,39 +308,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "eat",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "tokenId",
-        type: "uint256",
-      },
-    ],
-    name: "isEaten",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-    ],
-    name: "mint",
+    name: "send",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
