@@ -1,7 +1,7 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
 import { owner, alice, bob, carol, daniel, icecandy, profile, nft, poap } from './helpers/__setup.test'
-import { profileData } from './helpers/data'
+import { profileData, tokenURI } from './helpers/data'
 
 describe('icecandy test', () => {
   before(async () => {
@@ -44,7 +44,7 @@ describe('icecandy test', () => {
     expect(icecandy1_.sentModuleId).to.equal(0)
 
     expect(await icecandy.connect(alice).ownerOf(1)).to.be.equals(alice.address)
-    expect(await icecandy.connect(alice).tokenURI(1)).to.be.equals('http://example.com/1')
+    expect(await icecandy.connect(alice).tokenURI(1)).to.be.equals(tokenURI.notRevealed)
 
     // check icecandy 2
     const icecandy2_ = await icecandy.connect(bob).getIceCandy(2)
@@ -54,7 +54,7 @@ describe('icecandy test', () => {
     expect(icecandy2_.sentModuleId).to.equal(0)
 
     expect(await icecandy.connect(bob).ownerOf(2)).to.be.equals(bob.address)
-    expect(await icecandy.connect(bob).tokenURI(2)).to.be.equals('http://example.com/2')
+    expect(await icecandy.connect(bob).tokenURI(2)).to.be.equals(tokenURI.notRevealed)
 
     // check icecandy 3
     const icecandy3_ = await icecandy.connect(carol).getIceCandy(3)
@@ -64,7 +64,7 @@ describe('icecandy test', () => {
     expect(icecandy3_.sentModuleId).to.equal(0)
 
     expect(await icecandy.connect(carol).ownerOf(3)).to.be.equals(carol.address)
-    expect(await icecandy.connect(carol).tokenURI(3)).to.be.equals('http://example.com/3')
+    expect(await icecandy.connect(carol).tokenURI(3)).to.be.equals(tokenURI.notRevealed)
 
     // check balance of alice
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(1)
@@ -121,7 +121,7 @@ describe('icecandy test', () => {
     expect(icecandy1_.sentModule).to.equal(nft.address)
     expect(icecandy1_.sentModuleId).to.equal(1)
     expect(await icecandy.connect(bob).ownerOf(1)).to.be.equals(bob.address)
-    expect(await icecandy.connect(bob).tokenURI(1)).to.be.equals('http://example.com/1')
+    expect(await icecandy.connect(bob).tokenURI(1)).to.be.equals(tokenURI.revealed)
 
     // check icecandy 4
     const icecandy4_ = await icecandy.connect(alice).getIceCandy(4)
@@ -130,7 +130,7 @@ describe('icecandy test', () => {
     expect(icecandy4_.sentModule).to.equal(ethers.constants.AddressZero)
     expect(icecandy4_.sentModuleId).to.equal(0)
     expect(await icecandy.connect(alice).ownerOf(4)).to.be.equals(alice.address)
-    expect(await icecandy.connect(alice).tokenURI(4)).to.be.equals('http://example.com/4')
+    expect(await icecandy.connect(alice).tokenURI(4)).to.be.equals(tokenURI.lucky)
 
     // check balance of alice
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(1)
@@ -175,7 +175,7 @@ describe('icecandy test', () => {
     expect(icecandy3_.sentModule).to.equal(nft.address)
     expect(icecandy3_.sentModuleId).to.equal(1)
     expect(await icecandy.connect(bob).ownerOf(3)).to.be.equals(bob.address)
-    expect(await icecandy.connect(bob).tokenURI(3)).to.be.equals('http://example.com/3')
+    expect(await icecandy.connect(bob).tokenURI(3)).to.be.equals(tokenURI.revealed)
 
     // check icecandy 5
     const icecandy5_ = await icecandy.connect(carol).getIceCandy(5)
@@ -184,7 +184,7 @@ describe('icecandy test', () => {
     expect(icecandy5_.sentModule).to.equal(ethers.constants.AddressZero)
     expect(icecandy5_.sentModuleId).to.equal(0)
     expect(await icecandy.connect(carol).ownerOf(5)).to.be.equals(carol.address)
-    expect(await icecandy.connect(carol).tokenURI(5)).to.be.equals('http://example.com/5')
+    expect(await icecandy.connect(carol).tokenURI(5)).to.be.equals(tokenURI.unlucky)
 
     // check balance of bob
     expect(await icecandy.connect(bob).balanceOf(bob.address)).to.be.equals(3)
@@ -257,7 +257,7 @@ describe('icecandy test', () => {
     expect(icecandy4_.sentModule).to.equal(ethers.constants.AddressZero)
     expect(icecandy4_.sentModuleId).to.equal(0)
     expect(await icecandy.connect(alice).ownerOf(4)).to.be.equals(carol.address)
-    expect(await icecandy.connect(alice).tokenURI(4)).to.be.equals('http://example.com/4')
+    expect(await icecandy.connect(alice).tokenURI(4)).to.be.equals(tokenURI.lucky)
 
     // get balance of alice
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(1)
@@ -296,7 +296,7 @@ describe('icecandy test', () => {
     expect(icecandy5_.sentModule).to.equal(ethers.constants.AddressZero)
     expect(icecandy5_.sentModuleId).to.equal(0)
     expect(await icecandy.connect(carol).ownerOf(5)).to.be.equals(alice.address)
-    expect(await icecandy.connect(carol).tokenURI(5)).to.be.equals('http://example.com/5')
+    expect(await icecandy.connect(carol).tokenURI(5)).to.be.equals(tokenURI.unlucky)
 
     // get balance of alice
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(2)
@@ -335,7 +335,7 @@ describe('icecandy test', () => {
     expect(icecandy1_.sentModule).to.equal(nft.address)
     expect(icecandy1_.sentModuleId).to.equal(1)
     expect(await icecandy.connect(bob).ownerOf(1)).to.be.equals(alice.address)
-    expect(await icecandy.connect(bob).tokenURI(1)).to.be.equals('http://example.com/1')
+    expect(await icecandy.connect(bob).tokenURI(1)).to.be.equals(tokenURI.revealed)
 
     // get balance of alice
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(3)
@@ -396,7 +396,7 @@ describe('icecandy test', () => {
     expect(icecandy6_.sentModule).to.equal(nft.address)
     expect(icecandy6_.sentModuleId).to.equal(1)
     expect(await icecandy.connect(bob).ownerOf(6)).to.be.equals(bob.address)
-    expect(await icecandy.connect(bob).tokenURI(6)).to.be.equals('http://example.com/6')
+    expect(await icecandy.connect(bob).tokenURI(6)).to.be.equals(tokenURI.revealed)
 
     // check icecandy 7
     const icecandy7_ = await icecandy.connect(alice).getIceCandy(7)
@@ -405,7 +405,7 @@ describe('icecandy test', () => {
     expect(icecandy7_.sentModule).to.equal(ethers.constants.AddressZero)
     expect(icecandy7_.sentModuleId).to.equal(0)
     expect(await icecandy.connect(alice).ownerOf(7)).to.be.equals(alice.address)
-    expect(await icecandy.connect(alice).tokenURI(7)).to.be.equals('http://example.com/7')
+    expect(await icecandy.connect(alice).tokenURI(7)).to.be.equals(tokenURI.unlucky)
 
     // get balance of alice
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(3)
@@ -472,7 +472,7 @@ describe('icecandy test', () => {
     expect(icecandy8_.sentModule).to.equal(nft.address)
     expect(icecandy8_.sentModuleId).to.equal(1)
     expect(await icecandy.connect(bob).ownerOf(8)).to.be.equals(carol.address)
-    expect(await icecandy.connect(bob).tokenURI(8)).to.be.equals('http://example.com/8')
+    expect(await icecandy.connect(bob).tokenURI(8)).to.be.equals(tokenURI.revealed)
 
     // check icecandy 9
     const icecandy9_ = await icecandy.connect(alice).getIceCandy(9)
@@ -481,7 +481,7 @@ describe('icecandy test', () => {
     expect(icecandy9_.sentModule).to.equal(ethers.constants.AddressZero)
     expect(icecandy9_.sentModuleId).to.equal(0)
     expect(await icecandy.connect(alice).ownerOf(9)).to.be.equals(alice.address)
-    expect(await icecandy.connect(alice).tokenURI(9)).to.be.equals('http://example.com/9')
+    expect(await icecandy.connect(alice).tokenURI(9)).to.be.equals(tokenURI.unlucky)
 
     // get balance of alice
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(4)

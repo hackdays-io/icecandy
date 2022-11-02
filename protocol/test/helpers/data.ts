@@ -133,4 +133,11 @@ const snsData = (owner: SignerWithAddress) => [
   },
 ]
 
-export { profileData, nftData, nftData2, nftData3, poapData, mirrorData, snsData }
+const tokenURI = {
+  revealed: 'ipfs://bafybeia6z47fclyvyladuzfu5srqhthuu2l6uw2yxxsankpmatygrgiazm/iceCandy_eaten.json',
+  notRevealed: 'ipfs://bafybeieqpdxscoeheazxwnj2jq4n3n6hfkmzvfb7dytya62fay6z2zqrua/iceCandy_notEaten.json',
+  lucky: 'dummy',
+  unlucky: 'dummy',
+}
+
+export { profileData, nftData, nftData2, nftData3, poapData, mirrorData, snsData, tokenURI }
