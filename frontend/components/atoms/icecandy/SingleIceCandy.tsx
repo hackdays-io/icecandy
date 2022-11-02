@@ -3,6 +3,7 @@ import axios from 'axios'
 import { FC, useEffect, useState } from 'react'
 import { useEatIceCandy } from '../../../hooks/useIceCandy'
 import { ipfs2http } from '../../../utils/ipfs2https'
+import Image from 'next/image'
 
 type Props = {
   tokenURI: string
@@ -27,7 +28,7 @@ const SingleIceCandy: FC<Props> = ({ tokenURI, tokenId, canEat }) => {
 
   return (
     <Box>
-      <img src={metadata?.image} alt="" />
+      <Image src={metadata?.image as string} alt="" />
       {canEat && (
         <Button width="full" onClick={() => eat()} isLoading={loading}>
           たべる

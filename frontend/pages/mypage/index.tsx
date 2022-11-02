@@ -17,6 +17,7 @@ const MyPage: NextPage = () => {
             tokenURI={iceCandy.tokenURI}
             tokenId={iceCandy.tokenId.toNumber()}
             canEat={true}
+            key={iceCandy.tokenId.toNumber()}
           />
         ))}
       </Grid>
@@ -27,6 +28,7 @@ const MyPage: NextPage = () => {
             tokenURI={iceCandy.tokenURI}
             tokenId={iceCandy.tokenId.toNumber()}
             canEat={false}
+            key={iceCandy.tokenId.toNumber()}
           />
         ))}
       </Grid>
