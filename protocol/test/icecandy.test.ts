@@ -377,4 +377,134 @@ describe('icecandy test', () => {
       'ERC721: caller is not token owner nor approved'
     )
   })
+
+  it('alice send icecandy to bob', async () => {
+    // alice send icecandy to bob
+    const _tx = await icecandy.connect(alice).send(2, nft.address, 1)
+    await expect(_tx)
+      .to.emit(icecandy, 'Transfer')
+      .withArgs(alice.address, bob.address, 1)
+      .to.emit(icecandy, 'Sent')
+      .withArgs(6, 1, 2, nft.address, 1, await ethers.provider.getBlockNumber())
+      .to.emit(icecandy, 'Mint')
+      .withArgs(7, alice.address, 3, await ethers.provider.getBlockNumber())
+
+    // check icecandy 6
+    const icecandy6_ = await icecandy.connect(alice).getIceCandy(6)
+    expect(icecandy6_.iceCandyType).to.equal(1)
+    expect(icecandy6_.sentProfileId).to.equal(2)
+    expect(icecandy6_.sentModule).to.equal(nft.address)
+    expect(icecandy6_.sentModuleId).to.equal(1)
+    expect(await icecandy.connect(bob).ownerOf(6)).to.be.equals(bob.address)
+    expect(await icecandy.connect(bob).tokenURI(6)).to.be.equals('http://example.com/6')
+
+    // check icecandy 7
+    const icecandy7_ = await icecandy.connect(alice).getIceCandy(7)
+    expect(icecandy7_.iceCandyType).to.equal(3)
+    expect(icecandy7_.sentProfileId).to.equal(0)
+    expect(icecandy7_.sentModule).to.equal(ethers.constants.AddressZero)
+    expect(icecandy7_.sentModuleId).to.equal(0)
+    expect(await icecandy.connect(alice).ownerOf(7)).to.be.equals(alice.address)
+    expect(await icecandy.connect(alice).tokenURI(7)).to.be.equals('http://example.com/7')
+
+    // get balance of alice
+    expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(3)
+    expect(await icecandy.connect(alice).balanceOfRevealed(alice.address)).to.be.equals(1)
+    expect(await icecandy.connect(alice).balanceOfNotRevealed(alice.address)).to.be.equals(0)
+    expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(0)
+    expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(2)
+
+    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(1)
+    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(2)
+    expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
+
+    // check balance of bob
+    expect(await icecandy.connect(bob).balanceOf(bob.address)).to.be.equals(3)
+    expect(await icecandy.connect(bob).balanceOfRevealed(bob.address)).to.be.equals(2)
+    expect(await icecandy.connect(bob).balanceOfNotRevealed(bob.address)).to.be.equals(1)
+    expect(await icecandy.connect(bob).balanceOfLucky(bob.address)).to.be.equals(0)
+    expect(await icecandy.connect(bob).balanceOfUnlucky(bob.address)).to.be.equals(0)
+
+    expect(await icecandy.connect(bob).numberOfSender(2)).to.be.equals(0)
+    expect(await icecandy.connect(bob).numberOfReceiver(2)).to.be.equals(2)
+    expect(await icecandy.connect(bob).numberOfSent(2)).to.be.equals(0)
+    expect(await icecandy.connect(bob).numberOfReceived(2)).to.be.equals(3)
+  })
+
+  it('owner mint icecandy to alice', async () => {
+    // mint icecandy to alice
+    const _tx = await icecandy.connect(owner).mint(alice.address)
+    await expect(_tx)
+      .to.emit(icecandy, 'Transfer')
+      .withArgs(ethers.constants.AddressZero, alice.address, 8)
+      .to.emit(icecandy, 'Mint')
+      .withArgs(8, alice.address, 0, await ethers.provider.getBlockNumber())
+
+    // get balance of alice
+    expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(4)
+    expect(await icecandy.connect(alice).balanceOfRevealed(alice.address)).to.be.equals(1)
+    expect(await icecandy.connect(alice).balanceOfNotRevealed(alice.address)).to.be.equals(1)
+    expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(0)
+    expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(2)
+
+    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(1)
+    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(2)
+    expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
+  })
+
+  it('alice send icecandy to carol', async () => {
+    // alice send icecandy to bob
+    const _tx = await icecandy.connect(alice).send(3, nft.address, 1)
+    await expect(_tx)
+      .to.emit(icecandy, 'Transfer')
+      .withArgs(alice.address, bob.address, 1)
+      .to.emit(icecandy, 'Sent')
+      .withArgs(8, 1, 3, nft.address, 1, await ethers.provider.getBlockNumber())
+      .to.emit(icecandy, 'Mint')
+      .withArgs(9, alice.address, 3, await ethers.provider.getBlockNumber())
+
+    // check icecandy 8
+    const icecandy8_ = await icecandy.connect(alice).getIceCandy(8)
+    expect(icecandy8_.iceCandyType).to.equal(1)
+    expect(icecandy8_.sentProfileId).to.equal(3)
+    expect(icecandy8_.sentModule).to.equal(nft.address)
+    expect(icecandy8_.sentModuleId).to.equal(1)
+    expect(await icecandy.connect(bob).ownerOf(8)).to.be.equals(carol.address)
+    expect(await icecandy.connect(bob).tokenURI(8)).to.be.equals('http://example.com/8')
+
+    // check icecandy 9
+    const icecandy9_ = await icecandy.connect(alice).getIceCandy(9)
+    expect(icecandy9_.iceCandyType).to.equal(3)
+    expect(icecandy9_.sentProfileId).to.equal(0)
+    expect(icecandy9_.sentModule).to.equal(ethers.constants.AddressZero)
+    expect(icecandy9_.sentModuleId).to.equal(0)
+    expect(await icecandy.connect(alice).ownerOf(9)).to.be.equals(alice.address)
+    expect(await icecandy.connect(alice).tokenURI(9)).to.be.equals('http://example.com/9')
+
+    // get balance of alice
+    expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(4)
+    expect(await icecandy.connect(alice).balanceOfRevealed(alice.address)).to.be.equals(1)
+    expect(await icecandy.connect(alice).balanceOfNotRevealed(alice.address)).to.be.equals(0)
+    expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(0)
+    expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(3)
+
+    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(2)
+    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(3)
+    expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
+
+    // check balance of carol
+    expect(await icecandy.connect(carol).balanceOf(carol.address)).to.be.equals(2)
+    expect(await icecandy.connect(carol).balanceOfRevealed(carol.address)).to.be.equals(1)
+    expect(await icecandy.connect(carol).balanceOfNotRevealed(carol.address)).to.be.equals(0)
+    expect(await icecandy.connect(carol).balanceOfLucky(carol.address)).to.be.equals(1)
+    expect(await icecandy.connect(carol).balanceOfUnlucky(carol.address)).to.be.equals(0)
+
+    expect(await icecandy.connect(carol).numberOfSender(3)).to.be.equals(1)
+    expect(await icecandy.connect(carol).numberOfReceiver(3)).to.be.equals(1)
+    expect(await icecandy.connect(carol).numberOfSent(3)).to.be.equals(1)
+    expect(await icecandy.connect(carol).numberOfReceived(3)).to.be.equals(1)
+  })
 })

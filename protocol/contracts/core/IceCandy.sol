@@ -64,7 +64,7 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         // update _receivers
         isExist = false;
         for (uint256 i = 0; i < _receivers[profileId].length; i++) {
-            if (_receivers[profileId][i] == profileId) {
+            if (_receivers[profileId][i] == fromProfileId) {
                 isExist = true;
                 break;
             }
