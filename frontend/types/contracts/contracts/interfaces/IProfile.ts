@@ -163,6 +163,7 @@ export interface IProfileInterface extends utils.Interface {
     "getNFTCollection(uint256)": FunctionFragment;
     "getPOAPCollection(uint256)": FunctionFragment;
     "getProfile(uint256)": FunctionFragment;
+    "getProfileId(address)": FunctionFragment;
     "getSNSAccounts(uint256)": FunctionFragment;
     "getScore(uint256)": FunctionFragment;
     "setGlobals(address)": FunctionFragment;
@@ -185,6 +186,7 @@ export interface IProfileInterface extends utils.Interface {
       | "getNFTCollection"
       | "getPOAPCollection"
       | "getProfile"
+      | "getProfileId"
       | "getSNSAccounts"
       | "getScore"
       | "setGlobals"
@@ -260,6 +262,10 @@ export interface IProfileInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "getProfileId",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getSNSAccounts",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
@@ -314,6 +320,10 @@ export interface IProfileInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getProfile", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getProfileId",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getSNSAccounts",
     data: BytesLike
@@ -562,6 +572,11 @@ export interface IProfile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[IProfile.ProfileStructStructOutput]>;
 
+    getProfileId(
+      wallet: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber]>;
+
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -661,6 +676,11 @@ export interface IProfile extends BaseContract {
     overrides?: CallOverrides
   ): Promise<IProfile.ProfileStructStructOutput>;
 
+  getProfileId(
+    wallet: PromiseOrValue<string>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber>;
+
   getSNSAccounts(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
@@ -759,6 +779,11 @@ export interface IProfile extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<IProfile.ProfileStructStructOutput>;
+
+    getProfileId(
+      wallet: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
 
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
@@ -952,6 +977,11 @@ export interface IProfile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getProfileId(
+      wallet: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1049,6 +1079,11 @@ export interface IProfile extends BaseContract {
 
     getProfile(
       profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getProfileId(
+      wallet: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

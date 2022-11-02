@@ -61,6 +61,8 @@ interface IProfile {
 
     function getColor(uint256 profileId) external view returns (IColorExtension.ColorStruct[] memory);
 
+    function getProfileId(address wallet) external view returns (uint256);
+
     event ProfileCreated(uint256 indexed profileId, address indexed owner, uint256 blockNumber);
 
     event NFTCollectionCreated(uint256 indexed profileId, address indexed module, uint256 blockNumber);

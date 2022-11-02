@@ -9,12 +9,13 @@ import {IScoreModule} from "../interfaces/IScoreModule.sol";
 import {IMirrorModule} from "../interfaces/IMirrorModule.sol";
 import {IColorExtension} from "../interfaces/IColorExtension.sol";
 import {ISNSAccountModule} from "../interfaces/ISNSAccountModule.sol";
-import {IceCandy} from "./IceCandy.sol";
+import {IIceCandy} from "../interfaces/IIceCandy.sol";
 import {IGlobals} from "../interfaces/IGlobals.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract Profile is ERC721Enumerable, IProfile, Ownable {
     mapping(uint256 => IProfile.ProfileStruct) internal _profile;
+    mapping(address => uint256) internal _profileId;
     uint256 internal _profileCounter;
     address internal _globals;
 
@@ -24,7 +25,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     modifier hasIceCandy() {
         require(
-            IceCandy(IGlobals(_globals).getIceCandy()).balanceOfNotEaten(msg.sender) > 0,
+            IIceCandy(IGlobals(_globals).getIceCandy()).balanceOfNotRevealed(msg.sender) > 0,
             "Profile: caller has no icecandy"
         );
         _;
@@ -35,7 +36,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     }
 
     function createProfile(CreateProfileStructData calldata vars) external override returns (uint256) {
+        require(_profileId[msg.sender] == 0, "Profile: profile already exists");
+
         uint256 profileId = ++_profileCounter;
+        _profileId[msg.sender] = profileId;
 
         _createProfile(profileId, msg.sender, vars.name, vars.introduction, vars.imageURI);
         _createNFTCollection(profileId, IGlobals(_globals).getNFTCollectionModule(), vars.nfts);
@@ -98,6 +102,9 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     function addWallet(uint256 profileId, address wallet) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        require(_profileId[wallet] == 0, "Profile: profile already exists");
+
+        _profileId[wallet] = profileId;
         _profile[profileId].wallets.push(wallet);
 
         emit WalletAdded(profileId, wallet);
@@ -144,6 +151,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     function getColor(uint256 profileId) external view override returns (IColorExtension.ColorStruct[] memory) {
         return IColorExtension(IGlobals(_globals).getColorExtension()).getColor(profileId);
+    }
+
+    function getProfileId(address wallet) external view returns (uint256) {
+        return _profileId[wallet];
     }
 
     function _createProfile(
