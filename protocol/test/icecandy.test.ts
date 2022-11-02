@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { owner, alice, bob, carol, daniel, icecandy, profile, nft, poap } from './helpers/__setup.test'
+import { owner, alice, bob, carol, daniel, icecandy, profile, nft, poap } from './helpers/__setup1.test'
 import { profileData, tokenURI } from './helpers/data'
 
 describe('icecandy test', () => {
