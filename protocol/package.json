@@ -13,6 +13,7 @@
     "coverage": "hardhat coverage",
     "deploy": "hardhat run scripts/deploy.ts --network mumbai",
     "deploy:local": "hardhat run scripts/deploy_local.ts --network local",
+    "mint:local": "hardhat run scripts/mint.ts --network local",
     "verify": "hardhat verify --network mumbai",
     "geninterface": "hardhat gen-interface",
     "uml": "sol2uml class ./contracts",

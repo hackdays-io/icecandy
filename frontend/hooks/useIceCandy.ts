@@ -1,5 +1,5 @@
 import { useAddress } from '@thirdweb-dev/react'
-import { BigNumber } from 'ethers'
+import { BigNumber, constants } from 'ethers'
 import { useEffect, useRef, useState } from 'react'
 import { TypedListener } from '../types/contracts/common'
 import {
@@ -100,22 +100,18 @@ export const useHoldingIceCandyNum = (address?: string) => {
 export const useSendIceCandy = () => {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>(null)
-  const profileNFTContract = useProfileNFTContractClient({
-    config: { requireWalletConnection: true },
-  })
   const iceCandyContract = useIceCandyContractClient({
     config: { requireWalletConnection: true },
   })
   const address = useAddress()
 
-  const send = async (profileId: number, tokenId: number) => {
-    if (!iceCandyContract || !profileNFTContract || !address) {
+  const send = async (profileId: number, module: string, moduleId: number) => {
+    if (!iceCandyContract || !address) {
       throw new Error('Contract or Address cannnot find')
     }
     setLoading(true)
     try {
-      const sendToAddress = await profileNFTContract.ownerOf(profileId)
-      await iceCandyContract.transferFrom(address, sendToAddress, tokenId)
+      await iceCandyContract.send(profileId, module, moduleId)
       setLoading(false)
     } catch (error) {
       setErrors(error)
