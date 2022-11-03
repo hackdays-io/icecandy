@@ -81,6 +81,10 @@ async function main() {
     await setBalance(process.env.LOCAL_USER_ADDRESS, 100n ** 9n)
     await icecandy.mint(process.env.LOCAL_USER_ADDRESS)
   }
+  if (process.env.LOCAL_USER_ADDRESS_2) {
+    await setBalance(process.env.LOCAL_USER_ADDRESS_2, 100n ** 9n)
+    await icecandy.mint(process.env.LOCAL_USER_ADDRESS_2)
+  }
 }
 
 main()
