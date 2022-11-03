@@ -1,18 +1,15 @@
-import { Box, Button } from '@chakra-ui/react'
+import { Image } from '@chakra-ui/react'
 import axios from 'axios'
 import { FC, useEffect, useState } from 'react'
-import { useEatIceCandy } from '../../../hooks/useIceCandy'
 import { ipfs2http } from '../../../utils/ipfs2https'
-import Image from 'next/image'
 
 type Props = {
   tokenURI: string
   tokenId: number
-  canEat: boolean
+  iceCandyType: number
 }
 
-const SingleIceCandy: FC<Props> = ({ tokenURI, tokenId, canEat }) => {
-  const { eat, loading, errors } = useEatIceCandy(1, tokenId)
+const SingleIceCandy: FC<Props> = ({ tokenURI, tokenId, iceCandyType }) => {
   const [metadata, setMetadata] = useState<{
     name: string
     description: string
@@ -27,14 +24,9 @@ const SingleIceCandy: FC<Props> = ({ tokenURI, tokenId, canEat }) => {
   }, [])
 
   return (
-    <Box>
-      <Image src={metadata?.image as string} alt="" />
-      {canEat && (
-        <Button width="full" onClick={() => eat()} isLoading={loading}>
-          たべる
-        </Button>
-      )}
-    </Box>
+    <>
+      <Image src={metadata?.image as string} alt={metadata?.name} />
+    </>
   )
 }
 
