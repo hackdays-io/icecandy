@@ -24,7 +24,6 @@ const MyPage: NextPage = () => {
           <SingleIceCandy
             tokenURI={e.tokenURI}
             tokenId={e.tokenId.toNumber()}
-            iceCandyType={0}
             key={e.tokenId.toNumber()}
           />
         ))}
@@ -37,7 +36,6 @@ const MyPage: NextPage = () => {
           <SingleIceCandy
             tokenURI={e.tokenURI}
             tokenId={e.tokenId.toNumber()}
-            iceCandyType={1}
             key={e.tokenId.toNumber()}
           />
         ))}
@@ -48,7 +46,6 @@ const MyPage: NextPage = () => {
           <SingleIceCandy
             tokenURI={e.tokenURI}
             tokenId={e.tokenId.toNumber()}
-            iceCandyType={1}
             key={e.tokenId.toNumber()}
           />
         ))}
@@ -61,7 +58,6 @@ const MyPage: NextPage = () => {
           <SingleIceCandy
             tokenURI={e.tokenURI}
             tokenId={e.tokenId.toNumber()}
-            iceCandyType={1}
             key={e.tokenId.toNumber()}
           />
         ))}

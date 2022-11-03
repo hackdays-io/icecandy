@@ -6,10 +6,9 @@ import { ipfs2http } from '../../../utils/ipfs2https'
 type Props = {
   tokenURI: string
   tokenId: number
-  iceCandyType: number
 }
 
-const SingleIceCandy: FC<Props> = ({ tokenURI, tokenId, iceCandyType }) => {
+const SingleIceCandy: FC<Props> = ({ tokenURI, tokenId }) => {
   const [metadata, setMetadata] = useState<{
     name: string
     description: string
