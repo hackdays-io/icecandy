@@ -1,4 +1,5 @@
 import { useAddress } from '@thirdweb-dev/react'
+import { BigNumber } from 'ethers'
 import { orderBy, uniq, uniqBy } from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
@@ -108,7 +109,6 @@ export const useCreateProfileNFT = () => {
     }
 
     if (!profileNFTContract || !address) return
-
     const filter = profileNFTContract.filters.ProfileCreated(null, address)
     profileNFTContract.on(filter, transitionCreatedProfilePage)
   }, [profileNFTContract, address])
@@ -230,4 +230,24 @@ export const useProfileId = (address?: string) => {
   }, [address, profileNFTContract])
 
   return { profileId, loading, errors }
+}
+
+export const useLookupProfileId = (address: string) => {
+  const [profileId, setProfileId] = useState<BigNumber>()
+  const profileContract = useProfileNFTContractClient()
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!profileContract) return
+      try {
+        const profileId = await profileContract?.getProfileId(address)
+        setProfileId(profileId)
+      } catch (error) {
+        setProfileId(BigNumber.from(0))
+      }
+    }
+    fetch()
+  }, [profileContract, address])
+
+  return profileId
 }

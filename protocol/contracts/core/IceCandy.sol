@@ -93,11 +93,12 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
 
         // mint lucky or unlucky icecandy to sender
         ++_tokenCounter;
+
+        IIceCandy.IceCandyType iceCandyType = IIceCandy.IceCandyType.UNLUCKY;
         if (_tokenCounter % 2 == 0) {
-            _mint(msg.sender, _tokenCounter, IIceCandy.IceCandyType.LUCKY);
-        } else {
-            _mint(msg.sender, _tokenCounter, IIceCandy.IceCandyType.UNLUCKY);
+            iceCandyType = IIceCandy.IceCandyType.LUCKY;
         }
+        _mint(msg.sender, _tokenCounter, iceCandyType);
 
         emit Sent(
             tokenId,
@@ -105,6 +106,7 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
             profileId,
             module,
             moduleId,
+            iceCandyType,
             block.number
         );
     }

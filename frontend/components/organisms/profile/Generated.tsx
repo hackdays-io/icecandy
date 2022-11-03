@@ -92,7 +92,7 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
         ) : (
           <ProfileMain
             isPreview
-            pfpURI={getValues()?.name}
+            pfpURI={getValues()?.imageURI}
             name={getValues()?.name}
             introduction={getValues()?.introduction}
             modules={[

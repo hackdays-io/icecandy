@@ -65,6 +65,7 @@ interface IIceCandy {
         uint256 indexed to,
         address module,
         uint256 moduleId,
+        IIceCandy.IceCandyType iceCandyType,
         uint256 blockNumber
     );
 
