@@ -2,7 +2,7 @@ import { ethers } from 'hardhat'
 import { expect } from 'chai'
 import { BigNumber } from 'ethers'
 import { owner, alice, bob, carol, daniel, icecandy, profile, nft, poap, score } from './helpers/__setup2.test'
-import { profileData, nftData, nftData2, nftData3, poapData, mirrorData, snsData } from './helpers/data'
+import { profileData, nftData, nftData2, nftData3, poapData, mirrorData, snsData, skillData } from './helpers/data'
 
 describe('profile test', () => {
   it('createProfile()', async () => {
@@ -141,6 +141,21 @@ describe('profile test', () => {
     // get mirror
     const mirror_ = await profile.connect(alice).getMirror(1)
     expect(mirror_[0]?.hoge).to.equal(_mirror.hoge)
+  })
+
+  it('addSkill()', async () => {
+    // send transaction
+    const _skill = skillData()
+    const _tx = await profile.connect(alice).addSkill(1, _skill)
+    await expect(_tx)
+      .to.emit(profile, 'SkillAdded')
+      .withArgs(1, 1, await ethers.provider.getBlockNumber())
+
+    // get skill
+    const skill_ = await profile.connect(alice).getSkill(1)
+    expect(skill_[0]?.name).to.equal(_skill.name)
+    expect(skill_[0]?.description).to.equal(_skill.description)
+    expect(skill_[0]?.link).to.equal(_skill.link)
   })
 
   it('addColor()', async () => {

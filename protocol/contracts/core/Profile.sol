@@ -7,6 +7,7 @@ import {IProfile} from "../interfaces/IProfile.sol";
 import {INFTCollectionModule} from "../interfaces/INFTCollectionModule.sol";
 import {IScoreModule} from "../interfaces/IScoreModule.sol";
 import {IMirrorModule} from "../interfaces/IMirrorModule.sol";
+import {ISkillModule} from "../interfaces/ISkillModule.sol";
 import {IColorExtension} from "../interfaces/IColorExtension.sol";
 import {ISNSAccountModule} from "../interfaces/ISNSAccountModule.sol";
 import {IIceCandy} from "../interfaces/IIceCandy.sol";
@@ -69,6 +70,12 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         uint256 moduleId = IMirrorModule(IGlobals(_globals).getMirrorModule()).addMirror(profileId, mirror);
         emit MirrorAdded(profileId, moduleId, block.number);
+    }
+
+    function addSkill(uint256 profileId, ISkillModule.SkillStruct calldata skill) external override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        uint256 moduleId = ISkillModule(IGlobals(_globals).getSkillModule()).addSkill(profileId, skill);
+        emit SkillAdded(profileId, moduleId, block.number);
     }
 
     function addColor(uint256 profileId, string memory color) external override {
@@ -144,6 +151,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     function getMirror(uint256 profileId) external view override returns (IMirrorModule.MirrorStruct[] memory) {
         return IMirrorModule(IGlobals(_globals).getMirrorModule()).getMirror(profileId);
+    }
+
+    function getSkill(uint256 profileId) external view override returns (ISkillModule.SkillStruct[] memory) {
+        return ISkillModule(IGlobals(_globals).getSkillModule()).getSkill(profileId);
     }
 
     function getColor(uint256 profileId) external view override returns (IColorExtension.ColorStruct[] memory) {

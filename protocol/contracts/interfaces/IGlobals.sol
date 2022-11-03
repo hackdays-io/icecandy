@@ -16,6 +16,8 @@ interface IGlobals {
 
     function setMirrorModule(address mirrorModule) external;
 
+    function setSkillModule(address skillModule) external;
+
     function setColorExtension(address colorExtension) external;
 
     function getIceCandy() external view returns (address);
@@ -31,6 +33,8 @@ interface IGlobals {
     function getScoreModule() external view returns (address);
 
     function getMirrorModule() external view returns (address);
+
+    function getSkillModule() external view returns (address);
 
     function getColorExtension() external view returns (address);
 }

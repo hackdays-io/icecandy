@@ -160,6 +160,12 @@ const mirrorData = () => ({
   hoge: 'fuga',
 })
 
+const skillData = () => ({
+  name: 'development',
+  description: 'I have over 10 years of experience in development.',
+  link: 'https://github.com/hoge',
+})
+
 const snsData = (owner: SignerWithAddress) => [
   {
     service: 'github',
@@ -182,4 +188,4 @@ const tokenURI = {
   unlucky: 'ipfs://bafybeifdlahtcdtr67jvvnruu5oh6v3tihvftpbk22c7lo6jwqtxaqcgz4/uncky.json',
 }
 
-export { profileData, nftData, nftData2, nftData3, poapData, mirrorData, snsData, tokenURI }
+export { profileData, nftData, nftData2, nftData3, poapData, mirrorData, skillData, snsData, tokenURI }

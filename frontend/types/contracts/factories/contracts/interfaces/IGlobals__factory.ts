@@ -115,6 +115,19 @@ const _abi = [
     type: "function",
   },
   {
+    inputs: [],
+    name: "getSkillModule",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "address",
@@ -214,6 +227,19 @@ const _abi = [
       },
     ],
     name: "setScoreModule",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "skillModule",
+        type: "address",
+      },
+    ],
+    name: "setSkillModule",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

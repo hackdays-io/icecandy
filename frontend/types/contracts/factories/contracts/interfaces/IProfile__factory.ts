@@ -202,6 +202,31 @@ const _abi = [
     anonymous: false,
     inputs: [
       {
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "moduleId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blockNumber",
+        type: "uint256",
+      },
+    ],
+    name: "SkillAdded",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
         indexed: false,
         internalType: "uint256",
         name: "profileId",
@@ -274,6 +299,41 @@ const _abi = [
       },
     ],
     name: "addMirror",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "link",
+            type: "string",
+          },
+        ],
+        internalType: "struct ISkillModule.SkillStruct",
+        name: "skill",
+        type: "tuple",
+      },
+    ],
+    name: "addSkill",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -850,6 +910,42 @@ const _abi = [
           },
         ],
         internalType: "struct IScoreModule.ScoreStruct[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getSkill",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "name",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "description",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "link",
+            type: "string",
+          },
+        ],
+        internalType: "struct ISkillModule.SkillStruct[]",
         name: "",
         type: "tuple[]",
       },

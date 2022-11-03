@@ -6,3 +6,4 @@ export { NFTCollectionModule__factory } from "./NFTCollectionModule__factory";
 export { POAPCollectionModule__factory } from "./POAPCollectionModule__factory";
 export { SNSAccountModule__factory } from "./SNSAccountModule__factory";
 export { ScoreModule__factory } from "./ScoreModule__factory";
+export { SkillModule__factory } from "./SkillModule__factory";

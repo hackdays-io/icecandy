@@ -10,3 +10,4 @@ export { INFTCollectionModule__factory } from "./INFTCollectionModule__factory";
 export { IProfile__factory } from "./IProfile__factory";
 export { ISNSAccountModule__factory } from "./ISNSAccountModule__factory";
 export { IScoreModule__factory } from "./IScoreModule__factory";
+export { ISkillModule__factory } from "./ISkillModule__factory";

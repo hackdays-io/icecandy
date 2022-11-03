@@ -16,6 +16,8 @@ import {
   ScoreModule__factory,
   MirrorModule,
   MirrorModule__factory,
+  SkillModule,
+  SkillModule__factory,
   ColorExtension,
   ColorExtension__factory,
 } from '../../typechain-types'
@@ -37,6 +39,7 @@ export let poap: POAPCollectionModule
 export let sns: SNSAccountModule
 export let score: ScoreModule
 export let mirror: MirrorModule
+export let skill: SkillModule
 export let color: ColorExtension
 
 before(async () => {
@@ -57,6 +60,7 @@ before(async () => {
   sns = await new SNSAccountModule__factory(owner).deploy(owner.address)
   score = await new ScoreModule__factory(owner).deploy(owner.address)
   mirror = await new MirrorModule__factory(owner).deploy(owner.address)
+  skill = await new SkillModule__factory(owner).deploy(owner.address)
   color = await new ColorExtension__factory(owner).deploy(owner.address)
 
   // setup address
@@ -67,6 +71,7 @@ before(async () => {
   await sns.setGlobals(globals.address)
   await score.setGlobals(globals.address)
   await mirror.setGlobals(globals.address)
+  await skill.setGlobals(globals.address)
   await color.setGlobals(globals.address)
   await globals.setIceCandy(icecandy.address)
   await globals.setProfile(profile.address)
@@ -75,5 +80,6 @@ before(async () => {
   await globals.setSNSAccountModule(sns.address)
   await globals.setScoreModule(score.address)
   await globals.setMirrorModule(mirror.address)
+  await globals.setSkillModule(skill.address)
   await globals.setColorExtension(color.address)
 })
