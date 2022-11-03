@@ -6,7 +6,7 @@ import {ModuleBase} from "../bases/ModuleBase.sol";
 import {IGlobals} from "../../interfaces/IGlobals.sol";
 import {IIceCandy} from "../../interfaces/IIceCandy.sol";
 import {IProfile} from "../../interfaces/IProfile.sol";
-import {Scoring} from "../../libraries/Scoring.sol";
+import {ScoreLogic} from "../../libraries/ScoreLogic.sol";
 
 contract ScoreModule is IScoreModule, ModuleBase {
     mapping(uint256 => mapping(address => ScoreStruct)) internal _scores;
@@ -32,7 +32,7 @@ contract ScoreModule is IScoreModule, ModuleBase {
 
     function _getProfileScore(uint256 profileId) internal view returns (uint256) {
         return
-            Scoring.calcProfileScore(
+            ScoreLogic.calcProfileScore(
                 IIceCandy(IGlobals(_globals).getIceCandy()).numberOfSentProfiles(profileId),
                 IIceCandy(IGlobals(_globals).getIceCandy()).numberOfReceivedProfiles(profileId),
                 IIceCandy(IGlobals(_globals).getIceCandy()).numberOfSentIceCandies(profileId),
@@ -41,10 +41,10 @@ contract ScoreModule is IScoreModule, ModuleBase {
     }
 
     function _getNFTScore(uint256 profileId) internal view returns (uint256) {
-        return Scoring.calcNFTScore(IProfile(IGlobals(_globals).getProfile()).getNFTCollection(profileId).length);
+        return ScoreLogic.calcNFTScore(IProfile(IGlobals(_globals).getProfile()).getNFTCollection(profileId).length);
     }
 
     function _getPOAPScore(uint256 profileId) internal view returns (uint256) {
-        return Scoring.calcNFTScore(IProfile(IGlobals(_globals).getProfile()).getPOAPCollection(profileId).length);
+        return ScoreLogic.calcNFTScore(IProfile(IGlobals(_globals).getProfile()).getPOAPCollection(profileId).length);
     }
 }

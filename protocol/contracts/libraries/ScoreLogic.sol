@@ -3,7 +3,7 @@ pragma solidity ^0.8.10;
 
 import {IIceCandy} from "../interfaces/IIceCandy.sol";
 
-library Scoring {
+library ScoreLogic {
     function calcProfileScore(
         uint256 numberOfSentProfiles,
         uint256 unmberOfReceivedProfiles,
