@@ -43,6 +43,7 @@ const ProfilePage: NextPage = () => {
             name={profile?.name.toString()}
             introduction={profile?.introduction.toString()}
             pfpURI={profile?.imageURI.toString()}
+            wallets={profile?.wallets.map((wallet) => wallet.toString())}
             iceCandyStats={stats}
             modules={[
               { type: 'snsAccounts', data: snsAccounts || [] },

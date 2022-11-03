@@ -1,4 +1,5 @@
 import { Box, Flex, Grid, Heading, Text } from '@chakra-ui/react'
+import { useAddress } from '@thirdweb-dev/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { AppProfile } from '../../../types/profile'
@@ -12,6 +13,7 @@ type Props = {
   pfpURI?: string
   name?: string
   introduction?: string
+  wallets?: string[]
   iceCandyStats?: {
     score: number
     sentNumOfPeople: number
@@ -31,12 +33,14 @@ const ProfileMain: FC<Props> = ({
   pfpURI,
   name,
   introduction,
+  wallets,
   modules,
   iceCandyStats,
   isPreview,
 }) => {
   const router = useRouter()
   const { profileId } = router.query
+  const address = useAddress()
 
   return (
     <Box>
@@ -67,7 +71,9 @@ const ProfileMain: FC<Props> = ({
         </Box>
       </Grid>
 
-      {!isPreview && <SendIceCandyButton profileId={Number(profileId)} />}
+      {!isPreview && !wallets?.includes(String(address)) && (
+        <SendIceCandyButton profileId={Number(profileId)} />
+      )}
 
       {modules.map((module, index) => {
         switch (module.type) {
