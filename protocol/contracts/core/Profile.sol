@@ -53,6 +53,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     function createNFTCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata nfts) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _createNFTCollection(profileId, IGlobals(_globals).getNFTCollectionModule(), nfts);
+        _createScore(profileId);
     }
 
     function createPOAPCollection(uint256 profileId, INFTCollectionModule.NFTStruct[] calldata poaps)
@@ -61,10 +62,6 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _createNFTCollection(profileId, IGlobals(_globals).getPOAPCollectionModule(), poaps);
-    }
-
-    function createScore(uint256 profileId) external override {
-        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         _createScore(profileId);
     }
 
