@@ -1,9 +1,7 @@
 import { useAddress } from '@thirdweb-dev/react'
 import { BigNumber } from 'ethers'
 import { useEffect, useState } from 'react'
-import {
-  useIceCandyContractClient,
-} from './useContractClient'
+import { useIceCandyContractClient } from './useContractClient'
 
 export type tokenInfo = { tokenId: BigNumber; tokenURI: string }
 
@@ -134,13 +132,17 @@ export const useSendAndReceiveHistoryNum = (profileId: number) => {
       if (!iceCandyContract) return
       try {
         setSendAndReceivedHistoryNum({
-          sender: (await iceCandyContract.numberOfSender(profileId)).toNumber(),
-          receiver: (
-            await iceCandyContract.numberOfReceiver(profileId)
+          sender: (
+            await iceCandyContract.numberOfSentProfiles(profileId)
           ).toNumber(),
-          sent: (await iceCandyContract.numberOfSent(profileId)).toNumber(),
+          receiver: (
+            await iceCandyContract.numberOfReceivedProfiles(profileId)
+          ).toNumber(),
+          sent: (
+            await iceCandyContract.numberOfSentIceCandies(profileId)
+          ).toNumber(),
           received: (
-            await iceCandyContract.numberOfReceived(profileId)
+            await iceCandyContract.numberOfReceivedIceCandies(profileId)
           ).toNumber(),
         })
         setLoading(false)
