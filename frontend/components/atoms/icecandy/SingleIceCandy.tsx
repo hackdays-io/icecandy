@@ -1,15 +1,15 @@
-import { Box, Button } from '@chakra-ui/react'
+import { Image } from '@chakra-ui/react'
 import axios from 'axios'
 import { FC, useEffect, useState } from 'react'
 import { ipfs2http } from '../../../utils/ipfs2https'
-import Image from 'next/image'
 
 type Props = {
   tokenURI: string
   tokenId: number
+  iceCandyType: number
 }
 
-const SingleIceCandy: FC<Props> = ({ tokenURI, tokenId }) => {
+const SingleIceCandy: FC<Props> = ({ tokenURI, tokenId, iceCandyType }) => {
   const [metadata, setMetadata] = useState<{
     name: string
     description: string
@@ -24,9 +24,9 @@ const SingleIceCandy: FC<Props> = ({ tokenURI, tokenId }) => {
   }, [])
 
   return (
-    <Box>
-      <img src={metadata?.image as string} alt="" />
-    </Box>
+    <>
+      <Image src={metadata?.image as string} alt={metadata?.name} />
+    </>
   )
 }
 

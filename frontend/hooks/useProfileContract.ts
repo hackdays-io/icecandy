@@ -207,6 +207,31 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
   }
 }
 
+export const useProfileId = (address?: string) => {
+  const [loading, setLoading] = useState(true)
+  const [errors, setErrors] = useState<any>(null)
+  const [profileId, setProfileId] = useState<number>()
+  const profileNFTContract = useProfileNFTContractClient()
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!profileNFTContract || !address) return
+      setLoading(true)
+      try {
+        setProfileId(
+          await (await profileNFTContract.getProfileId(address)).toNumber()
+        )
+      } catch (error) {
+        setErrors(error)
+      }
+      setLoading(false)
+    }
+    fetch()
+  }, [address, profileNFTContract])
+
+  return { profileId, loading, errors }
+}
+
 export const useLookupProfileId = (address: string) => {
   const [profileId, setProfileId] = useState<BigNumber>()
   const profileContract = useProfileNFTContractClient()

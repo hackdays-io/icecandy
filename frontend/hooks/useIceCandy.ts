@@ -30,6 +30,7 @@ export const useHoldingIceCandies = (address?: string) => {
   useEffect(() => {
     const fetch = async () => {
       if (!iceCandyContract || !address) return
+      setLoading(true)
       try {
         const balances = await iceCandyContract.balanceOf(address)
         const notRevealed: tokenInfo[] = []
@@ -63,10 +64,10 @@ export const useHoldingIceCandies = (address?: string) => {
           lucky,
           unlucky,
         })
-        setLoading(false)
       } catch (error) {
         setErrors(error)
       }
+      setLoading(false)
     }
     fetch()
   }, [address, iceCandyContract])
@@ -88,7 +89,7 @@ export type SentAndReceivedHistories = {
   receivedIceCandies: SentIceCandy[]
 }
 
-export const useSentAndReceivedHistories = (profileId: number) => {
+export const useSentAndReceivedHistories = (profileId?: number) => {
   const [loading, setLoading] = useState(true)
   const [errors, setErrors] = useState<any>(null)
   const [sentAndReceivedHistories, setSentAndReceivedHistories] =
@@ -99,7 +100,8 @@ export const useSentAndReceivedHistories = (profileId: number) => {
 
   useEffect(() => {
     const fetch = async () => {
-      if (!iceCandyContract) return
+      if (!iceCandyContract || !profileId) return
+      setLoading(true)
       try {
         setSentAndReceivedHistories({
           sentProfileIds: (
@@ -125,10 +127,10 @@ export const useSentAndReceivedHistories = (profileId: number) => {
             moduleId: e.moduleId.toNumber(),
           })),
         })
-        setLoading(false)
       } catch (error) {
         setErrors(error)
       }
+      setLoading(false)
     }
     fetch()
   }, [profileId, iceCandyContract])
@@ -209,6 +211,7 @@ export const useSendIceCandy = () => {
       setLoading(false)
       setErrors(error)
     }
+    setLoading(false)
   }
 
   return { loading, send, errors, result }
