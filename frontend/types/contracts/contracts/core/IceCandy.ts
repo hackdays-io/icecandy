@@ -46,6 +46,25 @@ export declare namespace IIceCandy {
     sentModule: string;
     sentModuleId: BigNumber;
   };
+
+  export type SentIceCandyStructStruct = {
+    tokenId: PromiseOrValue<BigNumberish>;
+    profileId: PromiseOrValue<BigNumberish>;
+    module: PromiseOrValue<string>;
+    moduleId: PromiseOrValue<BigNumberish>;
+  };
+
+  export type SentIceCandyStructStructOutput = [
+    BigNumber,
+    BigNumber,
+    string,
+    BigNumber
+  ] & {
+    tokenId: BigNumber;
+    profileId: BigNumber;
+    module: string;
+    moduleId: BigNumber;
+  };
 }
 
 export interface IceCandyInterface extends utils.Interface {
@@ -58,13 +77,17 @@ export interface IceCandyInterface extends utils.Interface {
     "balanceOfUnlucky(address)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "getIceCandy(uint256)": FunctionFragment;
+    "getReceivedIceCandies(uint256)": FunctionFragment;
+    "getReceivedProfileIds(uint256)": FunctionFragment;
+    "getSentIceCandies(uint256)": FunctionFragment;
+    "getSentProfileIds(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "mint(address)": FunctionFragment;
     "name()": FunctionFragment;
-    "numberOfReceived(uint256)": FunctionFragment;
-    "numberOfReceiver(uint256)": FunctionFragment;
-    "numberOfSender(uint256)": FunctionFragment;
-    "numberOfSent(uint256)": FunctionFragment;
+    "numberOfReceivedIceCandies(uint256)": FunctionFragment;
+    "numberOfReceivedProfiles(uint256)": FunctionFragment;
+    "numberOfSentIceCandies(uint256)": FunctionFragment;
+    "numberOfSentProfiles(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "ownerOf(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -93,13 +116,17 @@ export interface IceCandyInterface extends utils.Interface {
       | "balanceOfUnlucky"
       | "getApproved"
       | "getIceCandy"
+      | "getReceivedIceCandies"
+      | "getReceivedProfileIds"
+      | "getSentIceCandies"
+      | "getSentProfileIds"
       | "isApprovedForAll"
       | "mint"
       | "name"
-      | "numberOfReceived"
-      | "numberOfReceiver"
-      | "numberOfSender"
-      | "numberOfSent"
+      | "numberOfReceivedIceCandies"
+      | "numberOfReceivedProfiles"
+      | "numberOfSentIceCandies"
+      | "numberOfSentProfiles"
       | "owner"
       | "ownerOf"
       | "renounceOwnership"
@@ -151,6 +178,22 @@ export interface IceCandyInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "getReceivedIceCandies",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getReceivedProfileIds",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSentIceCandies",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSentProfileIds",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [PromiseOrValue<string>, PromiseOrValue<string>]
   ): string;
@@ -160,19 +203,19 @@ export interface IceCandyInterface extends utils.Interface {
   ): string;
   encodeFunctionData(functionFragment: "name", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "numberOfReceived",
+    functionFragment: "numberOfReceivedIceCandies",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "numberOfReceiver",
+    functionFragment: "numberOfReceivedProfiles",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "numberOfSender",
+    functionFragment: "numberOfSentIceCandies",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "numberOfSent",
+    functionFragment: "numberOfSentProfiles",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -278,25 +321,41 @@ export interface IceCandyInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getReceivedIceCandies",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getReceivedProfileIds",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSentIceCandies",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSentProfileIds",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "isApprovedForAll",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "mint", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "name", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "numberOfReceived",
+    functionFragment: "numberOfReceivedIceCandies",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "numberOfReceiver",
+    functionFragment: "numberOfReceivedProfiles",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "numberOfSender",
+    functionFragment: "numberOfSentIceCandies",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "numberOfSent",
+    functionFragment: "numberOfSentProfiles",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -508,6 +567,26 @@ export interface IceCandy extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[IIceCandy.IceCandyStructStructOutput]>;
 
+    getReceivedIceCandies(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[IIceCandy.SentIceCandyStructStructOutput[]]>;
+
+    getReceivedProfileIds(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[]]>;
+
+    getSentIceCandies(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[IIceCandy.SentIceCandyStructStructOutput[]]>;
+
+    getSentProfileIds(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[BigNumber[]]>;
+
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
@@ -521,22 +600,22 @@ export interface IceCandy extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<[string]>;
 
-    numberOfReceived(
+    numberOfReceivedIceCandies(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    numberOfReceiver(
+    numberOfReceivedProfiles(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    numberOfSender(
+    numberOfSentIceCandies(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
 
-    numberOfSent(
+    numberOfSentProfiles(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[BigNumber]>;
@@ -664,6 +743,26 @@ export interface IceCandy extends BaseContract {
     overrides?: CallOverrides
   ): Promise<IIceCandy.IceCandyStructStructOutput>;
 
+  getReceivedIceCandies(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<IIceCandy.SentIceCandyStructStructOutput[]>;
+
+  getReceivedProfileIds(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber[]>;
+
+  getSentIceCandies(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<IIceCandy.SentIceCandyStructStructOutput[]>;
+
+  getSentProfileIds(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<BigNumber[]>;
+
   isApprovedForAll(
     owner: PromiseOrValue<string>,
     operator: PromiseOrValue<string>,
@@ -677,22 +776,22 @@ export interface IceCandy extends BaseContract {
 
   name(overrides?: CallOverrides): Promise<string>;
 
-  numberOfReceived(
+  numberOfReceivedIceCandies(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  numberOfReceiver(
+  numberOfReceivedProfiles(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  numberOfSender(
+  numberOfSentIceCandies(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
 
-  numberOfSent(
+  numberOfSentProfiles(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
@@ -820,6 +919,26 @@ export interface IceCandy extends BaseContract {
       overrides?: CallOverrides
     ): Promise<IIceCandy.IceCandyStructStructOutput>;
 
+    getReceivedIceCandies(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<IIceCandy.SentIceCandyStructStructOutput[]>;
+
+    getReceivedProfileIds(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
+
+    getSentIceCandies(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<IIceCandy.SentIceCandyStructStructOutput[]>;
+
+    getSentProfileIds(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber[]>;
+
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
@@ -830,22 +949,22 @@ export interface IceCandy extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<string>;
 
-    numberOfReceived(
+    numberOfReceivedIceCandies(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    numberOfReceiver(
+    numberOfReceivedProfiles(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    numberOfSender(
+    numberOfSentIceCandies(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    numberOfSent(
+    numberOfSentProfiles(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1048,6 +1167,26 @@ export interface IceCandy extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getReceivedIceCandies(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getReceivedProfileIds(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSentIceCandies(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSentProfileIds(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
@@ -1061,22 +1200,22 @@ export interface IceCandy extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<BigNumber>;
 
-    numberOfReceived(
+    numberOfReceivedIceCandies(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    numberOfReceiver(
+    numberOfReceivedProfiles(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    numberOfSender(
+    numberOfSentIceCandies(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    numberOfSent(
+    numberOfSentProfiles(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1205,6 +1344,26 @@ export interface IceCandy extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getReceivedIceCandies(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getReceivedProfileIds(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSentIceCandies(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSentProfileIds(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     isApprovedForAll(
       owner: PromiseOrValue<string>,
       operator: PromiseOrValue<string>,
@@ -1218,22 +1377,22 @@ export interface IceCandy extends BaseContract {
 
     name(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    numberOfReceived(
+    numberOfReceivedIceCandies(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    numberOfReceiver(
+    numberOfReceivedProfiles(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    numberOfSender(
+    numberOfSentIceCandies(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    numberOfSent(
+    numberOfSentProfiles(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
