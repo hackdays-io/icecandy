@@ -44,7 +44,7 @@ const ProfileNFTCollectionModule: FC<Props> = ({
                 receivedIceCandies?.filter(
                   (ic) =>
                     ic.module === ModuleTypeAddress.nftCollection &&
-                    ic.moduleId === index
+                    ic.moduleId === index + 1
                 ).length
               }
             </Box>

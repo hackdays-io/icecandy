@@ -30,6 +30,7 @@ const ProfilePOAPCollectionModulePreview: FC<Props> = ({
       <Text fontWeight="bold" fontSize="20px" mb={5}>
         POAPs
       </Text>
+
       <Grid
         gridTemplateColumns="repeat(5, minmax(100px, 1fr))"
         gridGap={4}
@@ -44,7 +45,7 @@ const ProfilePOAPCollectionModulePreview: FC<Props> = ({
                 receivedIceCandies?.filter(
                   (ic) =>
                     ic.module === ModuleTypeAddress.poapCollection &&
-                    ic.moduleId === index
+                    ic.moduleId === index + 1
                 ).length
               }
             </Box>
@@ -52,7 +53,7 @@ const ProfilePOAPCollectionModulePreview: FC<Props> = ({
               <SendIceCandyButton
                 profileId={Number(profileId)}
                 module="poapCollection"
-                moduleId={index}
+                moduleId={index + 1}
               />
             )}
           </Box>
