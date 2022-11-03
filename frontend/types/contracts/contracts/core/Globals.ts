@@ -36,6 +36,7 @@ export interface GlobalsInterface extends utils.Interface {
     "getProfile()": FunctionFragment;
     "getSNSAccountModule()": FunctionFragment;
     "getScoreModule()": FunctionFragment;
+    "getSkillModule()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setColorExtension(address)": FunctionFragment;
@@ -46,6 +47,7 @@ export interface GlobalsInterface extends utils.Interface {
     "setProfile(address)": FunctionFragment;
     "setSNSAccountModule(address)": FunctionFragment;
     "setScoreModule(address)": FunctionFragment;
+    "setSkillModule(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
 
@@ -59,6 +61,7 @@ export interface GlobalsInterface extends utils.Interface {
       | "getProfile"
       | "getSNSAccountModule"
       | "getScoreModule"
+      | "getSkillModule"
       | "owner"
       | "renounceOwnership"
       | "setColorExtension"
@@ -69,6 +72,7 @@ export interface GlobalsInterface extends utils.Interface {
       | "setProfile"
       | "setSNSAccountModule"
       | "setScoreModule"
+      | "setSkillModule"
       | "transferOwnership"
   ): FunctionFragment;
 
@@ -102,6 +106,10 @@ export interface GlobalsInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "getScoreModule",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getSkillModule",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
@@ -142,6 +150,10 @@ export interface GlobalsInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
+    functionFragment: "setSkillModule",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "transferOwnership",
     values: [PromiseOrValue<string>]
   ): string;
@@ -173,6 +185,10 @@ export interface GlobalsInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getScoreModule",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getSkillModule",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
@@ -207,6 +223,10 @@ export interface GlobalsInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setScoreModule",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSkillModule",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -276,6 +296,8 @@ export interface Globals extends BaseContract {
 
     getScoreModule(overrides?: CallOverrides): Promise<[string]>;
 
+    getSkillModule(overrides?: CallOverrides): Promise<[string]>;
+
     owner(overrides?: CallOverrides): Promise<[string]>;
 
     renounceOwnership(
@@ -322,6 +344,11 @@ export interface Globals extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
+    setSkillModule(
+      skillModule_: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -343,6 +370,8 @@ export interface Globals extends BaseContract {
   getSNSAccountModule(overrides?: CallOverrides): Promise<string>;
 
   getScoreModule(overrides?: CallOverrides): Promise<string>;
+
+  getSkillModule(overrides?: CallOverrides): Promise<string>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -390,6 +419,11 @@ export interface Globals extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setSkillModule(
+    skillModule_: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   transferOwnership(
     newOwner: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -411,6 +445,8 @@ export interface Globals extends BaseContract {
     getSNSAccountModule(overrides?: CallOverrides): Promise<string>;
 
     getScoreModule(overrides?: CallOverrides): Promise<string>;
+
+    getSkillModule(overrides?: CallOverrides): Promise<string>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -456,6 +492,11 @@ export interface Globals extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    setSkillModule(
+      skillModule_: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: CallOverrides
@@ -489,6 +530,8 @@ export interface Globals extends BaseContract {
     getSNSAccountModule(overrides?: CallOverrides): Promise<BigNumber>;
 
     getScoreModule(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getSkillModule(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -536,6 +579,11 @@ export interface Globals extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
+    setSkillModule(
+      skillModule_: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     transferOwnership(
       newOwner: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -564,6 +612,8 @@ export interface Globals extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getScoreModule(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getSkillModule(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -608,6 +658,11 @@ export interface Globals extends BaseContract {
 
     setScoreModule(
       scoreModule_: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSkillModule(
+      skillModule_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

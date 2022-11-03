@@ -54,6 +54,8 @@ export type { POAPCollectionModule } from "./contracts/core/modules/POAPCollecti
 export { POAPCollectionModule__factory } from "./factories/contracts/core/modules/POAPCollectionModule__factory";
 export type { ScoreModule } from "./contracts/core/modules/ScoreModule";
 export { ScoreModule__factory } from "./factories/contracts/core/modules/ScoreModule__factory";
+export type { SkillModule } from "./contracts/core/modules/SkillModule";
+export { SkillModule__factory } from "./factories/contracts/core/modules/SkillModule__factory";
 export type { SNSAccountModule } from "./contracts/core/modules/SNSAccountModule";
 export { SNSAccountModule__factory } from "./factories/contracts/core/modules/SNSAccountModule__factory";
 export type { Profile } from "./contracts/core/Profile";
@@ -74,5 +76,7 @@ export type { IProfile } from "./contracts/interfaces/IProfile";
 export { IProfile__factory } from "./factories/contracts/interfaces/IProfile__factory";
 export type { IScoreModule } from "./contracts/interfaces/IScoreModule";
 export { IScoreModule__factory } from "./factories/contracts/interfaces/IScoreModule__factory";
+export type { ISkillModule } from "./contracts/interfaces/ISkillModule";
+export { ISkillModule__factory } from "./factories/contracts/interfaces/ISkillModule__factory";
 export type { ISNSAccountModule } from "./contracts/interfaces/ISNSAccountModule";
 export { ISNSAccountModule__factory } from "./factories/contracts/interfaces/ISNSAccountModule__factory";

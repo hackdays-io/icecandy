@@ -11,3 +11,4 @@ export type { INFTCollectionModule } from "./INFTCollectionModule";
 export type { IProfile } from "./IProfile";
 export type { ISNSAccountModule } from "./ISNSAccountModule";
 export type { IScoreModule } from "./IScoreModule";
+export type { ISkillModule } from "./ISkillModule";

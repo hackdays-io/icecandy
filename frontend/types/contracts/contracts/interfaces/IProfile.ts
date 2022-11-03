@@ -33,6 +33,20 @@ export declare namespace IMirrorModule {
   export type MirrorStructStructOutput = [string] & { hoge: string };
 }
 
+export declare namespace ISkillModule {
+  export type SkillStructStruct = {
+    name: PromiseOrValue<string>;
+    description: PromiseOrValue<string>;
+    link: PromiseOrValue<string>;
+  };
+
+  export type SkillStructStructOutput = [string, string, string] & {
+    name: string;
+    description: string;
+    link: string;
+  };
+}
+
 export declare namespace INFTCollectionModule {
   export type NFTStructStruct = {
     chainId: PromiseOrValue<BigNumberish>;
@@ -151,6 +165,7 @@ export interface IProfileInterface extends utils.Interface {
     "activateColor(uint256,uint256)": FunctionFragment;
     "addColor(uint256,string)": FunctionFragment;
     "addMirror(uint256,(string))": FunctionFragment;
+    "addSkill(uint256,(string,string,string))": FunctionFragment;
     "addWallet(uint256,address)": FunctionFragment;
     "createNFTCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
     "createPOAPCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
@@ -165,6 +180,7 @@ export interface IProfileInterface extends utils.Interface {
     "getProfileId(address)": FunctionFragment;
     "getSNSAccounts(uint256)": FunctionFragment;
     "getScore(uint256)": FunctionFragment;
+    "getSkill(uint256)": FunctionFragment;
     "setGlobals(address)": FunctionFragment;
   };
 
@@ -173,6 +189,7 @@ export interface IProfileInterface extends utils.Interface {
       | "activateColor"
       | "addColor"
       | "addMirror"
+      | "addSkill"
       | "addWallet"
       | "createNFTCollection"
       | "createPOAPCollection"
@@ -187,6 +204,7 @@ export interface IProfileInterface extends utils.Interface {
       | "getProfileId"
       | "getSNSAccounts"
       | "getScore"
+      | "getSkill"
       | "setGlobals"
   ): FunctionFragment;
 
@@ -201,6 +219,10 @@ export interface IProfileInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "addMirror",
     values: [PromiseOrValue<BigNumberish>, IMirrorModule.MirrorStructStruct]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "addSkill",
+    values: [PromiseOrValue<BigNumberish>, ISkillModule.SkillStructStruct]
   ): string;
   encodeFunctionData(
     functionFragment: "addWallet",
@@ -268,6 +290,10 @@ export interface IProfileInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
+    functionFragment: "getSkill",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "setGlobals",
     values: [PromiseOrValue<string>]
   ): string;
@@ -278,6 +304,7 @@ export interface IProfileInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(functionFragment: "addColor", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "addMirror", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "addSkill", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "addWallet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "createNFTCollection",
@@ -319,6 +346,7 @@ export interface IProfileInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getScore", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getSkill", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "setGlobals", data: BytesLike): Result;
 
   events: {
@@ -330,6 +358,7 @@ export interface IProfileInterface extends utils.Interface {
     "ProfileCreated(uint256,address,uint256)": EventFragment;
     "SNSAccountCreated(uint256,uint256)": EventFragment;
     "ScoreCreated(uint256,uint256)": EventFragment;
+    "SkillAdded(uint256,uint256,uint256)": EventFragment;
     "WalletAdded(uint256,address)": EventFragment;
   };
 
@@ -341,6 +370,7 @@ export interface IProfileInterface extends utils.Interface {
   getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "SNSAccountCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ScoreCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SkillAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WalletAdded"): EventFragment;
 }
 
@@ -441,6 +471,18 @@ export type ScoreCreatedEvent = TypedEvent<
 
 export type ScoreCreatedEventFilter = TypedEventFilter<ScoreCreatedEvent>;
 
+export interface SkillAddedEventObject {
+  profileId: BigNumber;
+  moduleId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type SkillAddedEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber],
+  SkillAddedEventObject
+>;
+
+export type SkillAddedEventFilter = TypedEventFilter<SkillAddedEvent>;
+
 export interface WalletAddedEventObject {
   profileId: BigNumber;
   wallet: string;
@@ -494,6 +536,12 @@ export interface IProfile extends BaseContract {
     addMirror(
       profileId: PromiseOrValue<BigNumberish>,
       mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
+    addSkill(
+      profileId: PromiseOrValue<BigNumberish>,
+      skill: ISkillModule.SkillStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -572,6 +620,11 @@ export interface IProfile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[IScoreModule.ScoreStructStructOutput[]]>;
 
+    getSkill(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[ISkillModule.SkillStructStructOutput[]]>;
+
     setGlobals(
       globals: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -593,6 +646,12 @@ export interface IProfile extends BaseContract {
   addMirror(
     profileId: PromiseOrValue<BigNumberish>,
     mirror: IMirrorModule.MirrorStructStruct,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
+  addSkill(
+    profileId: PromiseOrValue<BigNumberish>,
+    skill: ISkillModule.SkillStructStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -671,6 +730,11 @@ export interface IProfile extends BaseContract {
     overrides?: CallOverrides
   ): Promise<IScoreModule.ScoreStructStructOutput[]>;
 
+  getSkill(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: CallOverrides
+  ): Promise<ISkillModule.SkillStructStructOutput[]>;
+
   setGlobals(
     globals: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -692,6 +756,12 @@ export interface IProfile extends BaseContract {
     addMirror(
       profileId: PromiseOrValue<BigNumberish>,
       mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    addSkill(
+      profileId: PromiseOrValue<BigNumberish>,
+      skill: ISkillModule.SkillStructStruct,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -769,6 +839,11 @@ export interface IProfile extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<IScoreModule.ScoreStructStructOutput[]>;
+
+    getSkill(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<ISkillModule.SkillStructStructOutput[]>;
 
     setGlobals(
       globals: PromiseOrValue<string>,
@@ -861,6 +936,17 @@ export interface IProfile extends BaseContract {
       blockNumber?: null
     ): ScoreCreatedEventFilter;
 
+    "SkillAdded(uint256,uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): SkillAddedEventFilter;
+    SkillAdded(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): SkillAddedEventFilter;
+
     "WalletAdded(uint256,address)"(
       profileId?: null,
       wallet?: null
@@ -884,6 +970,12 @@ export interface IProfile extends BaseContract {
     addMirror(
       profileId: PromiseOrValue<BigNumberish>,
       mirror: IMirrorModule.MirrorStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    addSkill(
+      profileId: PromiseOrValue<BigNumberish>,
+      skill: ISkillModule.SkillStructStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -958,6 +1050,11 @@ export interface IProfile extends BaseContract {
     ): Promise<BigNumber>;
 
     getScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    getSkill(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -987,6 +1084,12 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
+    addSkill(
+      profileId: PromiseOrValue<BigNumberish>,
+      skill: ISkillModule.SkillStructStruct,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     addWallet(
       profileId: PromiseOrValue<BigNumberish>,
       wallet: PromiseOrValue<string>,
@@ -1058,6 +1161,11 @@ export interface IProfile extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     getScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    getSkill(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

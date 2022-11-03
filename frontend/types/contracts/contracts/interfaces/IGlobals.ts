@@ -32,6 +32,7 @@ export interface IGlobalsInterface extends utils.Interface {
     "getProfile()": FunctionFragment;
     "getSNSAccountModule()": FunctionFragment;
     "getScoreModule()": FunctionFragment;
+    "getSkillModule()": FunctionFragment;
     "setColorExtension(address)": FunctionFragment;
     "setIceCandy(address)": FunctionFragment;
     "setMirrorModule(address)": FunctionFragment;
@@ -40,6 +41,7 @@ export interface IGlobalsInterface extends utils.Interface {
     "setProfile(address)": FunctionFragment;
     "setSNSAccountModule(address)": FunctionFragment;
     "setScoreModule(address)": FunctionFragment;
+    "setSkillModule(address)": FunctionFragment;
   };
 
   getFunction(
@@ -52,6 +54,7 @@ export interface IGlobalsInterface extends utils.Interface {
       | "getProfile"
       | "getSNSAccountModule"
       | "getScoreModule"
+      | "getSkillModule"
       | "setColorExtension"
       | "setIceCandy"
       | "setMirrorModule"
@@ -60,6 +63,7 @@ export interface IGlobalsInterface extends utils.Interface {
       | "setProfile"
       | "setSNSAccountModule"
       | "setScoreModule"
+      | "setSkillModule"
   ): FunctionFragment;
 
   encodeFunctionData(
@@ -95,6 +99,10 @@ export interface IGlobalsInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
+    functionFragment: "getSkillModule",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
     functionFragment: "setColorExtension",
     values: [PromiseOrValue<string>]
   ): string;
@@ -124,6 +132,10 @@ export interface IGlobalsInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "setScoreModule",
+    values: [PromiseOrValue<string>]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "setSkillModule",
     values: [PromiseOrValue<string>]
   ): string;
 
@@ -157,6 +169,10 @@ export interface IGlobalsInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getSkillModule",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "setColorExtension",
     data: BytesLike
   ): Result;
@@ -183,6 +199,10 @@ export interface IGlobalsInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "setScoreModule",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setSkillModule",
     data: BytesLike
   ): Result;
 
@@ -232,6 +252,8 @@ export interface IGlobals extends BaseContract {
 
     getScoreModule(overrides?: CallOverrides): Promise<[string]>;
 
+    getSkillModule(overrides?: CallOverrides): Promise<[string]>;
+
     setColorExtension(
       colorExtension: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -271,6 +293,11 @@ export interface IGlobals extends BaseContract {
       scoreModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    setSkillModule(
+      skillModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
   };
 
   getColorExtension(overrides?: CallOverrides): Promise<string>;
@@ -288,6 +315,8 @@ export interface IGlobals extends BaseContract {
   getSNSAccountModule(overrides?: CallOverrides): Promise<string>;
 
   getScoreModule(overrides?: CallOverrides): Promise<string>;
+
+  getSkillModule(overrides?: CallOverrides): Promise<string>;
 
   setColorExtension(
     colorExtension: PromiseOrValue<string>,
@@ -329,6 +358,11 @@ export interface IGlobals extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
+  setSkillModule(
+    skillModule: PromiseOrValue<string>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     getColorExtension(overrides?: CallOverrides): Promise<string>;
 
@@ -345,6 +379,8 @@ export interface IGlobals extends BaseContract {
     getSNSAccountModule(overrides?: CallOverrides): Promise<string>;
 
     getScoreModule(overrides?: CallOverrides): Promise<string>;
+
+    getSkillModule(overrides?: CallOverrides): Promise<string>;
 
     setColorExtension(
       colorExtension: PromiseOrValue<string>,
@@ -383,6 +419,11 @@ export interface IGlobals extends BaseContract {
 
     setScoreModule(
       scoreModule: PromiseOrValue<string>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setSkillModule(
+      skillModule: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
   };
@@ -406,6 +447,8 @@ export interface IGlobals extends BaseContract {
 
     getScoreModule(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getSkillModule(overrides?: CallOverrides): Promise<BigNumber>;
+
     setColorExtension(
       colorExtension: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -443,6 +486,11 @@ export interface IGlobals extends BaseContract {
 
     setScoreModule(
       scoreModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    setSkillModule(
+      skillModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
@@ -470,6 +518,8 @@ export interface IGlobals extends BaseContract {
 
     getScoreModule(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    getSkillModule(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     setColorExtension(
       colorExtension: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -507,6 +557,11 @@ export interface IGlobals extends BaseContract {
 
     setScoreModule(
       scoreModule: PromiseOrValue<string>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setSkillModule(
+      skillModule: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };

@@ -109,6 +109,10 @@ declare module "hardhat/types/runtime" {
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.ScoreModule__factory>;
     getContractFactory(
+      name: "SkillModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.SkillModule__factory>;
+    getContractFactory(
       name: "SNSAccountModule",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.SNSAccountModule__factory>;
@@ -148,6 +152,10 @@ declare module "hardhat/types/runtime" {
       name: "IScoreModule",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.IScoreModule__factory>;
+    getContractFactory(
+      name: "ISkillModule",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.ISkillModule__factory>;
     getContractFactory(
       name: "ISNSAccountModule",
       signerOrOptions?: ethers.Signer | FactoryOptions
@@ -274,6 +282,11 @@ declare module "hardhat/types/runtime" {
       signer?: ethers.Signer
     ): Promise<Contracts.ScoreModule>;
     getContractAt(
+      name: "SkillModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.SkillModule>;
+    getContractAt(
       name: "SNSAccountModule",
       address: string,
       signer?: ethers.Signer
@@ -323,6 +336,11 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.IScoreModule>;
+    getContractAt(
+      name: "ISkillModule",
+      address: string,
+      signer?: ethers.Signer
+    ): Promise<Contracts.ISkillModule>;
     getContractAt(
       name: "ISNSAccountModule",
       address: string,
