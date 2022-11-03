@@ -2,6 +2,7 @@ import { ethers } from 'hardhat'
 import { expect } from 'chai'
 import { owner, alice, bob, carol, daniel, icecandy, profile, nft, poap } from './helpers/__setup1.test'
 import { profileData, tokenURI } from './helpers/data'
+import { BigNumber } from 'ethers'
 
 describe('icecandy test', () => {
   before(async () => {
@@ -78,6 +79,11 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).numberOfSentIceCandies(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfReceivedIceCandies(1)).to.be.equals(0)
 
+    expect(await icecandy.connect(alice).getSentProfileIds(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getReceivedProfileIds(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getSentIceCandies(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
+
     // check balance of bob
     expect(await icecandy.connect(bob).balanceOf(bob.address)).to.be.equals(1)
     expect(await icecandy.connect(bob).balanceOfRevealed(bob.address)).to.be.equals(0)
@@ -90,6 +96,11 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).numberOfSentIceCandies(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfReceivedIceCandies(2)).to.be.equals(0)
 
+    expect(await icecandy.connect(bob).getSentProfileIds(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getReceivedProfileIds(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getSentIceCandies(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getReceivedIceCandies(2)).to.be.deep.equals([])
+
     // check balance of carol
     expect(await icecandy.connect(carol).balanceOf(carol.address)).to.be.equals(1)
     expect(await icecandy.connect(carol).balanceOfRevealed(carol.address)).to.be.equals(0)
@@ -101,6 +112,11 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).numberOfReceivedProfiles(3)).to.be.equals(0)
     expect(await icecandy.connect(carol).numberOfSentIceCandies(3)).to.be.equals(0)
     expect(await icecandy.connect(carol).numberOfReceivedIceCandies(3)).to.be.equals(0)
+
+    expect(await icecandy.connect(carol).getSentProfileIds(3)).to.be.deep.equals([])
+    expect(await icecandy.connect(carol).getReceivedProfileIds(3)).to.be.deep.equals([])
+    expect(await icecandy.connect(carol).getSentIceCandies(3)).to.be.deep.equals([])
+    expect(await icecandy.connect(carol).getReceivedIceCandies(3)).to.be.deep.equals([])
   })
 
   it('alice send icecandy to bob, and get lucky icecandy', async () => {
@@ -144,6 +160,13 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).numberOfSentIceCandies(1)).to.be.equals(1)
     expect(await icecandy.connect(alice).numberOfReceivedIceCandies(1)).to.be.equals(0)
 
+    expect(await icecandy.connect(alice).getSentProfileIds(1)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(alice).getReceivedProfileIds(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getSentIceCandies(1)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
+
     // check balance of bob
     expect(await icecandy.connect(bob).balanceOf(bob.address)).to.be.equals(2)
     expect(await icecandy.connect(bob).balanceOfRevealed(bob.address)).to.be.equals(1)
@@ -155,6 +178,13 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).numberOfReceivedProfiles(2)).to.be.equals(1)
     expect(await icecandy.connect(bob).numberOfSentIceCandies(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfReceivedIceCandies(2)).to.be.equals(1)
+
+    expect(await icecandy.connect(bob).getSentProfileIds(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getReceivedProfileIds(2)).to.be.deep.equals([BigNumber.from(1)])
+    expect(await icecandy.connect(bob).getSentIceCandies(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getReceivedIceCandies(2)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(1), nft.address, BigNumber.from(1)],
+    ])
   })
 
   it('carol send icecandy to bob, and get unlucky icecandy', async () => {
@@ -198,6 +228,17 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).numberOfSentIceCandies(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfReceivedIceCandies(2)).to.be.equals(2)
 
+    expect(await icecandy.connect(bob).getSentProfileIds(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getReceivedProfileIds(2)).to.be.deep.equals([
+      BigNumber.from(1),
+      BigNumber.from(3),
+    ])
+    expect(await icecandy.connect(bob).getSentIceCandies(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getReceivedIceCandies(2)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(1), nft.address, BigNumber.from(1)],
+      [BigNumber.from(3), BigNumber.from(3), nft.address, BigNumber.from(1)],
+    ])
+
     // check balance of carol
     expect(await icecandy.connect(carol).balanceOf(carol.address)).to.be.equals(1)
     expect(await icecandy.connect(carol).balanceOfRevealed(carol.address)).to.be.equals(0)
@@ -209,6 +250,13 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).numberOfReceivedProfiles(3)).to.be.equals(0)
     expect(await icecandy.connect(carol).numberOfSentIceCandies(3)).to.be.equals(1)
     expect(await icecandy.connect(carol).numberOfReceivedIceCandies(3)).to.be.equals(0)
+
+    expect(await icecandy.connect(carol).getSentProfileIds(3)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(carol).getReceivedProfileIds(3)).to.be.deep.equals([])
+    expect(await icecandy.connect(carol).getSentIceCandies(3)).to.be.deep.equals([
+      [BigNumber.from(3), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(carol).getReceivedIceCandies(3)).to.be.deep.equals([])
   })
 
   it('failed to send icecandy from carol, because carol has no active token', async () => {
@@ -238,6 +286,13 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).numberOfReceivedProfiles(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSentIceCandies(1)).to.be.equals(1)
     expect(await icecandy.connect(alice).numberOfReceivedIceCandies(1)).to.be.equals(0)
+
+    expect(await icecandy.connect(alice).getSentProfileIds(1)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(alice).getReceivedProfileIds(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getSentIceCandies(1)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
   })
 
   it('failed to airdrop icecandy to bob, because bob has active token', async () => {
@@ -271,6 +326,13 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).numberOfSentIceCandies(1)).to.be.equals(1)
     expect(await icecandy.connect(alice).numberOfReceivedIceCandies(1)).to.be.equals(0)
 
+    expect(await icecandy.connect(alice).getSentProfileIds(1)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(alice).getReceivedProfileIds(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getSentIceCandies(1)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
+
     // check balance of carol
     expect(await icecandy.connect(carol).balanceOf(carol.address)).to.be.equals(2)
     expect(await icecandy.connect(carol).balanceOfRevealed(carol.address)).to.be.equals(0)
@@ -282,6 +344,13 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).numberOfReceivedProfiles(3)).to.be.equals(0)
     expect(await icecandy.connect(carol).numberOfSentIceCandies(3)).to.be.equals(1)
     expect(await icecandy.connect(carol).numberOfReceivedIceCandies(3)).to.be.equals(0)
+
+    expect(await icecandy.connect(carol).getSentProfileIds(3)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(carol).getReceivedProfileIds(3)).to.be.deep.equals([])
+    expect(await icecandy.connect(carol).getSentIceCandies(3)).to.be.deep.equals([
+      [BigNumber.from(3), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(carol).getReceivedIceCandies(3)).to.be.deep.equals([])
   })
 
   it('carol transfer unlucky icecandy to alice', async () => {
@@ -310,6 +379,13 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).numberOfSentIceCandies(1)).to.be.equals(1)
     expect(await icecandy.connect(alice).numberOfReceivedIceCandies(1)).to.be.equals(0)
 
+    expect(await icecandy.connect(alice).getSentProfileIds(1)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(alice).getReceivedProfileIds(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getSentIceCandies(1)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
+
     // check balance of carol
     expect(await icecandy.connect(carol).balanceOf(carol.address)).to.be.equals(1)
     expect(await icecandy.connect(carol).balanceOfRevealed(carol.address)).to.be.equals(0)
@@ -321,6 +397,13 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).numberOfReceivedProfiles(3)).to.be.equals(0)
     expect(await icecandy.connect(carol).numberOfSentIceCandies(3)).to.be.equals(1)
     expect(await icecandy.connect(carol).numberOfReceivedIceCandies(3)).to.be.equals(0)
+
+    expect(await icecandy.connect(carol).getSentProfileIds(3)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(carol).getReceivedProfileIds(3)).to.be.deep.equals([])
+    expect(await icecandy.connect(carol).getSentIceCandies(3)).to.be.deep.equals([
+      [BigNumber.from(3), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(carol).getReceivedIceCandies(3)).to.be.deep.equals([])
   })
 
   it('bob transfer revealed icecandy to alice', async () => {
@@ -349,6 +432,13 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).numberOfSentIceCandies(1)).to.be.equals(1)
     expect(await icecandy.connect(alice).numberOfReceivedIceCandies(1)).to.be.equals(0)
 
+    expect(await icecandy.connect(alice).getSentProfileIds(1)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(alice).getReceivedProfileIds(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getSentIceCandies(1)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
+
     // check balance of bob
     expect(await icecandy.connect(bob).balanceOf(bob.address)).to.be.equals(2)
     expect(await icecandy.connect(bob).balanceOfRevealed(bob.address)).to.be.equals(1)
@@ -360,6 +450,17 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).numberOfReceivedProfiles(2)).to.be.equals(2)
     expect(await icecandy.connect(bob).numberOfSentIceCandies(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfReceivedIceCandies(2)).to.be.equals(2)
+
+    expect(await icecandy.connect(bob).getSentProfileIds(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getReceivedProfileIds(2)).to.be.deep.equals([
+      BigNumber.from(1),
+      BigNumber.from(3),
+    ])
+    expect(await icecandy.connect(bob).getSentIceCandies(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getReceivedIceCandies(2)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(1), nft.address, BigNumber.from(1)],
+      [BigNumber.from(3), BigNumber.from(3), nft.address, BigNumber.from(1)],
+    ])
   })
 
   it('failed to transfer not revealed icecandy, because only owner can use not revealed icecandy', async () => {
@@ -419,6 +520,14 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).numberOfSentIceCandies(1)).to.be.equals(2)
     expect(await icecandy.connect(alice).numberOfReceivedIceCandies(1)).to.be.equals(0)
 
+    expect(await icecandy.connect(alice).getSentProfileIds(1)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(alice).getReceivedProfileIds(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getSentIceCandies(1)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(2), nft.address, BigNumber.from(1)],
+      [BigNumber.from(6), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
+
     // check balance of bob
     expect(await icecandy.connect(bob).balanceOf(bob.address)).to.be.equals(3)
     expect(await icecandy.connect(bob).balanceOfRevealed(bob.address)).to.be.equals(2)
@@ -430,6 +539,18 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).numberOfReceivedProfiles(2)).to.be.equals(2)
     expect(await icecandy.connect(bob).numberOfSentIceCandies(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfReceivedIceCandies(2)).to.be.equals(3)
+
+    expect(await icecandy.connect(bob).getSentProfileIds(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getReceivedProfileIds(2)).to.be.deep.equals([
+      BigNumber.from(1),
+      BigNumber.from(3),
+    ])
+    expect(await icecandy.connect(bob).getSentIceCandies(2)).to.be.deep.equals([])
+    expect(await icecandy.connect(bob).getReceivedIceCandies(2)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(1), nft.address, BigNumber.from(1)],
+      [BigNumber.from(3), BigNumber.from(3), nft.address, BigNumber.from(1)],
+      [BigNumber.from(6), BigNumber.from(1), nft.address, BigNumber.from(1)],
+    ])
   })
 
   it('owner mint icecandy to alice', async () => {
@@ -452,6 +573,14 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).numberOfReceivedProfiles(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSentIceCandies(1)).to.be.equals(2)
     expect(await icecandy.connect(alice).numberOfReceivedIceCandies(1)).to.be.equals(0)
+
+    expect(await icecandy.connect(alice).getSentProfileIds(1)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(alice).getReceivedProfileIds(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getSentIceCandies(1)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(2), nft.address, BigNumber.from(1)],
+      [BigNumber.from(6), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
   })
 
   it('alice send icecandy to carol', async () => {
@@ -495,6 +624,15 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).numberOfSentIceCandies(1)).to.be.equals(3)
     expect(await icecandy.connect(alice).numberOfReceivedIceCandies(1)).to.be.equals(0)
 
+    expect(await icecandy.connect(alice).getSentProfileIds(1)).to.be.deep.equals([BigNumber.from(2), BigNumber.from(3)])
+    expect(await icecandy.connect(alice).getReceivedProfileIds(1)).to.be.deep.equals([])
+    expect(await icecandy.connect(alice).getSentIceCandies(1)).to.be.deep.equals([
+      [BigNumber.from(1), BigNumber.from(2), nft.address, BigNumber.from(1)],
+      [BigNumber.from(6), BigNumber.from(2), nft.address, BigNumber.from(1)],
+      [BigNumber.from(8), BigNumber.from(3), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
+
     // check balance of carol
     expect(await icecandy.connect(carol).balanceOf(carol.address)).to.be.equals(2)
     expect(await icecandy.connect(carol).balanceOfRevealed(carol.address)).to.be.equals(1)
@@ -506,5 +644,14 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).numberOfReceivedProfiles(3)).to.be.equals(1)
     expect(await icecandy.connect(carol).numberOfSentIceCandies(3)).to.be.equals(1)
     expect(await icecandy.connect(carol).numberOfReceivedIceCandies(3)).to.be.equals(1)
+
+    expect(await icecandy.connect(carol).getSentProfileIds(3)).to.be.deep.equals([BigNumber.from(2)])
+    expect(await icecandy.connect(carol).getReceivedProfileIds(3)).to.be.deep.equals([BigNumber.from(1)])
+    expect(await icecandy.connect(carol).getSentIceCandies(3)).to.be.deep.equals([
+      [BigNumber.from(3), BigNumber.from(2), nft.address, BigNumber.from(1)],
+    ])
+    expect(await icecandy.connect(carol).getReceivedIceCandies(3)).to.be.deep.equals([
+      [BigNumber.from(8), BigNumber.from(1), nft.address, BigNumber.from(1)],
+    ])
   })
 })
