@@ -13,7 +13,7 @@ contract ScoreModule is IScoreModule, ModuleBase {
 
     constructor(address owner) ModuleBase(owner) {}
 
-    function processScore(uint256 profileId) external override onlyProfile {
+    function processScore(uint256 profileId) external override onlyProfileAndIceCandy {
         _scores[profileId][address(0)].name = "PROFILE";
         _scores[profileId][address(0)].point = _getProfileScore(profileId);
         _scores[profileId][IGlobals(_globals).getNFTCollectionModule()].name = "NFT";

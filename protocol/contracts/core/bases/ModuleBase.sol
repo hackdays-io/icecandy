@@ -16,6 +16,14 @@ abstract contract ModuleBase is Ownable {
         _;
     }
 
+    modifier onlyProfileAndIceCandy() {
+        require(
+            msg.sender == IGlobals(_globals).getProfile() || msg.sender == IGlobals(_globals).getIceCandy(),
+            "ExtensionBase: only profile"
+        );
+        _;
+    }
+
     function setGlobals(address globals) external onlyOwner {
         _globals = globals;
     }
