@@ -7,6 +7,7 @@ import {IProfile} from "../interfaces/IProfile.sol";
 import {INFTCollectionModule} from "../interfaces/INFTCollectionModule.sol";
 import {IScoreModule} from "../interfaces/IScoreModule.sol";
 import {IMirrorModule} from "../interfaces/IMirrorModule.sol";
+import {ISkillModule} from "../interfaces/ISkillModule.sol";
 import {IColorExtension} from "../interfaces/IColorExtension.sol";
 import {ISNSAccountModule} from "../interfaces/ISNSAccountModule.sol";
 import {IIceCandy} from "../interfaces/IIceCandy.sol";
@@ -144,6 +145,10 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     function getMirror(uint256 profileId) external view override returns (IMirrorModule.MirrorStruct[] memory) {
         return IMirrorModule(IGlobals(_globals).getMirrorModule()).getMirror(profileId);
+    }
+
+    function getSkill(uint256 profileId) external view override returns (ISkillModule.SkillStruct[] memory) {
+        return ISkillModule(IGlobals(_globals).getSkillModule()).getSkill(profileId);
     }
 
     function getColor(uint256 profileId) external view override returns (IColorExtension.ColorStruct[] memory) {

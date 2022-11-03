@@ -5,6 +5,7 @@ import {INFTCollectionModule} from "./INFTCollectionModule.sol";
 import {ISNSAccountModule} from "./ISNSAccountModule.sol";
 import {IScoreModule} from "./IScoreModule.sol";
 import {IMirrorModule} from "./IMirrorModule.sol";
+import {ISkillModule} from "./ISkillModule.sol";
 import {IColorExtension} from "./IColorExtension.sol";
 
 interface IProfile {
@@ -56,6 +57,8 @@ interface IProfile {
     function getScore(uint256 profileId) external view returns (IScoreModule.ScoreStruct[] memory);
 
     function getMirror(uint256 profileId) external view returns (IMirrorModule.MirrorStruct[] memory);
+
+    function getSkill(uint256 profileId) external view returns (ISkillModule.SkillStruct[] memory);
 
     function getColor(uint256 profileId) external view returns (IColorExtension.ColorStruct[] memory);
 
