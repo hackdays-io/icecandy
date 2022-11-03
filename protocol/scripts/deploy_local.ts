@@ -52,7 +52,12 @@ async function main() {
   const mirror = await fMirror.deploy(deployer.address)
   console.log('MirrorModule address:', mirror.address)
 
-  // MirrorModule
+  // SkillModule
+  const fSkill = await ethers.getContractFactory('SkillModule')
+  const skill = await fSkill.deploy(deployer.address)
+  console.log('SkillModule address:', skill.address)
+
+  // ColorExtension
   const fColor = await ethers.getContractFactory('ColorExtension')
   const color = await fColor.deploy(deployer.address)
   console.log('ColorExtension address:', color.address)
@@ -65,6 +70,7 @@ async function main() {
   await globals.setSNSAccountModule(sns.address)
   await globals.setScoreModule(score.address)
   await globals.setMirrorModule(mirror.address)
+  await globals.setSkillModule(skill.address)
   await globals.setColorExtension(color.address)
 
   // set globals to other contracts
@@ -75,6 +81,7 @@ async function main() {
   await sns.setGlobals(globals.address)
   await score.setGlobals(globals.address)
   await mirror.setGlobals(globals.address)
+  await skill.setGlobals(globals.address)
   await color.setGlobals(globals.address)
 
   if (process.env.LOCAL_USER_ADDRESS) {
