@@ -560,19 +560,6 @@ const _abi = [
         name: "profileId",
         type: "uint256",
       },
-    ],
-    name: "createScore",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
       {
         internalType: "uint256",
         name: "extensionId",
