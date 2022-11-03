@@ -11,6 +11,7 @@ contract Globals is IGlobals, Ownable {
     address private _poapCollectionModule;
     address private _scoreModule;
     address private _mirrorModule;
+    address private _skillModule;
     address private _snsAccountModule;
     address private _colorExtension;
 
@@ -40,6 +41,10 @@ contract Globals is IGlobals, Ownable {
 
     function setMirrorModule(address mirrorModule_) external override onlyOwner {
         _mirrorModule = mirrorModule_;
+    }
+
+    function setSkillModule(address skillModule_) external override onlyOwner {
+        _skillModule = skillModule_;
     }
 
     function setSNSAccountModule(address snsAccountModule_) external override onlyOwner {
@@ -72,6 +77,10 @@ contract Globals is IGlobals, Ownable {
 
     function getMirrorModule() external view override returns (address) {
         return _mirrorModule;
+    }
+
+    function getSkillModule() external view override returns (address) {
+        return _skillModule;
     }
 
     function getSNSAccountModule() external view override returns (address) {
