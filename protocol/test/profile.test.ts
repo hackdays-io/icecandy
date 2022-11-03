@@ -104,23 +104,6 @@ describe('profile test', () => {
     expect(poaps_[1]?.tokenURI).to.equal(_poaps[1]?.tokenURI)
   })
 
-  it('createScore()', async () => {
-    // send transaction
-    const _tx = await profile.connect(alice).createScore(1)
-    await expect(_tx)
-      .to.emit(profile, 'ScoreCreated')
-      .withArgs(1, await ethers.provider.getBlockNumber())
-
-    // get score
-    const scores_ = await profile.connect(alice).getScore(1)
-    expect(scores_[0]?.name).to.equal('PROFILE')
-    expect(scores_[0]?.point).to.equal(300)
-    expect(scores_[1]?.name).to.equal('NFT')
-    expect(scores_[1]?.point).to.equal(100)
-    expect(scores_[2]?.name).to.equal('POAP')
-    expect(scores_[2]?.point).to.equal(200)
-  })
-
   it('addMirror()', async () => {
     // send transaction
     const _mirror = mirrorData()
