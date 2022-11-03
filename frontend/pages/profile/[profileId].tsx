@@ -4,10 +4,14 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import ProfileMain from '../../components/organisms/profile/Main'
 import { useRetrieveProfileNFTByTokenId } from '../../hooks/useProfileContract'
+import { useSendAndReceiveHistoryNum } from '../../hooks/useIceCandy'
 
 const ProfilePage: NextPage = () => {
   const router = useRouter()
   const { profileId } = router.query
+  const { sendAndReceiveHistoryNum } = useSendAndReceiveHistoryNum(
+    Number(profileId)
+  )
 
   const {
     profile,
@@ -22,12 +26,12 @@ const ProfilePage: NextPage = () => {
     if (!score) return
     return {
       score: Number(score[0].point.toString()),
-      sentNumOfPeople: 0,
-      receiveNumOfPeople: 0,
-      sentNum: 0,
-      receiveNum: 0,
+      sentNumOfPeople: sendAndReceiveHistoryNum?.sender as number,
+      receiveNumOfPeople: sendAndReceiveHistoryNum?.receiver as number,
+      sentNum: sendAndReceiveHistoryNum?.sent as number,
+      receiveNum: sendAndReceiveHistoryNum?.received as number,
     }
-  }, [score])
+  }, [score, sendAndReceiveHistoryNum])
 
   return (
     <Box>

@@ -1,23 +1,23 @@
 import { useAddress } from '@thirdweb-dev/react'
-import { BigNumber, constants } from 'ethers'
-import { useEffect, useRef, useState } from 'react'
-import { TypedListener } from '../types/contracts/common'
-import {
-  EatenEvent,
-  EatenEventObject,
-} from '../types/contracts/contracts/core/IceCandy'
+import { BigNumber } from 'ethers'
+import { useEffect, useState } from 'react'
 import {
   useIceCandyContractClient,
-  useProfileNFTContractClient,
 } from './useContractClient'
+
+export type tokenInfo = { tokenId: BigNumber; tokenURI: string }
+
+export type HoldingIceCandy = {
+  notRevealed: tokenInfo[]
+  revealed: tokenInfo[]
+  lucky: tokenInfo[]
+  unlucky: tokenInfo[]
+}
 
 export const useHoldingIceCandy = (address?: string) => {
   const [loading, setLoading] = useState(true)
   const [errors, setErrors] = useState<any>(null)
-  const [holdingIceCandy, setHoldingIceCandy] = useState<{
-    eatenIceCandy: { tokenId: BigNumber; tokenURI: string }[]
-    notEatenIceCandy: { tokenId: BigNumber; tokenURI: string }[]
-  }>()
+  const [holdingIceCandy, setHoldingIceCandy] = useState<HoldingIceCandy>()
   const iceCandyContract = useIceCandyContractClient({
     config: { requireWalletConnection: true },
   })
@@ -26,27 +26,36 @@ export const useHoldingIceCandy = (address?: string) => {
     const fetch = async () => {
       if (!iceCandyContract || !address) return
       try {
-        const holdingIceCandy = await iceCandyContract.balanceOf(address)
-        const eatenIceCandy: { tokenId: BigNumber; tokenURI: string }[] = []
-        const notEatenIceCandy: { tokenId: BigNumber; tokenURI: string }[] = []
+        const balances = await iceCandyContract.balanceOf(address)
+        const notRevealed: tokenInfo[] = []
+        const revealed: tokenInfo[] = []
+        const lucky: tokenInfo[] = []
+        const unlucky: tokenInfo[] = []
         for (
           let index = 0;
-          index < Array(holdingIceCandy.toNumber()).fill('').length;
+          index < Array(balances.toNumber()).fill('').length;
           index++
         ) {
           const tokenId = await iceCandyContract.tokenOfOwnerByIndex(
             address,
             index
           )
-          const isEaten = await iceCandyContract.isEaten(tokenId)
+          const iceCandyType = (await iceCandyContract.getIceCandy(tokenId))
+            .iceCandyType
           const tokenURI = await iceCandyContract.tokenURI(tokenId)
-          isEaten
-            ? eatenIceCandy.push({ tokenId, tokenURI })
-            : notEatenIceCandy.push({ tokenId, tokenURI })
+          iceCandyType === 0
+            ? notRevealed.push({ tokenId, tokenURI })
+            : iceCandyType === 1
+            ? revealed.push({ tokenId, tokenURI })
+            : iceCandyType === 2
+            ? lucky.push({ tokenId, tokenURI })
+            : unlucky.push({ tokenId, tokenURI })
         }
         setHoldingIceCandy({
-          eatenIceCandy,
-          notEatenIceCandy,
+          notRevealed,
+          revealed,
+          lucky,
+          unlucky,
         })
         setLoading(false)
       } catch (error) {
@@ -59,14 +68,19 @@ export const useHoldingIceCandy = (address?: string) => {
   return { holdingIceCandy, loading, errors }
 }
 
+export type HoldingIceCandyNum = {
+  total: number
+  notRevealed: number
+  revealed: number
+  lucky: number
+  unlucky: number
+}
+
 export const useHoldingIceCandyNum = (address?: string) => {
   const [loading, setLoading] = useState(true)
   const [errors, setErrors] = useState<any>(null)
-  const [holdingIceCandy, setHoldingIceCandy] = useState<{
-    holdingIceCandy: number
-    holdingEatenIceCandy: number
-    holdingNotEatenIceCandy: number
-  }>()
+  const [holdingIceCandyNum, setHoldingIceCandyNum] =
+    useState<HoldingIceCandyNum>()
   const iceCandyContract = useIceCandyContractClient({
     config: { requireWalletConnection: true },
   })
@@ -75,16 +89,18 @@ export const useHoldingIceCandyNum = (address?: string) => {
     const fetch = async () => {
       if (!iceCandyContract || !address) return
       try {
-        const holdingIceCandy = await iceCandyContract.balanceOf(address)
-        const holdingEatenIceCandy = await iceCandyContract.balanceOfEaten(
-          address
-        )
-        const holdingNotEatenIceCandy =
-          await iceCandyContract.balanceOfNotEaten(address)
-        setHoldingIceCandy({
-          holdingIceCandy: holdingIceCandy.toNumber(),
-          holdingEatenIceCandy: holdingEatenIceCandy.toNumber(),
-          holdingNotEatenIceCandy: holdingNotEatenIceCandy.toNumber(),
+        setHoldingIceCandyNum({
+          total: (await iceCandyContract.balanceOf(address)).toNumber(),
+          notRevealed: (
+            await iceCandyContract.balanceOfNotRevealed(address)
+          ).toNumber(),
+          revealed: (
+            await iceCandyContract.balanceOfRevealed(address)
+          ).toNumber(),
+          lucky: (await iceCandyContract.balanceOfLucky(address)).toNumber(),
+          unlucky: (
+            await iceCandyContract.balanceOfUnlucky(address)
+          ).toNumber(),
         })
         setLoading(false)
       } catch (error) {
@@ -94,7 +110,48 @@ export const useHoldingIceCandyNum = (address?: string) => {
     fetch()
   }, [address, iceCandyContract])
 
-  return { holdingIceCandy, loading, errors }
+  return { holdingIceCandyNum, loading, errors }
+}
+
+export type SendAndReceiveHistoryNum = {
+  sender: number
+  receiver: number
+  sent: number
+  received: number
+}
+
+export const useSendAndReceiveHistoryNum = (profileId: number) => {
+  const [loading, setLoading] = useState(true)
+  const [errors, setErrors] = useState<any>(null)
+  const [sendAndReceiveHistoryNum, setSendAndReceivedHistoryNum] =
+    useState<SendAndReceiveHistoryNum>()
+  const iceCandyContract = useIceCandyContractClient({
+    config: { requireWalletConnection: true },
+  })
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!iceCandyContract) return
+      try {
+        setSendAndReceivedHistoryNum({
+          sender: (await iceCandyContract.numberOfSender(profileId)).toNumber(),
+          receiver: (
+            await iceCandyContract.numberOfReceiver(profileId)
+          ).toNumber(),
+          sent: (await iceCandyContract.numberOfSent(profileId)).toNumber(),
+          received: (
+            await iceCandyContract.numberOfReceived(profileId)
+          ).toNumber(),
+        })
+        setLoading(false)
+      } catch (error) {
+        setErrors(error)
+      }
+    }
+    fetch()
+  }, [profileId, iceCandyContract])
+
+  return { sendAndReceiveHistoryNum, loading, errors }
 }
 
 export const useSendIceCandy = () => {
@@ -107,7 +164,7 @@ export const useSendIceCandy = () => {
 
   const send = async (profileId: number, module: string, moduleId: number) => {
     if (!iceCandyContract || !address) {
-      throw new Error('Contract or Address cannnot find')
+      throw new Error('Contract or Address can not find')
     }
     setLoading(true)
     try {
@@ -119,64 +176,4 @@ export const useSendIceCandy = () => {
   }
 
   return { loading, send, errors }
-}
-
-export const useEatIceCandy = (profileId: number, tokenId: number) => {
-  const [loading, setLoading] = useState(false)
-  const [errors, setErrors] = useState<any>(null)
-  const [result, setResult] = useState<any>()
-  const success = useRef(false)
-  const address = useAddress()
-
-  const iceCandyContract = useIceCandyContractClient({
-    config: { requireWalletConnection: true },
-  })
-
-  useEffect(() => {
-    const transitionEaten: TypedListener<EatenEvent> = (
-      tokenId,
-      from,
-      profileId,
-      module,
-      moduleId,
-      blockNumber
-    ) => {
-      if (success.current) {
-        setLoading(false)
-        setResult({
-          tokenId: tokenId.toNumber(),
-          from,
-          profileId,
-          module,
-          moduleId,
-          blockNumber: blockNumber.toNumber(),
-        })
-      }
-    }
-
-    if (!iceCandyContract || !address) return
-
-    const filter = iceCandyContract.filters.Eaten(tokenId, null, null)
-    iceCandyContract.on(filter, transitionEaten)
-  }, [iceCandyContract, address])
-
-  const eat = async () => {
-    if (!iceCandyContract || !address) {
-      throw new Error('Contract or Address cannnot find')
-    }
-    setLoading(true)
-    try {
-      await iceCandyContract.eat(
-        tokenId,
-        profileId,
-        '0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9',
-        0
-      )
-      setLoading(false)
-    } catch (error) {
-      setErrors(error)
-    }
-  }
-
-  return { loading, eat, errors, result }
 }
