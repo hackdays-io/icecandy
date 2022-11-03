@@ -1,7 +1,13 @@
 import { useAddress } from '@thirdweb-dev/react'
 import { BigNumber } from 'ethers'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { TypedListener } from '../types/contracts/common'
+import {
+  SentEvent,
+  SentEventObject,
+} from '../types/contracts/contracts/core/IceCandy'
 import { useIceCandyContractClient } from './useContractClient'
+import { useLookupProfileId } from './useProfileContract'
 
 export type tokenInfo = { tokenId: BigNumber; tokenURI: string }
 
@@ -130,13 +136,66 @@ export const useSentAndReceivedHistories = (profileId: number) => {
   return { sentAndReceivedHistories, loading, errors }
 }
 
+export const useGetIceCandyTokenURI = (tokenId?: number) => {
+  const [tokenURI, setTokenURI] = useState<string>()
+  const iceCandyContract = useIceCandyContractClient()
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!tokenId) return
+      try {
+        const _tokenURI = await iceCandyContract?.tokenURI(tokenId)
+        setTokenURI(_tokenURI)
+      } catch (error) {
+        setTokenURI(undefined)
+      }
+    }
+
+    fetch()
+  }, [tokenId])
+
+  return tokenURI
+}
+
 export const useSendIceCandy = () => {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>(null)
+  const [result, setResult] = useState<SentEventObject>()
+  const success = useRef(false)
   const iceCandyContract = useIceCandyContractClient({
     config: { requireWalletConnection: true },
   })
   const address = useAddress()
+  const myProfileId = useLookupProfileId(String(address))
+
+  useEffect(() => {
+    const catchEvent: TypedListener<SentEvent> = (
+      tokenId,
+      from,
+      to,
+      module,
+      moduleId,
+      iceCandyType,
+      blockNumber
+    ) => {
+      if (success.current) {
+        setLoading(false)
+        setResult({
+          tokenId,
+          from,
+          to,
+          module,
+          moduleId,
+          iceCandyType,
+          blockNumber,
+        })
+      }
+    }
+
+    if (!iceCandyContract || !address || myProfileId === undefined) return
+    const filter = iceCandyContract.filters.Sent(null, myProfileId, null)
+    iceCandyContract.on(filter, catchEvent)
+  }, [iceCandyContract, address, myProfileId])
 
   const send = async (profileId: number, module: string, moduleId: number) => {
     if (!iceCandyContract || !address) {
@@ -145,11 +204,12 @@ export const useSendIceCandy = () => {
     setLoading(true)
     try {
       await iceCandyContract.send(profileId, module, moduleId)
-      setLoading(false)
+      success.current = true
     } catch (error) {
+      setLoading(false)
       setErrors(error)
     }
   }
 
-  return { loading, send, errors }
+  return { loading, send, errors, result }
 }
