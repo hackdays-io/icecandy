@@ -351,7 +351,7 @@ export interface IceCandyInterface extends utils.Interface {
     "ApprovalForAll(address,address,bool)": EventFragment;
     "Mint(uint256,address,uint8,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
-    "Sent(uint256,uint256,uint256,address,uint256,uint256)": EventFragment;
+    "Sent(uint256,uint256,uint256,address,uint256,uint8,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
   };
 
@@ -418,10 +418,11 @@ export interface SentEventObject {
   to: BigNumber;
   module: string;
   moduleId: BigNumber;
+  iceCandyType: number;
   blockNumber: BigNumber;
 }
 export type SentEvent = TypedEvent<
-  [BigNumber, BigNumber, BigNumber, string, BigNumber, BigNumber],
+  [BigNumber, BigNumber, BigNumber, string, BigNumber, number, BigNumber],
   SentEventObject
 >;
 
@@ -974,12 +975,13 @@ export interface IceCandy extends BaseContract {
       newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
 
-    "Sent(uint256,uint256,uint256,address,uint256,uint256)"(
+    "Sent(uint256,uint256,uint256,address,uint256,uint8,uint256)"(
       tokenId?: PromiseOrValue<BigNumberish> | null,
       from?: PromiseOrValue<BigNumberish> | null,
       to?: PromiseOrValue<BigNumberish> | null,
       module?: null,
       moduleId?: null,
+      iceCandyType?: null,
       blockNumber?: null
     ): SentEventFilter;
     Sent(
@@ -988,6 +990,7 @@ export interface IceCandy extends BaseContract {
       to?: PromiseOrValue<BigNumberish> | null,
       module?: null,
       moduleId?: null,
+      iceCandyType?: null,
       blockNumber?: null
     ): SentEventFilter;
 

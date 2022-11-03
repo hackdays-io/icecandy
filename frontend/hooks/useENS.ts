@@ -12,6 +12,7 @@ export const useENSName = () => {
   const providerRpc = `https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY_ETH}`
   const PROFILE_KEYS = [
     'url',
+    'avator',
     'description',
     'com.twitter',
     'email',

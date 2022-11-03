@@ -24,15 +24,19 @@ const ModalBase: FC<Props> = ({ isOpen, onClose, children, maxWidth }) => {
       isCentered
     >
       <AlertDialogOverlay>
-        <AlertDialogContent
-          my={0}
-          mx={2}
-          pb={3}
-          maxWidth={maxWidth}
-          maxHeight="90%"
-        >
+        <AlertDialogContent my={0} mx={2} maxWidth={maxWidth} maxHeight="90%">
           <AlertDialogCloseButton />
-          <AlertDialogBody overflow="auto">{children}</AlertDialogBody>
+          <AlertDialogBody
+            p={0}
+            overflow="auto"
+            css={{
+              '&::-webkit-scrollbar': {
+                width: '0px',
+              },
+            }}
+          >
+            {children}
+          </AlertDialogBody>
         </AlertDialogContent>
       </AlertDialogOverlay>
     </AlertDialog>

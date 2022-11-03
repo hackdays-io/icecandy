@@ -175,7 +175,7 @@ export interface IIceCandyInterface extends utils.Interface {
 
   events: {
     "Mint(uint256,address,uint8,uint256)": EventFragment;
-    "Sent(uint256,uint256,uint256,address,uint256,uint256)": EventFragment;
+    "Sent(uint256,uint256,uint256,address,uint256,uint8,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
@@ -201,10 +201,11 @@ export interface SentEventObject {
   to: BigNumber;
   module: string;
   moduleId: BigNumber;
+  iceCandyType: number;
   blockNumber: BigNumber;
 }
 export type SentEvent = TypedEvent<
-  [BigNumber, BigNumber, BigNumber, string, BigNumber, BigNumber],
+  [BigNumber, BigNumber, BigNumber, string, BigNumber, number, BigNumber],
   SentEventObject
 >;
 
@@ -437,12 +438,13 @@ export interface IIceCandy extends BaseContract {
       blockNumber?: null
     ): MintEventFilter;
 
-    "Sent(uint256,uint256,uint256,address,uint256,uint256)"(
+    "Sent(uint256,uint256,uint256,address,uint256,uint8,uint256)"(
       tokenId?: PromiseOrValue<BigNumberish> | null,
       from?: PromiseOrValue<BigNumberish> | null,
       to?: PromiseOrValue<BigNumberish> | null,
       module?: null,
       moduleId?: null,
+      iceCandyType?: null,
       blockNumber?: null
     ): SentEventFilter;
     Sent(
@@ -451,6 +453,7 @@ export interface IIceCandy extends BaseContract {
       to?: PromiseOrValue<BigNumberish> | null,
       module?: null,
       moduleId?: null,
+      iceCandyType?: null,
       blockNumber?: null
     ): SentEventFilter;
   };

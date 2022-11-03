@@ -76,6 +76,12 @@ const _abi = [
       },
       {
         indexed: false,
+        internalType: "enum IIceCandy.IceCandyType",
+        name: "iceCandyType",
+        type: "uint8",
+      },
+      {
+        indexed: false,
         internalType: "uint256",
         name: "blockNumber",
         type: "uint256",
