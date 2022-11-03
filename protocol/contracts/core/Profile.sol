@@ -72,6 +72,12 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         emit MirrorAdded(profileId, moduleId, block.number);
     }
 
+    function addSkill(uint256 profileId, ISkillModule.SkillStruct calldata skill) external override {
+        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
+        uint256 moduleId = ISkillModule(IGlobals(_globals).getSkillModule()).addSkill(profileId, skill);
+        emit SkillAdded(profileId, moduleId, block.number);
+    }
+
     function addColor(uint256 profileId, string memory color) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
         uint256 extensionId = IColorExtension(IGlobals(_globals).getColorExtension()).addColor(profileId, color);

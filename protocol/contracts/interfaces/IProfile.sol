@@ -38,6 +38,8 @@ interface IProfile {
 
     function addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) external;
 
+    function addSkill(uint256 profileId, ISkillModule.SkillStruct calldata skill) external;
+
     function addColor(uint256 profileId, string memory color) external;
 
     function activateColor(uint256 profileId, uint256 extensionId) external;
@@ -73,6 +75,8 @@ interface IProfile {
     event ScoreCreated(uint256 indexed profileId, uint256 blockNumber);
 
     event MirrorAdded(uint256 indexed profileId, uint256 indexed moduleId, uint256 blockNumber);
+
+    event SkillAdded(uint256 indexed profileId, uint256 indexed moduleId, uint256 blockNumber);
 
     event ColorAdded(uint256 indexed profileId, uint256 indexed extensionId, uint256 blockNumber);
 
