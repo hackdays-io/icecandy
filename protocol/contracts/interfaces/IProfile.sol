@@ -35,8 +35,6 @@ interface IProfile {
 
     function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) external;
 
-    function createScore(uint256 profileId) external;
-
     function addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) external;
 
     function addColor(uint256 profileId, string memory color) external;

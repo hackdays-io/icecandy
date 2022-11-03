@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { owner, alice, bob, carol, daniel, icecandy, profile, nft, poap } from './helpers/__setup1.test'
+import { owner, alice, bob, carol, icecandy, profile, nft, score } from './helpers/__setup1.test'
 import { profileData, tokenURI } from './helpers/data'
 import { BigNumber } from 'ethers'
 
@@ -117,6 +117,24 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).getReceivedProfileIds(3)).to.be.deep.equals([])
     expect(await icecandy.connect(carol).getSentIceCandies(3)).to.be.deep.equals([])
     expect(await icecandy.connect(carol).getReceivedIceCandies(3)).to.be.deep.equals([])
+
+    // check score of alice
+    const score1 = await score.connect(alice).getScore(1)
+    expect(score1[0]?.point).to.be.equals(BigNumber.from(0))
+    expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check score of bob
+    const score2 = await score.connect(alice).getScore(2)
+    expect(score2[0]?.point).to.be.equals(BigNumber.from(0))
+    expect(score2[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score2[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check score of carol
+    const score3 = await score.connect(alice).getScore(3)
+    expect(score3[0]?.point).to.be.equals(BigNumber.from(0))
+    expect(score3[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score3[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('alice send icecandy to bob, and get lucky icecandy', async () => {
@@ -185,6 +203,18 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).getReceivedIceCandies(2)).to.be.deep.equals([
       [BigNumber.from(1), BigNumber.from(1), nft.address, BigNumber.from(1)],
     ])
+
+    // check score of alice
+    const score1 = await score.connect(alice).getScore(1)
+    expect(score1[0]?.point).to.be.equals(BigNumber.from(110))
+    expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check score of bob
+    const score2 = await score.connect(alice).getScore(2)
+    expect(score2[0]?.point).to.be.equals(BigNumber.from(110))
+    expect(score2[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score2[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('carol send icecandy to bob, and get unlucky icecandy', async () => {
@@ -257,6 +287,18 @@ describe('icecandy test', () => {
       [BigNumber.from(3), BigNumber.from(2), nft.address, BigNumber.from(1)],
     ])
     expect(await icecandy.connect(carol).getReceivedIceCandies(3)).to.be.deep.equals([])
+
+    // check score of bob
+    const score2 = await score.connect(alice).getScore(2)
+    expect(score2[0]?.point).to.be.equals(BigNumber.from(220))
+    expect(score2[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score2[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check score of carol
+    const score3 = await score.connect(alice).getScore(3)
+    expect(score3[0]?.point).to.be.equals(BigNumber.from(110))
+    expect(score3[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score3[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('failed to send icecandy from carol, because carol has no active token', async () => {
@@ -293,6 +335,12 @@ describe('icecandy test', () => {
       [BigNumber.from(1), BigNumber.from(2), nft.address, BigNumber.from(1)],
     ])
     expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
+
+    // check score of alice
+    const score1 = await score.connect(alice).getScore(1)
+    expect(score1[0]?.point).to.be.equals(BigNumber.from(110))
+    expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('failed to airdrop icecandy to bob, because bob has active token', async () => {
@@ -351,6 +399,18 @@ describe('icecandy test', () => {
       [BigNumber.from(3), BigNumber.from(2), nft.address, BigNumber.from(1)],
     ])
     expect(await icecandy.connect(carol).getReceivedIceCandies(3)).to.be.deep.equals([])
+
+    // check score of alice
+    const score1 = await score.connect(alice).getScore(1)
+    expect(score1[0]?.point).to.be.equals(BigNumber.from(110))
+    expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check score of carol
+    const score3 = await score.connect(alice).getScore(3)
+    expect(score3[0]?.point).to.be.equals(BigNumber.from(110))
+    expect(score3[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score3[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('carol transfer unlucky icecandy to alice', async () => {
@@ -404,6 +464,18 @@ describe('icecandy test', () => {
       [BigNumber.from(3), BigNumber.from(2), nft.address, BigNumber.from(1)],
     ])
     expect(await icecandy.connect(carol).getReceivedIceCandies(3)).to.be.deep.equals([])
+
+    // check score of alice
+    const score1 = await score.connect(alice).getScore(1)
+    expect(score1[0]?.point).to.be.equals(BigNumber.from(110))
+    expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check score of carol
+    const score3 = await score.connect(alice).getScore(3)
+    expect(score3[0]?.point).to.be.equals(BigNumber.from(110))
+    expect(score3[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score3[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('bob transfer revealed icecandy to alice', async () => {
@@ -461,6 +533,18 @@ describe('icecandy test', () => {
       [BigNumber.from(1), BigNumber.from(1), nft.address, BigNumber.from(1)],
       [BigNumber.from(3), BigNumber.from(3), nft.address, BigNumber.from(1)],
     ])
+
+    // check score of alice
+    const score1 = await score.connect(alice).getScore(1)
+    expect(score1[0]?.point).to.be.equals(BigNumber.from(110))
+    expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check score of bob
+    const score2 = await score.connect(alice).getScore(2)
+    expect(score2[0]?.point).to.be.equals(BigNumber.from(220))
+    expect(score2[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score2[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('failed to transfer not revealed icecandy, because only owner can use not revealed icecandy', async () => {
@@ -551,6 +635,18 @@ describe('icecandy test', () => {
       [BigNumber.from(3), BigNumber.from(3), nft.address, BigNumber.from(1)],
       [BigNumber.from(6), BigNumber.from(1), nft.address, BigNumber.from(1)],
     ])
+
+    // check score of alice
+    const score1 = await score.connect(alice).getScore(1)
+    expect(score1[0]?.point).to.be.equals(BigNumber.from(120))
+    expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check score of bob
+    const score2 = await score.connect(alice).getScore(2)
+    expect(score2[0]?.point).to.be.equals(BigNumber.from(230))
+    expect(score2[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score2[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('owner mint icecandy to alice', async () => {
@@ -581,6 +677,12 @@ describe('icecandy test', () => {
       [BigNumber.from(6), BigNumber.from(2), nft.address, BigNumber.from(1)],
     ])
     expect(await icecandy.connect(alice).getReceivedIceCandies(1)).to.be.deep.equals([])
+
+    // check score of alice
+    const score1 = await score.connect(alice).getScore(1)
+    expect(score1[0]?.point).to.be.equals(BigNumber.from(120))
+    expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('alice send icecandy to carol', async () => {
@@ -653,5 +755,17 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).getReceivedIceCandies(3)).to.be.deep.equals([
       [BigNumber.from(8), BigNumber.from(1), nft.address, BigNumber.from(1)],
     ])
+
+    // check score of alice
+    const score1 = await score.connect(alice).getScore(1)
+    expect(score1[0]?.point).to.be.equals(BigNumber.from(230))
+    expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check score of carol
+    const score3 = await score.connect(alice).getScore(3)
+    expect(score3[0]?.point).to.be.equals(BigNumber.from(220))
+    expect(score3[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score3[2]?.point).to.be.equals(BigNumber.from(20))
   })
 })

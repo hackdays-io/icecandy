@@ -156,7 +156,6 @@ export interface IProfileInterface extends utils.Interface {
     "createPOAPCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
     "createProfile((string,string,string,(uint256,address,uint256,string,address)[],(uint256,address,uint256,string,address)[],(string,string,string,address)[]))": FunctionFragment;
     "createSNSAccount(uint256,(string,string,string,address)[])": FunctionFragment;
-    "createScore(uint256)": FunctionFragment;
     "deactivateColor(uint256,uint256)": FunctionFragment;
     "getColor(uint256)": FunctionFragment;
     "getMirror(uint256)": FunctionFragment;
@@ -179,7 +178,6 @@ export interface IProfileInterface extends utils.Interface {
       | "createPOAPCollection"
       | "createProfile"
       | "createSNSAccount"
-      | "createScore"
       | "deactivateColor"
       | "getColor"
       | "getMirror"
@@ -232,10 +230,6 @@ export interface IProfileInterface extends utils.Interface {
       PromiseOrValue<BigNumberish>,
       ISNSAccountModule.SNSAccountStructStruct[]
     ]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "createScore",
-    values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
     functionFragment: "deactivateColor",
@@ -299,10 +293,6 @@ export interface IProfileInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "createSNSAccount",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "createScore",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -536,11 +526,6 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    createScore(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
     deactivateColor(
       profileId: PromiseOrValue<BigNumberish>,
       extensionId: PromiseOrValue<BigNumberish>,
@@ -640,11 +625,6 @@ export interface IProfile extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  createScore(
-    profileId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   deactivateColor(
     profileId: PromiseOrValue<BigNumberish>,
     extensionId: PromiseOrValue<BigNumberish>,
@@ -741,11 +721,6 @@ export interface IProfile extends BaseContract {
     createSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
       snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    createScore(
-      profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -941,11 +916,6 @@ export interface IProfile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    createScore(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
     deactivateColor(
       profileId: PromiseOrValue<BigNumberish>,
       extensionId: PromiseOrValue<BigNumberish>,
@@ -1043,11 +1013,6 @@ export interface IProfile extends BaseContract {
     createSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
       snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    createScore(
-      profileId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 

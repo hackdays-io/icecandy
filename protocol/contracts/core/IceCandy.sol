@@ -6,6 +6,7 @@ import {ERC721} from "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import {IIceCandy} from "../interfaces/IIceCandy.sol";
 import {IGlobals} from "../interfaces/IGlobals.sol";
 import {IProfile} from "../interfaces/IProfile.sol";
+import {IScoreModule} from "../interfaces/IScoreModule.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
@@ -99,6 +100,10 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
             iceCandyType = IIceCandy.IceCandyType.LUCKY;
         }
         _mint(msg.sender, _tokenCounter, iceCandyType);
+
+        // create score
+        _createScore(profileId);
+        _createScore(fromProfileId);
 
         emit Sent(
             tokenId,
@@ -226,6 +231,10 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
             }
         }
         super._transfer(from, to, tokenId);
+    }
+
+    function _createScore(uint256 profileId) internal {
+        IScoreModule(IGlobals(_globals).getScoreModule()).processScore(profileId);
     }
 
     function _baseURI() internal pure override returns (string memory) {
