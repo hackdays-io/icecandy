@@ -4,12 +4,12 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import ProfileMain from '../../components/organisms/profile/Main'
 import { useRetrieveProfileNFTByTokenId } from '../../hooks/useProfileContract'
-import { useSendAndReceiveHistoryNum } from '../../hooks/useIceCandy'
+import { useSentAndReceivedHistories } from '../../hooks/useIceCandy'
 
 const ProfilePage: NextPage = () => {
   const router = useRouter()
   const { profileId } = router.query
-  const { sendAndReceiveHistoryNum } = useSendAndReceiveHistoryNum(
+  const { sentAndReceivedHistories } = useSentAndReceivedHistories(
     Number(profileId)
   )
 
@@ -23,15 +23,15 @@ const ProfilePage: NextPage = () => {
   } = useRetrieveProfileNFTByTokenId(profileId as string)
 
   const stats = useMemo(() => {
-    if (!score) return
+    if (!score || !sentAndReceivedHistories) return
     return {
       score: Number(score[0].point.toString()),
-      sentNumOfPeople: sendAndReceiveHistoryNum?.sender as number,
-      receiveNumOfPeople: sendAndReceiveHistoryNum?.receiver as number,
-      sentNum: sendAndReceiveHistoryNum?.sent as number,
-      receiveNum: sendAndReceiveHistoryNum?.received as number,
+      sentNumOfPeople: sentAndReceivedHistories?.sentProfileIds.length,
+      receiveNumOfPeople: sentAndReceivedHistories?.receivedProfileIds.length,
+      sentNum: sentAndReceivedHistories?.sentIceCandies.length,
+      receiveNum: sentAndReceivedHistories?.receivedIceCandies.length,
     }
-  }, [score, sendAndReceiveHistoryNum])
+  }, [score, sentAndReceivedHistories])
 
   return (
     <Box>
