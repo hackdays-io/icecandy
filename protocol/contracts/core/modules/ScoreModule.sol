@@ -4,6 +4,9 @@ pragma solidity ^0.8.10;
 import {IScoreModule} from "../../interfaces/IScoreModule.sol";
 import {ModuleBase} from "../bases/ModuleBase.sol";
 import {IGlobals} from "../../interfaces/IGlobals.sol";
+import {IIceCandy} from "../../interfaces/IIceCandy.sol";
+import {IProfile} from "../../interfaces/IProfile.sol";
+import {Scoring} from "../../libraries/Scoring.sol";
 
 contract ScoreModule is IScoreModule, ModuleBase {
     mapping(uint256 => mapping(address => ScoreStruct)) internal _scores;
@@ -12,11 +15,11 @@ contract ScoreModule is IScoreModule, ModuleBase {
 
     function processScore(uint256 profileId) external override onlyProfile {
         _scores[profileId][address(0)].name = "PROFILE";
-        _scores[profileId][address(0)].point = 300;
+        _scores[profileId][address(0)].point = _getProfileScore(profileId);
         _scores[profileId][IGlobals(_globals).getNFTCollectionModule()].name = "NFT";
-        _scores[profileId][IGlobals(_globals).getNFTCollectionModule()].point = 100;
+        _scores[profileId][IGlobals(_globals).getNFTCollectionModule()].point = _getNFTScore(profileId);
         _scores[profileId][IGlobals(_globals).getPOAPCollectionModule()].name = "POAP";
-        _scores[profileId][IGlobals(_globals).getPOAPCollectionModule()].point = 200;
+        _scores[profileId][IGlobals(_globals).getPOAPCollectionModule()].point = _getPOAPScore(profileId);
     }
 
     function getScore(uint256 profileId) external view override returns (ScoreStruct[] memory) {
@@ -25,5 +28,23 @@ contract ScoreModule is IScoreModule, ModuleBase {
         scoreArray[1] = _scores[profileId][IGlobals(_globals).getNFTCollectionModule()];
         scoreArray[2] = _scores[profileId][IGlobals(_globals).getPOAPCollectionModule()];
         return scoreArray;
+    }
+
+    function _getProfileScore(uint256 profileId) internal view returns (uint256) {
+        return
+            Scoring.calcProfileScore(
+                IIceCandy(IGlobals(_globals).getIceCandy()).numberOfSentProfiles(profileId),
+                IIceCandy(IGlobals(_globals).getIceCandy()).numberOfReceivedProfiles(profileId),
+                IIceCandy(IGlobals(_globals).getIceCandy()).numberOfSentIceCandies(profileId),
+                IIceCandy(IGlobals(_globals).getIceCandy()).numberOfReceivedIceCandies(profileId)
+            );
+    }
+
+    function _getNFTScore(uint256 profileId) internal view returns (uint256) {
+        return Scoring.calcNFTScore(IProfile(IGlobals(_globals).getProfile()).getNFTCollection(profileId).length);
+    }
+
+    function _getPOAPScore(uint256 profileId) internal view returns (uint256) {
+        return Scoring.calcNFTScore(IProfile(IGlobals(_globals).getProfile()).getPOAPCollection(profileId).length);
     }
 }
