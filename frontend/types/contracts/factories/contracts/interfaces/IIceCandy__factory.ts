@@ -204,6 +204,126 @@ const _abi = [
   {
     inputs: [
       {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getReceivedIceCandies",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "profileId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "module",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "moduleId",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct IIceCandy.SentIceCandyStruct[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getReceivedProfileIds",
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "",
+        type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getSentIceCandies",
+    outputs: [
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+          },
+          {
+            internalType: "uint256",
+            name: "profileId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "module",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "moduleId",
+            type: "uint256",
+          },
+        ],
+        internalType: "struct IIceCandy.SentIceCandyStruct[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+    ],
+    name: "getSentProfileIds",
+    outputs: [
+      {
+        internalType: "uint256[]",
+        name: "",
+        type: "uint256[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
         internalType: "address",
         name: "to",
         type: "address",
@@ -222,7 +342,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "numberOfReceived",
+    name: "numberOfReceivedIceCandies",
     outputs: [
       {
         internalType: "uint256",
@@ -241,7 +361,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "numberOfReceiver",
+    name: "numberOfReceivedProfiles",
     outputs: [
       {
         internalType: "uint256",
@@ -260,7 +380,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "numberOfSender",
+    name: "numberOfSentIceCandies",
     outputs: [
       {
         internalType: "uint256",
@@ -279,7 +399,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "numberOfSent",
+    name: "numberOfSentProfiles",
     outputs: [
       {
         internalType: "uint256",
