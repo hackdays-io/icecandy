@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { owner, alice, bob, carol, daniel, icecandy, profile, nft, poap, score } from './helpers/__setup1.test'
+import { owner, alice, bob, carol, icecandy, profile, nft, score } from './helpers/__setup1.test'
 import { profileData, tokenURI } from './helpers/data'
 import { BigNumber } from 'ethers'
 

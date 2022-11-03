@@ -1,7 +1,7 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
 import { BigNumber } from 'ethers'
-import { owner, alice, bob, carol, daniel, icecandy, profile, nft, poap } from './helpers/__setup2.test'
+import { owner, alice, bob, carol, daniel, icecandy, profile, nft, poap, score } from './helpers/__setup2.test'
 import { profileData, nftData, nftData2, nftData3, poapData, mirrorData, snsData } from './helpers/data'
 
 describe('profile test', () => {
@@ -62,6 +62,12 @@ describe('profile test', () => {
     expect(await profile.connect(alice).balanceOf(alice.address)).to.be.equals(1)
     expect(await profile.connect(alice).ownerOf(1)).to.be.equals(alice.address)
     expect(await profile.connect(alice).tokenURI(1)).to.be.equals('http://example.com/1')
+
+    // check score
+    const score_ = await score.connect(alice).getScore(1)
+    expect(score_[0]?.point).to.be.equals(BigNumber.from(0))
+    expect(score_[1]?.point).to.be.equals(BigNumber.from(20))
+    expect(score_[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('createNFTCollection()', async () => {
@@ -82,6 +88,16 @@ describe('profile test', () => {
     expect(nfts_[1]?.contractAddress).to.equal(_nfts[1]?.contractAddress)
     expect(nfts_[1]?.tokenId).to.equal(BigNumber.from(_nfts[1]?.tokenId))
     expect(nfts_[1]?.tokenURI).to.equal(_nfts[1]?.tokenURI)
+    expect(nfts_[2]?.chainId).to.equal(BigNumber.from(_nfts[2]?.chainId))
+    expect(nfts_[2]?.contractAddress).to.equal(_nfts[2]?.contractAddress)
+    expect(nfts_[2]?.tokenId).to.equal(BigNumber.from(_nfts[2]?.tokenId))
+    expect(nfts_[2]?.tokenURI).to.equal(_nfts[2]?.tokenURI)
+
+    // check score
+    const score_ = await score.connect(alice).getScore(1)
+    expect(score_[0]?.point).to.be.equals(BigNumber.from(0))
+    expect(score_[1]?.point).to.be.equals(BigNumber.from(30))
+    expect(score_[2]?.point).to.be.equals(BigNumber.from(20))
   })
 
   it('createPOAPCollection()', async () => {
@@ -102,6 +118,16 @@ describe('profile test', () => {
     expect(poaps_[1]?.contractAddress).to.equal(_poaps[1]?.contractAddress)
     expect(poaps_[1]?.tokenId).to.equal(BigNumber.from(_poaps[1]?.tokenId))
     expect(poaps_[1]?.tokenURI).to.equal(_poaps[1]?.tokenURI)
+    expect(poaps_[2]?.chainId).to.equal(BigNumber.from(_poaps[2]?.chainId))
+    expect(poaps_[2]?.contractAddress).to.equal(_poaps[2]?.contractAddress)
+    expect(poaps_[2]?.tokenId).to.equal(BigNumber.from(_poaps[2]?.tokenId))
+    expect(poaps_[2]?.tokenURI).to.equal(_poaps[2]?.tokenURI)
+
+    // check score
+    const score_ = await score.connect(alice).getScore(1)
+    expect(score_[0]?.point).to.be.equals(BigNumber.from(0))
+    expect(score_[1]?.point).to.be.equals(BigNumber.from(30))
+    expect(score_[2]?.point).to.be.equals(BigNumber.from(30))
   })
 
   it('addMirror()', async () => {

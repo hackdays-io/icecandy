@@ -61,6 +61,13 @@ const nftData = (owner: SignerWithAddress) => [
     tokenURI: 'https://polygon.com/3',
     owner: owner.address,
   },
+  {
+    chainId: 592,
+    contractAddress: '0x0000000000000000000000000000000000000003',
+    tokenId: 3,
+    tokenURI: 'https://astar.com/3',
+    owner: owner.address,
+  },
 ]
 
 const nftData2 = (owner: SignerWithAddress) => [
@@ -72,10 +79,24 @@ const nftData2 = (owner: SignerWithAddress) => [
     owner: owner.address,
   },
   {
+    chainId: 56,
+    contractAddress: '0x0000000000000000000000000000000000000003',
+    tokenId: 5,
+    tokenURI: 'https://binance.com/5',
+    owner: owner.address,
+  },
+  {
     chainId: 137,
     contractAddress: '0x0000000000000000000000000000000000000005',
     tokenId: 5,
     tokenURI: 'https://polygon.com/5',
+    owner: owner.address,
+  },
+  {
+    chainId: 592,
+    contractAddress: '0x0000000000000000000000000000000000000003',
+    tokenId: 5,
+    tokenURI: 'https://astar.com/5',
     owner: owner.address,
   },
 ]
@@ -89,10 +110,24 @@ const nftData3 = (owner: SignerWithAddress) => [
     owner: owner.address,
   },
   {
+    chainId: 56,
+    contractAddress: '0x0000000000000000000000000000000000000006',
+    tokenId: 6,
+    tokenURI: 'https://binance.com/6',
+    owner: owner.address,
+  },
+  {
     chainId: 137,
     contractAddress: '0x0000000000000000000000000000000000000006',
     tokenId: 6,
     tokenURI: 'https://polygon.com/6',
+    owner: owner.address,
+  },
+  {
+    chainId: 592,
+    contractAddress: '0x0000000000000000000000000000000000000006',
+    tokenId: 6,
+    tokenURI: 'https://astar.com/6',
     owner: owner.address,
   },
 ]
@@ -103,6 +138,13 @@ const poapData = (owner: SignerWithAddress) => [
     contractAddress: '0x0000000000000000000000000000000000000004',
     tokenId: 4,
     tokenURI: '',
+    owner: owner.address,
+  },
+  {
+    chainId: 56,
+    contractAddress: '0x0000000000000000000000000000000000000004',
+    tokenId: 4,
+    tokenURI: 'https://binance.com/4',
     owner: owner.address,
   },
   {
