@@ -10,6 +10,9 @@ async function main() {
   if (process.env.LOCAL_USER_ADDRESS && process.env.ICECANDY_ADDRESS) {
     await IceCandy__factory.connect(process.env.ICECANDY_ADDRESS, deployer).mint(process.env.LOCAL_USER_ADDRESS)
   }
+  if (process.env.LOCAL_USER_ADDRESS_2 && process.env.ICECANDY_ADDRESS) {
+    await IceCandy__factory.connect(process.env.ICECANDY_ADDRESS, deployer).mint(process.env.LOCAL_USER_ADDRESS_2)
+  }
 }
 
 main()
