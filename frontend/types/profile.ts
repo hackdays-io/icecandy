@@ -12,6 +12,8 @@ export namespace AppProfile {
     snsAccounts: ISNSAccountModule.SNSAccountStructStruct[]
   }
 
+  export type ModuleType = 'nftCollection' | 'poapCollection'
+
   export type Module<T> = T extends 'nftCollection' | 'poapCollection'
     ? {
         type: T

@@ -211,7 +211,6 @@ export const useSendIceCandy = () => {
       setLoading(false)
       setErrors(error)
     }
-    setLoading(false)
   }
 
   return { loading, send, errors, result }

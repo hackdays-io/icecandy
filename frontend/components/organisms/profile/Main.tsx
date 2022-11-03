@@ -2,6 +2,8 @@ import { Box, Flex, Grid, Heading, Text } from '@chakra-ui/react'
 import { useAddress } from '@thirdweb-dev/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
+import { useSentAndReceivedHistories } from '../../../hooks/useIceCandy'
+import { useLookupProfileId } from '../../../hooks/useProfileContract'
 import { AppProfile } from '../../../types/profile'
 import PFP from '../../atoms/profile/PFP'
 import SendIceCandyButton from '../../atoms/profile/SendIceCandyButton'
@@ -41,6 +43,9 @@ const ProfileMain: FC<Props> = ({
   const router = useRouter()
   const { profileId } = router.query
   const address = useAddress()
+  const { sentAndReceivedHistories } = useSentAndReceivedHistories(
+    Number(profileId)
+  )
 
   return (
     <Box>
@@ -78,10 +83,26 @@ const ProfileMain: FC<Props> = ({
       {modules.map((module, index) => {
         switch (module.type) {
           case 'nftCollection':
-            return <ProfileNFTCollectionModule nfts={module.data} key={index} />
+            return (
+              <ProfileNFTCollectionModule
+                nfts={module.data}
+                key={index}
+                wallets={wallets}
+                receivedIceCandies={
+                  sentAndReceivedHistories?.receivedIceCandies
+                }
+              />
+            )
           case 'poapCollection':
             return (
-              <ProfilePOAPCollectionModule poaps={module.data} key={index} />
+              <ProfilePOAPCollectionModule
+                poaps={module.data}
+                key={index}
+                wallets={wallets}
+                receivedIceCandies={
+                  sentAndReceivedHistories?.receivedIceCandies
+                }
+              />
             )
           case 'snsAccounts':
             return (
