@@ -17,10 +17,10 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
     mapping(address => uint256) private _notRevealed;
     mapping(address => uint256) private _luckey;
     mapping(address => uint256) private _unluckey;
-    mapping(uint256 => uint256[]) private _sentTo;
-    mapping(uint256 => uint256[]) private _receivedFrom;
-    mapping(uint256 => HistoryStruct[]) private _sentHistory;
-    mapping(uint256 => HistoryStruct[]) private _receivedHistory;
+    mapping(uint256 => uint256[]) private _sentProfileIds;
+    mapping(uint256 => uint256[]) private _receivedProfileIds;
+    mapping(uint256 => SentIceCandyStruct[]) private _sentIceCandies;
+    mapping(uint256 => SentIceCandyStruct[]) private _receivedIceCandies;
     mapping(address => uint256) private _availableTokenId;
 
     constructor(address owner) ERC721("IceCandy", "ICE") {
@@ -51,34 +51,34 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         _iceCandy[tokenId].sentModule = module;
         _iceCandy[tokenId].sentModuleId = moduleId;
 
-        // update _senders
+        // update _sentProfileIds
         bool isExist = false;
-        for (uint256 i = 0; i < _sentTo[fromProfileId].length; i++) {
-            if (_sentTo[fromProfileId][i] == profileId) {
+        for (uint256 i = 0; i < _sentProfileIds[fromProfileId].length; i++) {
+            if (_sentProfileIds[fromProfileId][i] == profileId) {
                 isExist = true;
                 break;
             }
         }
-        if (!isExist) _sentTo[fromProfileId].push(profileId);
+        if (!isExist) _sentProfileIds[fromProfileId].push(profileId);
 
-        // update _receivers
+        // update _receivedProfileIds
         isExist = false;
-        for (uint256 i = 0; i < _receivedFrom[profileId].length; i++) {
-            if (_receivedFrom[profileId][i] == fromProfileId) {
+        for (uint256 i = 0; i < _receivedProfileIds[profileId].length; i++) {
+            if (_receivedProfileIds[profileId][i] == fromProfileId) {
                 isExist = true;
                 break;
             }
         }
-        if (!isExist) _receivedFrom[profileId].push(fromProfileId);
+        if (!isExist) _receivedProfileIds[profileId].push(fromProfileId);
 
-        // update _sentHistory
-        _sentHistory[fromProfileId].push(
-            HistoryStruct({tokenId: tokenId, profileId: profileId, module: module, moduleId: moduleId})
+        // update _sentIceCandies
+        _sentIceCandies[fromProfileId].push(
+            SentIceCandyStruct({tokenId: tokenId, profileId: profileId, module: module, moduleId: moduleId})
         );
 
-        // update _receivedHistory
-        _receivedHistory[profileId].push(
-            HistoryStruct({tokenId: tokenId, profileId: fromProfileId, module: module, moduleId: moduleId})
+        // update _receivedIceCandies
+        _receivedIceCandies[profileId].push(
+            SentIceCandyStruct({tokenId: tokenId, profileId: fromProfileId, module: module, moduleId: moduleId})
         );
 
         _availableTokenId[msg.sender] = 0;
@@ -135,20 +135,36 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         return _unluckey[owner];
     }
 
-    function numberOfSentTo(uint256 profileId) external view override returns (uint256) {
-        return _sentTo[profileId].length;
+    function numberOfSentProfiles(uint256 profileId) external view override returns (uint256) {
+        return _sentProfileIds[profileId].length;
     }
 
-    function numberOfReceivedFrom(uint256 profileId) external view override returns (uint256) {
-        return _receivedFrom[profileId].length;
+    function numberOfReceivedProfiles(uint256 profileId) external view override returns (uint256) {
+        return _receivedProfileIds[profileId].length;
     }
 
-    function numberOfSent(uint256 profileId) external view override returns (uint256) {
-        return _sentHistory[profileId].length;
+    function numberOfSentIceCandies(uint256 profileId) external view override returns (uint256) {
+        return _sentIceCandies[profileId].length;
     }
 
-    function numberOfReceived(uint256 profileId) external view override returns (uint256) {
-        return _receivedHistory[profileId].length;
+    function numberOfReceivedIceCandies(uint256 profileId) external view override returns (uint256) {
+        return _receivedIceCandies[profileId].length;
+    }
+
+    function getSentProfileIds(uint256 profileId) external view override returns (uint256[] memory) {
+        return _sentProfileIds[profileId];
+    }
+
+    function getReceivedProfileIds(uint256 profileId) external view override returns (uint256[] memory) {
+        return _receivedProfileIds[profileId];
+    }
+
+    function getSentIceCandies(uint256 profileId) external view override returns (SentIceCandyStruct[] memory) {
+        return _sentIceCandies[profileId];
+    }
+
+    function getReceivedIceCandies(uint256 profileId) external view override returns (SentIceCandyStruct[] memory) {
+        return _receivedIceCandies[profileId];
     }
 
     function _mint(

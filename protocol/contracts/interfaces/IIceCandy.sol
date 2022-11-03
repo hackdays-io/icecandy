@@ -16,7 +16,7 @@ interface IIceCandy {
         uint256 sentModuleId;
     }
 
-    struct HistoryStruct {
+    struct SentIceCandyStruct {
         uint256 tokenId;
         uint256 profileId; // on _sentHistories it means to, on _receivedHistories it means from
         address module;
@@ -43,13 +43,21 @@ interface IIceCandy {
 
     function balanceOfUnlucky(address owner) external view returns (uint256);
 
-    function numberOfSentTo(uint256 profileId) external view returns (uint256);
+    function numberOfSentProfiles(uint256 profileId) external view returns (uint256);
 
-    function numberOfReceivedFrom(uint256 profileId) external view returns (uint256);
+    function numberOfReceivedProfiles(uint256 profileId) external view returns (uint256);
 
-    function numberOfSent(uint256 profileId) external view returns (uint256);
+    function numberOfSentIceCandies(uint256 profileId) external view returns (uint256);
 
-    function numberOfReceived(uint256 profileId) external view returns (uint256);
+    function numberOfReceivedIceCandies(uint256 profileId) external view returns (uint256);
+
+    function getSentProfileIds(uint256 profileId) external view returns (uint256[] memory);
+
+    function getReceivedProfileIds(uint256 profileId) external view returns (uint256[] memory);
+
+    function getSentIceCandies(uint256 profileId) external view returns (SentIceCandyStruct[] memory);
+
+    function getReceivedIceCandies(uint256 profileId) external view returns (SentIceCandyStruct[] memory);
 
     event Sent(
         uint256 indexed tokenId,
