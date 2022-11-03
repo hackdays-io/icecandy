@@ -43,9 +43,9 @@ interface IIceCandy {
 
     function balanceOfUnlucky(address owner) external view returns (uint256);
 
-    function numberOfSender(uint256 profileId) external view returns (uint256);
+    function numberOfSentTo(uint256 profileId) external view returns (uint256);
 
-    function numberOfReceiver(uint256 profileId) external view returns (uint256);
+    function numberOfReceivedFrom(uint256 profileId) external view returns (uint256);
 
     function numberOfSent(uint256 profileId) external view returns (uint256);
 

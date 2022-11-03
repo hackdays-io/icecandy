@@ -73,8 +73,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(0)
     expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(0)
-    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSentTo(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfReceivedFrom(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
 
@@ -85,8 +85,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).balanceOfLucky(bob.address)).to.be.equals(0)
     expect(await icecandy.connect(bob).balanceOfUnlucky(bob.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(bob).numberOfSender(2)).to.be.equals(0)
-    expect(await icecandy.connect(bob).numberOfReceiver(2)).to.be.equals(0)
+    expect(await icecandy.connect(bob).numberOfSentTo(2)).to.be.equals(0)
+    expect(await icecandy.connect(bob).numberOfReceivedFrom(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfSent(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfReceived(2)).to.be.equals(0)
 
@@ -97,8 +97,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).balanceOfLucky(carol.address)).to.be.equals(0)
     expect(await icecandy.connect(carol).balanceOfUnlucky(carol.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(carol).numberOfSender(3)).to.be.equals(0)
-    expect(await icecandy.connect(carol).numberOfReceiver(3)).to.be.equals(0)
+    expect(await icecandy.connect(carol).numberOfSentTo(3)).to.be.equals(0)
+    expect(await icecandy.connect(carol).numberOfReceivedFrom(3)).to.be.equals(0)
     expect(await icecandy.connect(carol).numberOfSent(3)).to.be.equals(0)
     expect(await icecandy.connect(carol).numberOfReceived(3)).to.be.equals(0)
   })
@@ -139,8 +139,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(1)
     expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(1)
-    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSentTo(1)).to.be.equals(1)
+    expect(await icecandy.connect(alice).numberOfReceivedFrom(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(1)
     expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
 
@@ -151,8 +151,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).balanceOfLucky(bob.address)).to.be.equals(0)
     expect(await icecandy.connect(bob).balanceOfUnlucky(bob.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(bob).numberOfSender(2)).to.be.equals(0)
-    expect(await icecandy.connect(bob).numberOfReceiver(2)).to.be.equals(1)
+    expect(await icecandy.connect(bob).numberOfSentTo(2)).to.be.equals(0)
+    expect(await icecandy.connect(bob).numberOfReceivedFrom(2)).to.be.equals(1)
     expect(await icecandy.connect(bob).numberOfSent(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfReceived(2)).to.be.equals(1)
   })
@@ -193,8 +193,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).balanceOfLucky(bob.address)).to.be.equals(0)
     expect(await icecandy.connect(bob).balanceOfUnlucky(bob.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(bob).numberOfSender(2)).to.be.equals(0)
-    expect(await icecandy.connect(bob).numberOfReceiver(2)).to.be.equals(2)
+    expect(await icecandy.connect(bob).numberOfSentTo(2)).to.be.equals(0)
+    expect(await icecandy.connect(bob).numberOfReceivedFrom(2)).to.be.equals(2)
     expect(await icecandy.connect(bob).numberOfSent(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfReceived(2)).to.be.equals(2)
 
@@ -205,8 +205,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).balanceOfLucky(carol.address)).to.be.equals(0)
     expect(await icecandy.connect(carol).balanceOfUnlucky(carol.address)).to.be.equals(1)
 
-    expect(await icecandy.connect(carol).numberOfSender(3)).to.be.equals(1)
-    expect(await icecandy.connect(carol).numberOfReceiver(3)).to.be.equals(0)
+    expect(await icecandy.connect(carol).numberOfSentTo(3)).to.be.equals(1)
+    expect(await icecandy.connect(carol).numberOfReceivedFrom(3)).to.be.equals(0)
     expect(await icecandy.connect(carol).numberOfSent(3)).to.be.equals(1)
     expect(await icecandy.connect(carol).numberOfReceived(3)).to.be.equals(0)
   })
@@ -234,8 +234,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(1)
     expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(1)
-    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSentTo(1)).to.be.equals(1)
+    expect(await icecandy.connect(alice).numberOfReceivedFrom(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(1)
     expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
   })
@@ -266,8 +266,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(0)
     expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(1)
-    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSentTo(1)).to.be.equals(1)
+    expect(await icecandy.connect(alice).numberOfReceivedFrom(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(1)
     expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
 
@@ -278,8 +278,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).balanceOfLucky(carol.address)).to.be.equals(1)
     expect(await icecandy.connect(carol).balanceOfUnlucky(carol.address)).to.be.equals(1)
 
-    expect(await icecandy.connect(carol).numberOfSender(3)).to.be.equals(1)
-    expect(await icecandy.connect(carol).numberOfReceiver(3)).to.be.equals(0)
+    expect(await icecandy.connect(carol).numberOfSentTo(3)).to.be.equals(1)
+    expect(await icecandy.connect(carol).numberOfReceivedFrom(3)).to.be.equals(0)
     expect(await icecandy.connect(carol).numberOfSent(3)).to.be.equals(1)
     expect(await icecandy.connect(carol).numberOfReceived(3)).to.be.equals(0)
   })
@@ -305,8 +305,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(0)
     expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(1)
 
-    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(1)
-    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSentTo(1)).to.be.equals(1)
+    expect(await icecandy.connect(alice).numberOfReceivedFrom(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(1)
     expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
 
@@ -317,8 +317,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).balanceOfLucky(carol.address)).to.be.equals(1)
     expect(await icecandy.connect(carol).balanceOfUnlucky(carol.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(carol).numberOfSender(3)).to.be.equals(1)
-    expect(await icecandy.connect(carol).numberOfReceiver(3)).to.be.equals(0)
+    expect(await icecandy.connect(carol).numberOfSentTo(3)).to.be.equals(1)
+    expect(await icecandy.connect(carol).numberOfReceivedFrom(3)).to.be.equals(0)
     expect(await icecandy.connect(carol).numberOfSent(3)).to.be.equals(1)
     expect(await icecandy.connect(carol).numberOfReceived(3)).to.be.equals(0)
   })
@@ -344,8 +344,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(0)
     expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(1)
 
-    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(1)
-    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSentTo(1)).to.be.equals(1)
+    expect(await icecandy.connect(alice).numberOfReceivedFrom(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(1)
     expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
 
@@ -356,8 +356,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).balanceOfLucky(bob.address)).to.be.equals(0)
     expect(await icecandy.connect(bob).balanceOfUnlucky(bob.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(bob).numberOfSender(2)).to.be.equals(0)
-    expect(await icecandy.connect(bob).numberOfReceiver(2)).to.be.equals(2)
+    expect(await icecandy.connect(bob).numberOfSentTo(2)).to.be.equals(0)
+    expect(await icecandy.connect(bob).numberOfReceivedFrom(2)).to.be.equals(2)
     expect(await icecandy.connect(bob).numberOfSent(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfReceived(2)).to.be.equals(2)
   })
@@ -414,8 +414,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(0)
     expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(2)
 
-    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(1)
-    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSentTo(1)).to.be.equals(1)
+    expect(await icecandy.connect(alice).numberOfReceivedFrom(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(2)
     expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
 
@@ -426,8 +426,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(bob).balanceOfLucky(bob.address)).to.be.equals(0)
     expect(await icecandy.connect(bob).balanceOfUnlucky(bob.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(bob).numberOfSender(2)).to.be.equals(0)
-    expect(await icecandy.connect(bob).numberOfReceiver(2)).to.be.equals(2)
+    expect(await icecandy.connect(bob).numberOfSentTo(2)).to.be.equals(0)
+    expect(await icecandy.connect(bob).numberOfReceivedFrom(2)).to.be.equals(2)
     expect(await icecandy.connect(bob).numberOfSent(2)).to.be.equals(0)
     expect(await icecandy.connect(bob).numberOfReceived(2)).to.be.equals(3)
   })
@@ -448,8 +448,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(0)
     expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(2)
 
-    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(1)
-    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSentTo(1)).to.be.equals(1)
+    expect(await icecandy.connect(alice).numberOfReceivedFrom(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(2)
     expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
   })
@@ -490,8 +490,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(alice).balanceOfLucky(alice.address)).to.be.equals(0)
     expect(await icecandy.connect(alice).balanceOfUnlucky(alice.address)).to.be.equals(3)
 
-    expect(await icecandy.connect(alice).numberOfSender(1)).to.be.equals(2)
-    expect(await icecandy.connect(alice).numberOfReceiver(1)).to.be.equals(0)
+    expect(await icecandy.connect(alice).numberOfSentTo(1)).to.be.equals(2)
+    expect(await icecandy.connect(alice).numberOfReceivedFrom(1)).to.be.equals(0)
     expect(await icecandy.connect(alice).numberOfSent(1)).to.be.equals(3)
     expect(await icecandy.connect(alice).numberOfReceived(1)).to.be.equals(0)
 
@@ -502,8 +502,8 @@ describe('icecandy test', () => {
     expect(await icecandy.connect(carol).balanceOfLucky(carol.address)).to.be.equals(1)
     expect(await icecandy.connect(carol).balanceOfUnlucky(carol.address)).to.be.equals(0)
 
-    expect(await icecandy.connect(carol).numberOfSender(3)).to.be.equals(1)
-    expect(await icecandy.connect(carol).numberOfReceiver(3)).to.be.equals(1)
+    expect(await icecandy.connect(carol).numberOfSentTo(3)).to.be.equals(1)
+    expect(await icecandy.connect(carol).numberOfReceivedFrom(3)).to.be.equals(1)
     expect(await icecandy.connect(carol).numberOfSent(3)).to.be.equals(1)
     expect(await icecandy.connect(carol).numberOfReceived(3)).to.be.equals(1)
   })
