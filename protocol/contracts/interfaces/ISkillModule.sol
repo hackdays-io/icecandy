@@ -8,7 +8,7 @@ interface ISkillModule {
         string link;
     }
 
-    function addSkill(uint256 profileId, SkillStruct calldata skill) external returns (uint256);
+    function addSkill(uint256 profileId, SkillStruct calldata skill) external;
 
     function getSkill(uint256 profileId) external view returns (SkillStruct[] memory);
 
