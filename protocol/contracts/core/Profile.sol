@@ -46,6 +46,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         _createNFTCollection(profileId, IGlobals(_globals).getNFTCollectionModule(), vars.nfts);
         _createNFTCollection(profileId, IGlobals(_globals).getPOAPCollectionModule(), vars.poaps);
         _createSNSAccount(profileId, vars.snsAccounts);
+        _createSkill(profileId, vars.skills);
         _createScore(profileId);
 
         return profileId;
@@ -186,6 +187,12 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     function _createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) internal {
         ISNSAccountModule(IGlobals(_globals).getSNSAccountModule()).createSNSAccount(profileId, snsAccounts);
+    }
+
+    function _createSkill(uint256 profileId, ISkillModule.SkillStruct[] calldata skills) internal {
+        for (uint i = 0; i < skills.length; i++) {
+            ISkillModule(IGlobals(_globals).getSkillModule()).addSkill(profileId, skills[i]);
+        }
     }
 
     function _getNFTCollection(uint256 profileId, address module)

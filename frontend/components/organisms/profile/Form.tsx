@@ -29,6 +29,7 @@ import {
   Control,
   Controller,
   FormState,
+  useFieldArray,
   UseFormSetValue,
   UseFormWatch,
 } from 'react-hook-form'
@@ -137,6 +138,15 @@ const ProfileForm: FC<Props> = ({
     [address]
   )
 
+  const {
+    fields: skillFields,
+    append: appendSkill,
+    remove: removeSkill,
+  } = useFieldArray({
+    control,
+    name: 'skills',
+  })
+
   return (
     <form onSubmit={onSubmit}>
       <Grid gridTemplateColumns="1fr 400px" mb={3} width="50%">
@@ -167,6 +177,93 @@ const ProfileForm: FC<Props> = ({
 
       <Box my={4}>
         <AuthTwitter setAccountData={setSNSAccount} />
+      </Box>
+
+      <Box mb={5} backgroundColor="gray.200" p={3} borderRadius={10}>
+        <Heading size="md" as="h3" mb={2}>
+          Skills
+        </Heading>
+
+        <List display="grid" gridTemplateColumns="1fr 1fr" gridGap={3}>
+          {skillFields.map((field, index) => (
+            <ListItem
+              key={field.id}
+              backgroundColor="white"
+              borderRadius={3}
+              p={2}
+            >
+              <FormLabel fontSize="12px" mt={0} mb={1}>
+                スキル名
+              </FormLabel>
+              <Controller
+                control={control}
+                name={`skills.${index}.name`}
+                render={({ field }) => (
+                  <Input
+                    value={field.value.toString()}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+              <FormLabel fontSize="12px" mt={3} mb={1}>
+                説明
+              </FormLabel>
+              <Controller
+                control={control}
+                name={`skills.${index}.description`}
+                render={({ field }) => (
+                  <Textarea
+                    rows={3}
+                    value={field.value.toString()}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+              <FormLabel fontSize="12px" mt={3} mb={1}>
+                リンク
+              </FormLabel>
+              <Controller
+                control={control}
+                name={`skills.${index}.link`}
+                render={({ field }) => (
+                  <Input
+                    value={field.value.toString()}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+              <Button
+                width="full"
+                size="sm"
+                mt={3}
+                onClick={() => removeSkill(index)}
+              >
+                削除
+              </Button>
+            </ListItem>
+          ))}
+          <ListItem>
+            <Flex
+              height="100%"
+              minH="80px"
+              boxShadow="0 0 3px 2px lightgrey"
+              borderRadius={3}
+              flexWrap="wrap"
+              justifyContent="center"
+              alignItems="center"
+              cursor="pointer"
+              backgroundColor="white"
+              onClick={() =>
+                appendSkill({ name: '', description: '', link: '' })
+              }
+            >
+              <Box textAlign="center">
+                <AddIcon />
+                <Text>Add Skill</Text>
+              </Box>
+            </Flex>
+          </ListItem>
+        </List>
       </Box>
 
       <Box mb={5} backgroundColor="gray.200" p={3} borderRadius={10}>

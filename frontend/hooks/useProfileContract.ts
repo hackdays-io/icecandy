@@ -1,7 +1,7 @@
 import { useAddress } from '@thirdweb-dev/react'
 import { BigNumber } from 'ethers'
-import { orderBy, uniq, uniqBy } from 'lodash'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { uniqBy } from 'lodash'
+import { useEffect, useRef, useState } from 'react'
 import {
   INFTCollectionModule,
   IProfile,
@@ -10,8 +10,8 @@ import {
 } from '../types/contracts'
 import { TypedListener } from '../types/contracts/common'
 import {
+  ISkillModule,
   ProfileCreatedEvent,
-  ScoreCreatedEvent,
 } from '../types/contracts/contracts/core/Profile'
 import { ProfileCreatedEventObject } from '../types/contracts/contracts/interfaces/IProfile'
 import { AppProfile } from '../types/profile'
@@ -76,6 +76,7 @@ export const useGenerateProfile = () => {
         nfts,
         poaps,
         snsAccounts: [],
+        skills: [],
       })
 
       setLoading(false)
@@ -119,7 +120,8 @@ export const useCreateProfileNFT = () => {
     imageURI: string,
     nfts: INFTCollectionModule.NFTStructStruct[],
     poaps: INFTCollectionModule.NFTStructStruct[],
-    snsAccounts: ISNSAccountModule.SNSAccountStructStruct[]
+    snsAccounts: ISNSAccountModule.SNSAccountStructStruct[],
+    skills: ISkillModule.SkillStructStruct[]
   ) => {
     try {
       setErrors(null)
@@ -135,6 +137,7 @@ export const useCreateProfileNFT = () => {
         nfts,
         poaps,
         snsAccounts,
+        skills,
       })
       success.current = true
     } catch (error) {
@@ -154,6 +157,7 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
     useState<ISNSAccountModule.SNSAccountStructStruct[]>()
   const [poapCollection, setPOAPCollection] =
     useState<INFTCollectionModule.NFTStructStruct[]>()
+  const [skills, setSkills] = useState<ISkillModule.SkillStructStruct[]>()
   const [score, setScore] = useState<IScoreModule.ScoreStructStruct[]>()
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<any>(null)
@@ -180,6 +184,8 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
             Number(tokenId)
           )
           setPOAPCollection(poapCollection)
+          const skills = await profileNFTContract.getSkill(Number(tokenId))
+          setSkills(skills)
           const score = await profileNFTContract.getScore(Number(tokenId))
           setScore(score)
           setLoading(false)
@@ -201,6 +207,7 @@ export const useRetrieveProfileNFTByTokenId = (tokenId?: string) => {
     nftCollection,
     snsAccounts,
     poapCollection,
+    skills,
     score,
     loading,
     errors,

@@ -44,6 +44,13 @@ const profileData = (owner: SignerWithAddress) => ({
       wallet: owner.address,
     },
   ],
+  skills: [
+    {
+      name: 'development',
+      description: 'I have over 10 years of experience in development.',
+      link: 'https://github.com/hoge',
+    },
+  ],
 })
 
 const nftData = (owner: SignerWithAddress) => [

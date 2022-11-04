@@ -1,5 +1,4 @@
-import { ChainId } from '@thirdweb-dev/sdk'
-import { INFTCollectionModule } from './contracts'
+import { INFTCollectionModule, ISkillModule } from './contracts'
 import { ISNSAccountModule } from './contracts/contracts/core/Profile'
 
 export namespace AppProfile {
@@ -10,9 +9,10 @@ export namespace AppProfile {
     nfts: INFTCollectionModule.NFTStructStruct[]
     poaps: INFTCollectionModule.NFTStructStruct[]
     snsAccounts: ISNSAccountModule.SNSAccountStructStruct[]
+    skills: ISkillModule.SkillStructStruct[]
   }
 
-  export type ModuleType = 'nftCollection' | 'poapCollection'
+  export type ModuleType = 'nftCollection' | 'poapCollection' | 'skill'
 
   export type Module<T> = T extends 'nftCollection' | 'poapCollection'
     ? {
@@ -24,6 +24,12 @@ export namespace AppProfile {
     ? {
         type: T
         data: ISNSAccountModule.SNSAccountStructStruct[]
+        loading?: boolean
+      }
+    : T extends 'skills'
+    ? {
+        type: T
+        data: ISkillModule.SkillStructStruct[]
         loading?: boolean
       }
     : any

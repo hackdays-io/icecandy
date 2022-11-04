@@ -165,7 +165,7 @@ describe('profile test', () => {
     const _tx = await profile.connect(alice).addSkill(1, _skill)
     await expect(_tx)
       .to.emit(skill, 'SkillAdded')
-      .withArgs(1, 1, await ethers.provider.getBlockNumber())
+      .withArgs(1, 2, await ethers.provider.getBlockNumber())
 
     // get skill
     const skill_ = await profile.connect(alice).getSkill(1)
@@ -187,7 +187,7 @@ describe('profile test', () => {
     // check alice's flavor
     const _flavor = await profile.connect(alice).getFlavor(1)
     expect(_flavor.length).to.be.equals(1)
-    expect(_flavor[0].active).to.be.equals(false)
+    expect(_flavor[0]?.active).to.be.equals(false)
 
     // activate flavor
     const _tx = await profile.connect(alice).activateFlavor(1, 1)
@@ -197,7 +197,7 @@ describe('profile test', () => {
 
     // check flavor
     const flavor_ = await profile.connect(alice).getFlavor(1)
-    expect(flavor_[0].active).to.be.equals(true)
+    expect(flavor_[0]?.active).to.be.equals(true)
   })
 
   it('deactivateFlavor()', async () => {

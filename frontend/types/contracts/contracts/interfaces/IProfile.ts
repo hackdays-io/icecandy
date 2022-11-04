@@ -95,6 +95,7 @@ export declare namespace IProfile {
     nfts: INFTCollectionModule.NFTStructStruct[];
     poaps: INFTCollectionModule.NFTStructStruct[];
     snsAccounts: ISNSAccountModule.SNSAccountStructStruct[];
+    skills: ISkillModule.SkillStructStruct[];
   };
 
   export type CreateProfileStructDataStructOutput = [
@@ -103,7 +104,8 @@ export declare namespace IProfile {
     string,
     INFTCollectionModule.NFTStructStructOutput[],
     INFTCollectionModule.NFTStructStructOutput[],
-    ISNSAccountModule.SNSAccountStructStructOutput[]
+    ISNSAccountModule.SNSAccountStructStructOutput[],
+    ISkillModule.SkillStructStructOutput[]
   ] & {
     name: string;
     introduction: string;
@@ -111,6 +113,7 @@ export declare namespace IProfile {
     nfts: INFTCollectionModule.NFTStructStructOutput[];
     poaps: INFTCollectionModule.NFTStructStructOutput[];
     snsAccounts: ISNSAccountModule.SNSAccountStructStructOutput[];
+    skills: ISkillModule.SkillStructStructOutput[];
   };
 
   export type ProfileStructStruct = {
@@ -168,7 +171,7 @@ export interface IProfileInterface extends utils.Interface {
     "addWallet(uint256,address)": FunctionFragment;
     "createNFTCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
     "createPOAPCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
-    "createProfile((string,string,string,(uint256,address,uint256,string,address)[],(uint256,address,uint256,string,address)[],(string,string,string,address)[]))": FunctionFragment;
+    "createProfile((string,string,string,(uint256,address,uint256,string,address)[],(uint256,address,uint256,string,address)[],(string,string,string,address)[],(string,string,string)[]))": FunctionFragment;
     "createSNSAccount(uint256,(string,string,string,address)[])": FunctionFragment;
     "deactivateFlavor(uint256,uint256)": FunctionFragment;
     "getFlavor(uint256)": FunctionFragment;

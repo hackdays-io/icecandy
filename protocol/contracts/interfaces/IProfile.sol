@@ -24,6 +24,7 @@ interface IProfile {
         INFTCollectionModule.NFTStruct[] nfts;
         INFTCollectionModule.NFTStruct[] poaps;
         ISNSAccountModule.SNSAccountStruct[] snsAccounts;
+        ISkillModule.SkillStruct[] skills;
     }
 
     function setGlobals(address globals) external;

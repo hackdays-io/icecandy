@@ -350,6 +350,28 @@ const _abi = [
             name: "snsAccounts",
             type: "tuple[]",
           },
+          {
+            components: [
+              {
+                internalType: "string",
+                name: "name",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "description",
+                type: "string",
+              },
+              {
+                internalType: "string",
+                name: "link",
+                type: "string",
+              },
+            ],
+            internalType: "struct ISkillModule.SkillStruct[]",
+            name: "skills",
+            type: "tuple[]",
+          },
         ],
         internalType: "struct IProfile.CreateProfileStructData",
         name: "vars",
