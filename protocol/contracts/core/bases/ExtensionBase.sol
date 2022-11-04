@@ -16,6 +16,11 @@ abstract contract ExtensionBase is Ownable {
         _;
     }
 
+    modifier onlyIceCandy() {
+        require(msg.sender == IGlobals(_globals).getIceCandy(), "ExtensionBase: only icecandy");
+        _;
+    }
+
     function setGlobals(address globals) external onlyOwner {
         _globals = globals;
     }

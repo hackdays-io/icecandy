@@ -136,14 +136,14 @@ export declare namespace IProfile {
   };
 }
 
-export declare namespace IColorExtension {
-  export type ColorStructStruct = {
-    color: PromiseOrValue<string>;
+export declare namespace IFlavorExtension {
+  export type FlavorStructStruct = {
+    flavorType: PromiseOrValue<BigNumberish>;
     active: PromiseOrValue<boolean>;
   };
 
-  export type ColorStructStructOutput = [string, boolean] & {
-    color: string;
+  export type FlavorStructStructOutput = [number, boolean] & {
+    flavorType: number;
     active: boolean;
   };
 }
@@ -162,8 +162,7 @@ export declare namespace IScoreModule {
 
 export interface ProfileInterface extends utils.Interface {
   functions: {
-    "activateColor(uint256,uint256)": FunctionFragment;
-    "addColor(uint256,string)": FunctionFragment;
+    "activateFlavor(uint256,uint256)": FunctionFragment;
     "addMirror(uint256,(string))": FunctionFragment;
     "addSkill(uint256,(string,string,string))": FunctionFragment;
     "addWallet(uint256,address)": FunctionFragment;
@@ -173,9 +172,9 @@ export interface ProfileInterface extends utils.Interface {
     "createPOAPCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
     "createProfile((string,string,string,(uint256,address,uint256,string,address)[],(uint256,address,uint256,string,address)[],(string,string,string,address)[]))": FunctionFragment;
     "createSNSAccount(uint256,(string,string,string,address)[])": FunctionFragment;
-    "deactivateColor(uint256,uint256)": FunctionFragment;
+    "deactivateFlavor(uint256,uint256)": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
-    "getColor(uint256)": FunctionFragment;
+    "getFlavor(uint256)": FunctionFragment;
     "getMirror(uint256)": FunctionFragment;
     "getNFTCollection(uint256)": FunctionFragment;
     "getPOAPCollection(uint256)": FunctionFragment;
@@ -205,8 +204,7 @@ export interface ProfileInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "activateColor"
-      | "addColor"
+      | "activateFlavor"
       | "addMirror"
       | "addSkill"
       | "addWallet"
@@ -216,9 +214,9 @@ export interface ProfileInterface extends utils.Interface {
       | "createPOAPCollection"
       | "createProfile"
       | "createSNSAccount"
-      | "deactivateColor"
+      | "deactivateFlavor"
       | "getApproved"
-      | "getColor"
+      | "getFlavor"
       | "getMirror"
       | "getNFTCollection"
       | "getPOAPCollection"
@@ -247,12 +245,8 @@ export interface ProfileInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "activateColor",
+    functionFragment: "activateFlavor",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "addColor",
-    values: [PromiseOrValue<BigNumberish>, PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
     functionFragment: "addMirror",
@@ -300,7 +294,7 @@ export interface ProfileInterface extends utils.Interface {
     ]
   ): string;
   encodeFunctionData(
-    functionFragment: "deactivateColor",
+    functionFragment: "deactivateFlavor",
     values: [PromiseOrValue<BigNumberish>, PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -308,7 +302,7 @@ export interface ProfileInterface extends utils.Interface {
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
-    functionFragment: "getColor",
+    functionFragment: "getFlavor",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(
@@ -417,10 +411,9 @@ export interface ProfileInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "activateColor",
+    functionFragment: "activateFlavor",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "addColor", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "addMirror", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "addSkill", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "addWallet", data: BytesLike): Result;
@@ -443,14 +436,14 @@ export interface ProfileInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "deactivateColor",
+    functionFragment: "deactivateFlavor",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
     functionFragment: "getApproved",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "getColor", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getFlavor", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getMirror", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getNFTCollection",
@@ -525,9 +518,6 @@ export interface ProfileInterface extends utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
-    "ColorActivated(uint256,uint256,uint256)": EventFragment;
-    "ColorAdded(uint256,uint256,uint256)": EventFragment;
-    "ColorDeactivated(uint256,uint256,uint256)": EventFragment;
     "MirrorAdded(uint256,uint256,uint256)": EventFragment;
     "NFTCollectionCreated(uint256,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
@@ -541,9 +531,6 @@ export interface ProfileInterface extends utils.Interface {
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ColorActivated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ColorAdded"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ColorDeactivated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "MirrorAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "NFTCollectionCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
@@ -578,43 +565,6 @@ export type ApprovalForAllEvent = TypedEvent<
 >;
 
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
-
-export interface ColorActivatedEventObject {
-  profileId: BigNumber;
-  extensionId: BigNumber;
-  blockNumber: BigNumber;
-}
-export type ColorActivatedEvent = TypedEvent<
-  [BigNumber, BigNumber, BigNumber],
-  ColorActivatedEventObject
->;
-
-export type ColorActivatedEventFilter = TypedEventFilter<ColorActivatedEvent>;
-
-export interface ColorAddedEventObject {
-  profileId: BigNumber;
-  extensionId: BigNumber;
-  blockNumber: BigNumber;
-}
-export type ColorAddedEvent = TypedEvent<
-  [BigNumber, BigNumber, BigNumber],
-  ColorAddedEventObject
->;
-
-export type ColorAddedEventFilter = TypedEventFilter<ColorAddedEvent>;
-
-export interface ColorDeactivatedEventObject {
-  profileId: BigNumber;
-  extensionId: BigNumber;
-  blockNumber: BigNumber;
-}
-export type ColorDeactivatedEvent = TypedEvent<
-  [BigNumber, BigNumber, BigNumber],
-  ColorDeactivatedEventObject
->;
-
-export type ColorDeactivatedEventFilter =
-  TypedEventFilter<ColorDeactivatedEvent>;
 
 export interface MirrorAddedEventObject {
   profileId: BigNumber;
@@ -750,15 +700,9 @@ export interface Profile extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    activateColor(
+    activateFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       extensionId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
-
-    addColor(
-      profileId: PromiseOrValue<BigNumberish>,
-      color: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
@@ -814,7 +758,7 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    deactivateColor(
+    deactivateFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       extensionId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -825,10 +769,10 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[string]>;
 
-    getColor(
+    getFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<[IColorExtension.ColorStructStructOutput[]]>;
+    ): Promise<[IFlavorExtension.FlavorStructStructOutput[]]>;
 
     getMirror(
       profileId: PromiseOrValue<BigNumberish>,
@@ -953,15 +897,9 @@ export interface Profile extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  activateColor(
+  activateFlavor(
     profileId: PromiseOrValue<BigNumberish>,
     extensionId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
-  addColor(
-    profileId: PromiseOrValue<BigNumberish>,
-    color: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
@@ -1017,7 +955,7 @@ export interface Profile extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  deactivateColor(
+  deactivateFlavor(
     profileId: PromiseOrValue<BigNumberish>,
     extensionId: PromiseOrValue<BigNumberish>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1028,10 +966,10 @@ export interface Profile extends BaseContract {
     overrides?: CallOverrides
   ): Promise<string>;
 
-  getColor(
+  getFlavor(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
-  ): Promise<IColorExtension.ColorStructStructOutput[]>;
+  ): Promise<IFlavorExtension.FlavorStructStructOutput[]>;
 
   getMirror(
     profileId: PromiseOrValue<BigNumberish>,
@@ -1156,15 +1094,9 @@ export interface Profile extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    activateColor(
+    activateFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       extensionId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    addColor(
-      profileId: PromiseOrValue<BigNumberish>,
-      color: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1220,7 +1152,7 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    deactivateColor(
+    deactivateFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       extensionId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
@@ -1231,10 +1163,10 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<string>;
 
-    getColor(
+    getFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<IColorExtension.ColorStructStructOutput[]>;
+    ): Promise<IFlavorExtension.FlavorStructStructOutput[]>;
 
     getMirror(
       profileId: PromiseOrValue<BigNumberish>,
@@ -1380,39 +1312,6 @@ export interface Profile extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
-    "ColorActivated(uint256,uint256,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      extensionId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): ColorActivatedEventFilter;
-    ColorActivated(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      extensionId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): ColorActivatedEventFilter;
-
-    "ColorAdded(uint256,uint256,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      extensionId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): ColorAddedEventFilter;
-    ColorAdded(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      extensionId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): ColorAddedEventFilter;
-
-    "ColorDeactivated(uint256,uint256,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      extensionId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): ColorDeactivatedEventFilter;
-    ColorDeactivated(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      extensionId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): ColorDeactivatedEventFilter;
-
     "MirrorAdded(uint256,uint256,uint256)"(
       profileId?: PromiseOrValue<BigNumberish> | null,
       moduleId?: PromiseOrValue<BigNumberish> | null,
@@ -1503,15 +1402,9 @@ export interface Profile extends BaseContract {
   };
 
   estimateGas: {
-    activateColor(
+    activateFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       extensionId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
-
-    addColor(
-      profileId: PromiseOrValue<BigNumberish>,
-      color: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
@@ -1567,7 +1460,7 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    deactivateColor(
+    deactivateFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       extensionId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1578,7 +1471,7 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
-    getColor(
+    getFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
@@ -1707,15 +1600,9 @@ export interface Profile extends BaseContract {
   };
 
   populateTransaction: {
-    activateColor(
+    activateFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       extensionId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
-
-    addColor(
-      profileId: PromiseOrValue<BigNumberish>,
-      color: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -1771,7 +1658,7 @@ export interface Profile extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    deactivateColor(
+    deactivateFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       extensionId: PromiseOrValue<BigNumberish>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -1782,7 +1669,7 @@ export interface Profile extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
-    getColor(
+    getFlavor(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;

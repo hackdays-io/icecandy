@@ -7,6 +7,7 @@ import {IIceCandy} from "../interfaces/IIceCandy.sol";
 import {IGlobals} from "../interfaces/IGlobals.sol";
 import {IProfile} from "../interfaces/IProfile.sol";
 import {IScoreModule} from "../interfaces/IScoreModule.sol";
+import {IFlavorExtension} from "../interfaces/IFlavorExtension.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "hardhat/console.sol";
 
@@ -104,6 +105,10 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         // create score
         _createScore(profileId);
         _createScore(fromProfileId);
+
+        // add flavor
+        _addFlavor(profileId);
+        _addFlavor(fromProfileId);
 
         emit Sent(
             tokenId,
@@ -235,6 +240,10 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
 
     function _createScore(uint256 profileId) internal {
         IScoreModule(IGlobals(_globals).getScoreModule()).processScore(profileId);
+    }
+
+    function _addFlavor(uint256 profileId) internal {
+        IFlavorExtension(IGlobals(_globals).getFlavorExtension()).addFlavor(profileId);
     }
 
     function _baseURI() internal pure override returns (string memory) {

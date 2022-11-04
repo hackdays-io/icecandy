@@ -12,7 +12,7 @@ import type {
 const _abi = [
   {
     inputs: [],
-    name: "getColorExtension",
+    name: "getFlavorExtension",
     outputs: [
       {
         internalType: "address",
@@ -131,11 +131,11 @@ const _abi = [
     inputs: [
       {
         internalType: "address",
-        name: "colorExtension",
+        name: "flavorExtension",
         type: "address",
       },
     ],
-    name: "setColorExtension",
+    name: "setFlavorExtension",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",

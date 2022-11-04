@@ -3,18 +3,18 @@ pragma solidity ^0.8.10;
 
 import {IIceCandy} from "../interfaces/IIceCandy.sol";
 
-library Scoring {
+library ScoreLogic {
     function calcProfileScore(
         uint256 numberOfSentProfiles,
         uint256 unmberOfReceivedProfiles,
         uint256 numberOfSentIceCandies,
-        uint256 umberOfReceivedIceCandies
+        uint256 numberOfReceivedIceCandies
     ) internal pure returns (uint256) {
         uint256 score;
         score += numberOfSentProfiles * 100;
         score += unmberOfReceivedProfiles * 100;
         score += numberOfSentIceCandies * 10;
-        score += umberOfReceivedIceCandies * 10;
+        score += numberOfReceivedIceCandies * 10;
         return score;
     }
 

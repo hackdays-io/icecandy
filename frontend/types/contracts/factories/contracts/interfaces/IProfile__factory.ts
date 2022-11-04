@@ -22,81 +22,6 @@ const _abi = [
       {
         indexed: true,
         internalType: "uint256",
-        name: "extensionId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "ColorActivated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "extensionId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "ColorAdded",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "extensionId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "ColorDeactivated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
         name: "moduleId",
         type: "uint256",
       },
@@ -255,25 +180,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "activateColor",
-    outputs: [],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        internalType: "string",
-        name: "color",
-        type: "string",
-      },
-    ],
-    name: "addColor",
+    name: "activateFlavor",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -626,7 +533,7 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "deactivateColor",
+    name: "deactivateFlavor",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -639,14 +546,14 @@ const _abi = [
         type: "uint256",
       },
     ],
-    name: "getColor",
+    name: "getFlavor",
     outputs: [
       {
         components: [
           {
-            internalType: "string",
-            name: "color",
-            type: "string",
+            internalType: "enum IFlavorExtension.FlavorType",
+            name: "flavorType",
+            type: "uint8",
           },
           {
             internalType: "bool",
@@ -654,7 +561,7 @@ const _abi = [
             type: "bool",
           },
         ],
-        internalType: "struct IColorExtension.ColorStruct[]",
+        internalType: "struct IFlavorExtension.FlavorStruct[]",
         name: "",
         type: "tuple[]",
       },

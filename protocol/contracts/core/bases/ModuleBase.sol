@@ -12,14 +12,14 @@ abstract contract ModuleBase is Ownable {
     }
 
     modifier onlyProfile() {
-        require(msg.sender == IGlobals(_globals).getProfile(), "ExtensionBase: only profile");
+        require(msg.sender == IGlobals(_globals).getProfile(), "ModuleBase: only profile");
         _;
     }
 
     modifier onlyProfileAndIceCandy() {
         require(
             msg.sender == IGlobals(_globals).getProfile() || msg.sender == IGlobals(_globals).getIceCandy(),
-            "ExtensionBase: only profile"
+            "ModuleBase: only profile"
         );
         _;
     }
