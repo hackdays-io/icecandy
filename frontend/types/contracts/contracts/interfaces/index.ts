@@ -3,7 +3,7 @@
 /* eslint-disable */
 import type * as assetstore from "./assetstore";
 export type { assetstore };
-export type { IColorExtension } from "./IColorExtension";
+export type { IFlavorExtension } from "./IFlavorExtension";
 export type { IGlobals } from "./IGlobals";
 export type { IIceCandy } from "./IIceCandy";
 export type { IMirrorModule } from "./IMirrorModule";

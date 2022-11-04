@@ -28,7 +28,7 @@ import type {
 
 export interface GlobalsInterface extends utils.Interface {
   functions: {
-    "getColorExtension()": FunctionFragment;
+    "getFlavorExtension()": FunctionFragment;
     "getIceCandy()": FunctionFragment;
     "getMirrorModule()": FunctionFragment;
     "getNFTCollectionModule()": FunctionFragment;
@@ -39,7 +39,7 @@ export interface GlobalsInterface extends utils.Interface {
     "getSkillModule()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "setColorExtension(address)": FunctionFragment;
+    "setFlavorExtension(address)": FunctionFragment;
     "setIceCandy(address)": FunctionFragment;
     "setMirrorModule(address)": FunctionFragment;
     "setNFTCollectionModule(address)": FunctionFragment;
@@ -53,7 +53,7 @@ export interface GlobalsInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
-      | "getColorExtension"
+      | "getFlavorExtension"
       | "getIceCandy"
       | "getMirrorModule"
       | "getNFTCollectionModule"
@@ -64,7 +64,7 @@ export interface GlobalsInterface extends utils.Interface {
       | "getSkillModule"
       | "owner"
       | "renounceOwnership"
-      | "setColorExtension"
+      | "setFlavorExtension"
       | "setIceCandy"
       | "setMirrorModule"
       | "setNFTCollectionModule"
@@ -77,7 +77,7 @@ export interface GlobalsInterface extends utils.Interface {
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "getColorExtension",
+    functionFragment: "getFlavorExtension",
     values?: undefined
   ): string;
   encodeFunctionData(
@@ -118,7 +118,7 @@ export interface GlobalsInterface extends utils.Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "setColorExtension",
+    functionFragment: "setFlavorExtension",
     values: [PromiseOrValue<string>]
   ): string;
   encodeFunctionData(
@@ -159,7 +159,7 @@ export interface GlobalsInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "getColorExtension",
+    functionFragment: "getFlavorExtension",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -197,7 +197,7 @@ export interface GlobalsInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setColorExtension",
+    functionFragment: "setFlavorExtension",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -280,7 +280,7 @@ export interface Globals extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    getColorExtension(overrides?: CallOverrides): Promise<[string]>;
+    getFlavorExtension(overrides?: CallOverrides): Promise<[string]>;
 
     getIceCandy(overrides?: CallOverrides): Promise<[string]>;
 
@@ -304,7 +304,7 @@ export interface Globals extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
 
-    setColorExtension(
+    setFlavorExtension(
       colorExtension_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -355,7 +355,7 @@ export interface Globals extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
-  getColorExtension(overrides?: CallOverrides): Promise<string>;
+  getFlavorExtension(overrides?: CallOverrides): Promise<string>;
 
   getIceCandy(overrides?: CallOverrides): Promise<string>;
 
@@ -379,7 +379,7 @@ export interface Globals extends BaseContract {
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
 
-  setColorExtension(
+  setFlavorExtension(
     colorExtension_: PromiseOrValue<string>,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -430,7 +430,7 @@ export interface Globals extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
-    getColorExtension(overrides?: CallOverrides): Promise<string>;
+    getFlavorExtension(overrides?: CallOverrides): Promise<string>;
 
     getIceCandy(overrides?: CallOverrides): Promise<string>;
 
@@ -452,7 +452,7 @@ export interface Globals extends BaseContract {
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
-    setColorExtension(
+    setFlavorExtension(
       colorExtension_: PromiseOrValue<string>,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -515,7 +515,7 @@ export interface Globals extends BaseContract {
   };
 
   estimateGas: {
-    getColorExtension(overrides?: CallOverrides): Promise<BigNumber>;
+    getFlavorExtension(overrides?: CallOverrides): Promise<BigNumber>;
 
     getIceCandy(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -539,7 +539,7 @@ export interface Globals extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
 
-    setColorExtension(
+    setFlavorExtension(
       colorExtension_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -591,7 +591,9 @@ export interface Globals extends BaseContract {
   };
 
   populateTransaction: {
-    getColorExtension(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    getFlavorExtension(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
 
     getIceCandy(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -621,7 +623,7 @@ export interface Globals extends BaseContract {
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
 
-    setColorExtension(
+    setFlavorExtension(
       colorExtension_: PromiseOrValue<string>,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
