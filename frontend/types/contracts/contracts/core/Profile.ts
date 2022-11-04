@@ -518,26 +518,16 @@ export interface ProfileInterface extends utils.Interface {
   events: {
     "Approval(address,address,uint256)": EventFragment;
     "ApprovalForAll(address,address,bool)": EventFragment;
-    "MirrorAdded(uint256,uint256,uint256)": EventFragment;
-    "NFTCollectionCreated(uint256,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
     "ProfileCreated(uint256,address,uint256)": EventFragment;
-    "SNSAccountCreated(uint256,uint256)": EventFragment;
-    "ScoreCreated(uint256,uint256)": EventFragment;
-    "SkillAdded(uint256,uint256,uint256)": EventFragment;
     "Transfer(address,address,uint256)": EventFragment;
     "WalletAdded(uint256,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Approval"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ApprovalForAll"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "MirrorAdded"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "NFTCollectionCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "ProfileCreated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SNSAccountCreated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ScoreCreated"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "SkillAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "WalletAdded"): EventFragment;
 }
@@ -566,31 +556,6 @@ export type ApprovalForAllEvent = TypedEvent<
 
 export type ApprovalForAllEventFilter = TypedEventFilter<ApprovalForAllEvent>;
 
-export interface MirrorAddedEventObject {
-  profileId: BigNumber;
-  moduleId: BigNumber;
-  blockNumber: BigNumber;
-}
-export type MirrorAddedEvent = TypedEvent<
-  [BigNumber, BigNumber, BigNumber],
-  MirrorAddedEventObject
->;
-
-export type MirrorAddedEventFilter = TypedEventFilter<MirrorAddedEvent>;
-
-export interface NFTCollectionCreatedEventObject {
-  profileId: BigNumber;
-  module: string;
-  blockNumber: BigNumber;
-}
-export type NFTCollectionCreatedEvent = TypedEvent<
-  [BigNumber, string, BigNumber],
-  NFTCollectionCreatedEventObject
->;
-
-export type NFTCollectionCreatedEventFilter =
-  TypedEventFilter<NFTCollectionCreatedEvent>;
-
 export interface OwnershipTransferredEventObject {
   previousOwner: string;
   newOwner: string;
@@ -614,41 +579,6 @@ export type ProfileCreatedEvent = TypedEvent<
 >;
 
 export type ProfileCreatedEventFilter = TypedEventFilter<ProfileCreatedEvent>;
-
-export interface SNSAccountCreatedEventObject {
-  profileId: BigNumber;
-  blockNumber: BigNumber;
-}
-export type SNSAccountCreatedEvent = TypedEvent<
-  [BigNumber, BigNumber],
-  SNSAccountCreatedEventObject
->;
-
-export type SNSAccountCreatedEventFilter =
-  TypedEventFilter<SNSAccountCreatedEvent>;
-
-export interface ScoreCreatedEventObject {
-  profileId: BigNumber;
-  blockNumber: BigNumber;
-}
-export type ScoreCreatedEvent = TypedEvent<
-  [BigNumber, BigNumber],
-  ScoreCreatedEventObject
->;
-
-export type ScoreCreatedEventFilter = TypedEventFilter<ScoreCreatedEvent>;
-
-export interface SkillAddedEventObject {
-  profileId: BigNumber;
-  moduleId: BigNumber;
-  blockNumber: BigNumber;
-}
-export type SkillAddedEvent = TypedEvent<
-  [BigNumber, BigNumber, BigNumber],
-  SkillAddedEventObject
->;
-
-export type SkillAddedEventFilter = TypedEventFilter<SkillAddedEvent>;
 
 export interface TransferEventObject {
   from: string;
@@ -1312,28 +1242,6 @@ export interface Profile extends BaseContract {
       approved?: null
     ): ApprovalForAllEventFilter;
 
-    "MirrorAdded(uint256,uint256,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      moduleId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): MirrorAddedEventFilter;
-    MirrorAdded(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      moduleId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): MirrorAddedEventFilter;
-
-    "NFTCollectionCreated(uint256,address,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      module?: PromiseOrValue<string> | null,
-      blockNumber?: null
-    ): NFTCollectionCreatedEventFilter;
-    NFTCollectionCreated(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      module?: PromiseOrValue<string> | null,
-      blockNumber?: null
-    ): NFTCollectionCreatedEventFilter;
-
     "OwnershipTransferred(address,address)"(
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
@@ -1353,35 +1261,6 @@ export interface Profile extends BaseContract {
       owner?: PromiseOrValue<string> | null,
       blockNumber?: null
     ): ProfileCreatedEventFilter;
-
-    "SNSAccountCreated(uint256,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): SNSAccountCreatedEventFilter;
-    SNSAccountCreated(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): SNSAccountCreatedEventFilter;
-
-    "ScoreCreated(uint256,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): ScoreCreatedEventFilter;
-    ScoreCreated(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): ScoreCreatedEventFilter;
-
-    "SkillAdded(uint256,uint256,uint256)"(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      moduleId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): SkillAddedEventFilter;
-    SkillAdded(
-      profileId?: PromiseOrValue<BigNumberish> | null,
-      moduleId?: PromiseOrValue<BigNumberish> | null,
-      blockNumber?: null
-    ): SkillAddedEventFilter;
 
     "Transfer(address,address,uint256)"(
       from?: PromiseOrValue<string> | null,

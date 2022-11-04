@@ -53,9 +53,9 @@ export declare namespace INFTCollectionModule {
 
 export interface POAPCollectionModuleInterface extends utils.Interface {
   functions: {
+    "createCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
     "getCollection(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
-    "processCollect(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setGlobals(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
@@ -63,26 +63,26 @@ export interface POAPCollectionModuleInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "createCollection"
       | "getCollection"
       | "owner"
-      | "processCollect"
       | "renounceOwnership"
       | "setGlobals"
       | "transferOwnership"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "getCollection",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "processCollect",
+    functionFragment: "createCollection",
     values: [
       PromiseOrValue<BigNumberish>,
       INFTCollectionModule.NFTStructStruct[]
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "getCollection",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -97,14 +97,14 @@ export interface POAPCollectionModuleInterface extends utils.Interface {
   ): string;
 
   decodeFunctionResult(
+    functionFragment: "createCollection",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getCollection",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "processCollect",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -116,11 +116,26 @@ export interface POAPCollectionModuleInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "NFTCollectionCreated(uint256,address,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "NFTCollectionCreated"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export interface NFTCollectionCreatedEventObject {
+  profileId: BigNumber;
+  module: string;
+  blockNumber: BigNumber;
+}
+export type NFTCollectionCreatedEvent = TypedEvent<
+  [BigNumber, string, BigNumber],
+  NFTCollectionCreatedEventObject
+>;
+
+export type NFTCollectionCreatedEventFilter =
+  TypedEventFilter<NFTCollectionCreatedEvent>;
 
 export interface OwnershipTransferredEventObject {
   previousOwner: string;
@@ -161,18 +176,18 @@ export interface POAPCollectionModule extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    createCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      nfts: INFTCollectionModule.NFTStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     getCollection(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[INFTCollectionModule.NFTStructStructOutput[]]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
-
-    processCollect(
-      profileId: PromiseOrValue<BigNumberish>,
-      nfts: INFTCollectionModule.NFTStructStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -189,18 +204,18 @@ export interface POAPCollectionModule extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  createCollection(
+    profileId: PromiseOrValue<BigNumberish>,
+    nfts: INFTCollectionModule.NFTStructStruct[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   getCollection(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
 
   owner(overrides?: CallOverrides): Promise<string>;
-
-  processCollect(
-    profileId: PromiseOrValue<BigNumberish>,
-    nfts: INFTCollectionModule.NFTStructStruct[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -217,18 +232,18 @@ export interface POAPCollectionModule extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    createCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      nfts: INFTCollectionModule.NFTStructStruct[],
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     getCollection(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
 
     owner(overrides?: CallOverrides): Promise<string>;
-
-    processCollect(
-      profileId: PromiseOrValue<BigNumberish>,
-      nfts: INFTCollectionModule.NFTStructStruct[],
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -244,6 +259,17 @@ export interface POAPCollectionModule extends BaseContract {
   };
 
   filters: {
+    "NFTCollectionCreated(uint256,address,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      module?: PromiseOrValue<string> | null,
+      blockNumber?: null
+    ): NFTCollectionCreatedEventFilter;
+    NFTCollectionCreated(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      module?: PromiseOrValue<string> | null,
+      blockNumber?: null
+    ): NFTCollectionCreatedEventFilter;
+
     "OwnershipTransferred(address,address)"(
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
@@ -255,18 +281,18 @@ export interface POAPCollectionModule extends BaseContract {
   };
 
   estimateGas: {
+    createCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      nfts: INFTCollectionModule.NFTStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     getCollection(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    processCollect(
-      profileId: PromiseOrValue<BigNumberish>,
-      nfts: INFTCollectionModule.NFTStructStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -284,18 +310,18 @@ export interface POAPCollectionModule extends BaseContract {
   };
 
   populateTransaction: {
+    createCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      nfts: INFTCollectionModule.NFTStructStruct[],
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     getCollection(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    processCollect(
-      profileId: PromiseOrValue<BigNumberish>,
-      nfts: INFTCollectionModule.NFTStructStruct[],
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }

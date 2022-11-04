@@ -13,7 +13,11 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -49,37 +53,54 @@ export declare namespace INFTCollectionModule {
 
 export interface INFTCollectionModuleInterface extends utils.Interface {
   functions: {
+    "createCollection(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
     "getCollection(uint256)": FunctionFragment;
-    "processCollect(uint256,(uint256,address,uint256,string,address)[])": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "getCollection" | "processCollect"
+    nameOrSignatureOrTopic: "createCollection" | "getCollection"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "getCollection",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "processCollect",
+    functionFragment: "createCollection",
     values: [
       PromiseOrValue<BigNumberish>,
       INFTCollectionModule.NFTStructStruct[]
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "getCollection",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
 
+  decodeFunctionResult(
+    functionFragment: "createCollection",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getCollection",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "processCollect",
-    data: BytesLike
-  ): Result;
 
-  events: {};
+  events: {
+    "NFTCollectionCreated(uint256,address,uint256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "NFTCollectionCreated"): EventFragment;
 }
+
+export interface NFTCollectionCreatedEventObject {
+  profileId: BigNumber;
+  module: string;
+  blockNumber: BigNumber;
+}
+export type NFTCollectionCreatedEvent = TypedEvent<
+  [BigNumber, string, BigNumber],
+  NFTCollectionCreatedEventObject
+>;
+
+export type NFTCollectionCreatedEventFilter =
+  TypedEventFilter<NFTCollectionCreatedEvent>;
 
 export interface INFTCollectionModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -108,67 +129,78 @@ export interface INFTCollectionModule extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    getCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[INFTCollectionModule.NFTStructStructOutput[]]>;
-
-    processCollect(
+    createCollection(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    getCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[INFTCollectionModule.NFTStructStructOutput[]]>;
   };
+
+  createCollection(
+    profileId: PromiseOrValue<BigNumberish>,
+    nfts: INFTCollectionModule.NFTStructStruct[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   getCollection(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
 
-  processCollect(
-    profileId: PromiseOrValue<BigNumberish>,
-    nfts: INFTCollectionModule.NFTStructStruct[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   callStatic: {
-    getCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
-
-    processCollect(
+    createCollection(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
-  };
 
-  filters: {};
-
-  estimateGas: {
     getCollection(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<INFTCollectionModule.NFTStructStructOutput[]>;
+  };
 
-    processCollect(
+  filters: {
+    "NFTCollectionCreated(uint256,address,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      module?: PromiseOrValue<string> | null,
+      blockNumber?: null
+    ): NFTCollectionCreatedEventFilter;
+    NFTCollectionCreated(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      module?: PromiseOrValue<string> | null,
+      blockNumber?: null
+    ): NFTCollectionCreatedEventFilter;
+  };
+
+  estimateGas: {
+    createCollection(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    getCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    getCollection(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    processCollect(
+    createCollection(
       profileId: PromiseOrValue<BigNumberish>,
       nfts: INFTCollectionModule.NFTStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getCollection(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

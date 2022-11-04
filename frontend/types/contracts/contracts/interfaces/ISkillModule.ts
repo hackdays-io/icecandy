@@ -13,7 +13,11 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -59,8 +63,24 @@ export interface ISkillModuleInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "addSkill", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getSkill", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "SkillAdded(uint256,uint256,uint256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "SkillAdded"): EventFragment;
 }
+
+export interface SkillAddedEventObject {
+  profileId: BigNumber;
+  moduleId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type SkillAddedEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber],
+  SkillAddedEventObject
+>;
+
+export type SkillAddedEventFilter = TypedEventFilter<SkillAddedEvent>;
 
 export interface ISkillModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -117,7 +137,7 @@ export interface ISkillModule extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       skill: ISkillModule.SkillStructStruct,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<void>;
 
     getSkill(
       profileId: PromiseOrValue<BigNumberish>,
@@ -125,7 +145,18 @@ export interface ISkillModule extends BaseContract {
     ): Promise<ISkillModule.SkillStructStructOutput[]>;
   };
 
-  filters: {};
+  filters: {
+    "SkillAdded(uint256,uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): SkillAddedEventFilter;
+    SkillAdded(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): SkillAddedEventFilter;
+  };
 
   estimateGas: {
     addSkill(

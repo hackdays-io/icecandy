@@ -11,6 +11,65 @@ import type {
 
 const _abi = [
   {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blockNumber",
+        type: "uint256",
+      },
+    ],
+    name: "SNSAccountCreated",
+    type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "string",
+            name: "service",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "userId",
+            type: "string",
+          },
+          {
+            internalType: "string",
+            name: "userPageURL",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "wallet",
+            type: "address",
+          },
+        ],
+        internalType: "struct ISNSAccountModule.SNSAccountStruct[]",
+        name: "sns",
+        type: "tuple[]",
+      },
+    ],
+    name: "createSNSAccount",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
     inputs: [
       {
         internalType: "uint256",
@@ -49,46 +108,6 @@ const _abi = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "string",
-            name: "service",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "userId",
-            type: "string",
-          },
-          {
-            internalType: "string",
-            name: "userPageURL",
-            type: "string",
-          },
-          {
-            internalType: "address",
-            name: "wallet",
-            type: "address",
-          },
-        ],
-        internalType: "struct ISNSAccountModule.SNSAccountStruct[]",
-        name: "sns",
-        type: "tuple[]",
-      },
-    ],
-    name: "processSNSAccount",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
 ];

@@ -13,7 +13,11 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -41,37 +45,53 @@ export declare namespace ISNSAccountModule {
 
 export interface ISNSAccountModuleInterface extends utils.Interface {
   functions: {
+    "createSNSAccount(uint256,(string,string,string,address)[])": FunctionFragment;
     "getSNSAccounts(uint256)": FunctionFragment;
-    "processSNSAccount(uint256,(string,string,string,address)[])": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "getSNSAccounts" | "processSNSAccount"
+    nameOrSignatureOrTopic: "createSNSAccount" | "getSNSAccounts"
   ): FunctionFragment;
 
   encodeFunctionData(
-    functionFragment: "getSNSAccounts",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "processSNSAccount",
+    functionFragment: "createSNSAccount",
     values: [
       PromiseOrValue<BigNumberish>,
       ISNSAccountModule.SNSAccountStructStruct[]
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "getSNSAccounts",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
 
+  decodeFunctionResult(
+    functionFragment: "createSNSAccount",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "getSNSAccounts",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(
-    functionFragment: "processSNSAccount",
-    data: BytesLike
-  ): Result;
 
-  events: {};
+  events: {
+    "SNSAccountCreated(uint256,uint256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "SNSAccountCreated"): EventFragment;
 }
+
+export interface SNSAccountCreatedEventObject {
+  profileId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type SNSAccountCreatedEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  SNSAccountCreatedEventObject
+>;
+
+export type SNSAccountCreatedEventFilter =
+  TypedEventFilter<SNSAccountCreatedEvent>;
 
 export interface ISNSAccountModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -100,67 +120,76 @@ export interface ISNSAccountModule extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
-    getSNSAccounts(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<[ISNSAccountModule.SNSAccountStructStructOutput[]]>;
-
-    processSNSAccount(
+    createSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
       sns: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
+
+    getSNSAccounts(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<[ISNSAccountModule.SNSAccountStructStructOutput[]]>;
   };
+
+  createSNSAccount(
+    profileId: PromiseOrValue<BigNumberish>,
+    sns: ISNSAccountModule.SNSAccountStructStruct[],
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   getSNSAccounts(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
 
-  processSNSAccount(
-    profileId: PromiseOrValue<BigNumberish>,
-    sns: ISNSAccountModule.SNSAccountStructStruct[],
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   callStatic: {
-    getSNSAccounts(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
-
-    processSNSAccount(
+    createSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
       sns: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: CallOverrides
     ): Promise<void>;
-  };
 
-  filters: {};
-
-  estimateGas: {
     getSNSAccounts(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<ISNSAccountModule.SNSAccountStructStructOutput[]>;
+  };
 
-    processSNSAccount(
+  filters: {
+    "SNSAccountCreated(uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): SNSAccountCreatedEventFilter;
+    SNSAccountCreated(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): SNSAccountCreatedEventFilter;
+  };
+
+  estimateGas: {
+    createSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
       sns: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
+    getSNSAccounts(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
-    getSNSAccounts(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    processSNSAccount(
+    createSNSAccount(
       profileId: PromiseOrValue<BigNumberish>,
       sns: ISNSAccountModule.SNSAccountStructStruct[],
       overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
+    getSNSAccounts(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

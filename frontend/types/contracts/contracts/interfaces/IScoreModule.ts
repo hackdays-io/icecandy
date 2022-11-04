@@ -13,7 +13,11 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -37,31 +41,46 @@ export declare namespace IScoreModule {
 
 export interface IScoreModuleInterface extends utils.Interface {
   functions: {
+    "createScore(uint256)": FunctionFragment;
     "getScore(uint256)": FunctionFragment;
-    "processScore(uint256)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic: "getScore" | "processScore"
+    nameOrSignatureOrTopic: "createScore" | "getScore"
   ): FunctionFragment;
 
+  encodeFunctionData(
+    functionFragment: "createScore",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
   encodeFunctionData(
     functionFragment: "getScore",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
-  encodeFunctionData(
-    functionFragment: "processScore",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
 
-  decodeFunctionResult(functionFragment: "getScore", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "processScore",
+    functionFragment: "createScore",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getScore", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "ScoreCreated(uint256,uint256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "ScoreCreated"): EventFragment;
 }
+
+export interface ScoreCreatedEventObject {
+  profileId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type ScoreCreatedEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  ScoreCreatedEventObject
+>;
+
+export type ScoreCreatedEventFilter = TypedEventFilter<ScoreCreatedEvent>;
 
 export interface IScoreModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -90,62 +109,71 @@ export interface IScoreModule extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[IScoreModule.ScoreStructStructOutput[]]>;
-
-    processScore(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
   };
+
+  createScore(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
 
   getScore(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<IScoreModule.ScoreStructStructOutput[]>;
 
-  processScore(
-    profileId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
-
   callStatic: {
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<IScoreModule.ScoreStructStructOutput[]>;
-
-    processScore(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    "ScoreCreated(uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): ScoreCreatedEventFilter;
+    ScoreCreated(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): ScoreCreatedEventFilter;
+  };
 
   estimateGas: {
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    processScore(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
   };
 
   populateTransaction: {
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    processScore(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;
   };
 }
