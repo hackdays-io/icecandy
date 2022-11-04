@@ -66,15 +66,5 @@ interface IProfile {
 
     event ProfileCreated(uint256 indexed profileId, address indexed owner, uint256 blockNumber);
 
-    event NFTCollectionCreated(uint256 indexed profileId, address indexed module, uint256 blockNumber);
-
-    event SNSAccountCreated(uint256 indexed profileId, uint256 blockNumber);
-
-    event ScoreCreated(uint256 indexed profileId, uint256 blockNumber);
-
-    event MirrorAdded(uint256 indexed profileId, uint256 indexed moduleId, uint256 blockNumber);
-
-    event SkillAdded(uint256 indexed profileId, uint256 indexed moduleId, uint256 blockNumber);
-
     event WalletAdded(uint256 profileId, address wallet);
 }

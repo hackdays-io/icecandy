@@ -13,4 +13,6 @@ interface INFTCollectionModule {
     function processCollect(uint256 profileId, NFTStruct[] calldata nfts) external;
 
     function getCollection(uint256 profileId) external view returns (NFTStruct[] memory);
+
+    event NFTCollectionCreated(uint256 indexed profileId, address indexed module, uint256 blockNumber);
 }

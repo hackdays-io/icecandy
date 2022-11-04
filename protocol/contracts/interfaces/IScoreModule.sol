@@ -13,7 +13,9 @@ interface IScoreModule {
         uint256 point;
     }
 
-    function processScore(uint256 profileId) external;
+    function createScore(uint256 profileId) external;
 
     function getScore(uint256 profileId) external view returns (ScoreStruct[] memory);
+
+    event ScoreCreated(uint256 indexed profileId, uint256 blockNumber);
 }
