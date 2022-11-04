@@ -9,6 +9,7 @@ import PFP from '../../atoms/profile/PFP'
 import SendIceCandyButton from '../../atoms/profile/SendIceCandyButton'
 import ProfileNFTCollectionModule from '../../molecules/profiles/NFTCollectionModule'
 import ProfilePOAPCollectionModule from '../../molecules/profiles/POAPCollectionModule'
+import ProfileSkillsModule from '../../molecules/profiles/SkillsModule'
 import ProfileSNSAccountsModule from '../../molecules/profiles/SNSAccountsModule'
 
 type Props = {
@@ -25,6 +26,7 @@ type Props = {
   }
   modules: [
     AppProfile.Module<'snsAccounts'>,
+    AppProfile.Module<'skills'>,
     AppProfile.Module<'nftCollection'>,
     AppProfile.Module<'poapCollection'>
   ]
@@ -97,6 +99,17 @@ const ProfileMain: FC<Props> = ({
             return (
               <ProfilePOAPCollectionModule
                 poaps={module.data}
+                key={index}
+                wallets={wallets}
+                receivedIceCandies={
+                  sentAndReceivedHistories?.receivedIceCandies
+                }
+              />
+            )
+          case 'skills':
+            return (
+              <ProfileSkillsModule
+                skills={module.data}
                 key={index}
                 wallets={wallets}
                 receivedIceCandies={

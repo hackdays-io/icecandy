@@ -3,20 +3,19 @@ import { useAddress } from '@thirdweb-dev/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
 import { SentIceCandy } from '../../../hooks/useIceCandy'
-import { INFTCollectionModule } from '../../../types/contracts'
+import { ISkillModule } from '../../../types/contracts'
 import { ModuleTypeAddress } from '../../../utils/moduleType2Address'
 import SendIceCandyButton from '../../atoms/profile/SendIceCandyButton'
-import SinglePOAP from '../../atoms/profile/SinglePOAP'
 
 type Props = {
-  poaps: INFTCollectionModule.NFTStructStruct[]
+  skills: ISkillModule.SkillStructStruct[]
   wallets?: string[]
   isPreview?: boolean
   receivedIceCandies?: SentIceCandy[]
 }
 
-const ProfilePOAPCollectionModule: FC<Props> = ({
-  poaps,
+const ProfileSkillsModule: FC<Props> = ({
+  skills,
   wallets,
   isPreview,
   receivedIceCandies,
@@ -28,23 +27,37 @@ const ProfilePOAPCollectionModule: FC<Props> = ({
   return (
     <Box p={5} borderRadius={10} boxShadow="0 0 10px 10px #ecf3ff" my={8}>
       <Text fontWeight="bold" fontSize="20px" mb={5}>
-        POAPs
+        Skills
       </Text>
 
       <Grid
-        gridTemplateColumns="repeat(5, minmax(100px, 1fr))"
+        gridTemplateColumns="repeat(2, minmax(100px, 1fr))"
         gridGap={4}
         gridAutoRows="1fr"
       >
-        {poaps?.map((poap, index) => (
+        {skills?.map((skill, index) => (
           <Box textAlign="center">
-            <SinglePOAP key={index} {...{ poap }} />
+            <Box
+              border="2px solid"
+              borderColor="gray.300"
+              textAlign="left"
+              p={2}
+            >
+              <Text fontWeight="bold" mb={2}>
+                {skill.name.toString()}
+              </Text>
+              <Text mb={2}>{skill.description.toString()}</Text>
+              <Text mb={2}>
+                <a href={skill.link.toString()}>{skill.link.toString()}</a>
+              </Text>
+            </Box>
+
             <Box fontSize="11px">
               アイスキャンディの数
               {
                 receivedIceCandies?.filter(
                   (ic) =>
-                    ic.module === ModuleTypeAddress.poapCollection &&
+                    ic.module === ModuleTypeAddress.skill &&
                     ic.moduleId === index + 1
                 ).length
               }
@@ -52,7 +65,7 @@ const ProfilePOAPCollectionModule: FC<Props> = ({
             {!isPreview && !wallets?.includes(String(address)) && (
               <SendIceCandyButton
                 profileId={Number(profileId)}
-                module="poapCollection"
+                module="skill"
                 moduleId={index + 1}
               />
             )}
@@ -63,4 +76,4 @@ const ProfilePOAPCollectionModule: FC<Props> = ({
   )
 }
 
-export default ProfilePOAPCollectionModule
+export default ProfileSkillsModule

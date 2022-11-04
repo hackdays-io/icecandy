@@ -19,6 +19,7 @@ const ProfilePage: NextPage = () => {
     snsAccounts,
     nftCollection,
     poapCollection,
+    skills,
     score,
   } = useRetrieveProfileNFTByTokenId(profileId as string)
 
@@ -47,6 +48,7 @@ const ProfilePage: NextPage = () => {
             iceCandyStats={stats}
             modules={[
               { type: 'snsAccounts', data: snsAccounts || [] },
+              { type: 'skills', data: skills || [] },
               { type: 'nftCollection', data: nftCollection || [] },
               { type: 'poapCollection', data: poapCollection || [] },
             ]}
