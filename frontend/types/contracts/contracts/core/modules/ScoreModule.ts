@@ -41,9 +41,9 @@ export declare namespace IScoreModule {
 
 export interface ScoreModuleInterface extends utils.Interface {
   functions: {
+    "createScore(uint256)": FunctionFragment;
     "getScore(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
-    "processScore(uint256)": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "setGlobals(address)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
@@ -51,23 +51,23 @@ export interface ScoreModuleInterface extends utils.Interface {
 
   getFunction(
     nameOrSignatureOrTopic:
+      | "createScore"
       | "getScore"
       | "owner"
-      | "processScore"
       | "renounceOwnership"
       | "setGlobals"
       | "transferOwnership"
   ): FunctionFragment;
 
   encodeFunctionData(
+    functionFragment: "createScore",
+    values: [PromiseOrValue<BigNumberish>]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getScore",
     values: [PromiseOrValue<BigNumberish>]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "processScore",
-    values: [PromiseOrValue<BigNumberish>]
-  ): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
     values?: undefined
@@ -81,12 +81,12 @@ export interface ScoreModuleInterface extends utils.Interface {
     values: [PromiseOrValue<string>]
   ): string;
 
-  decodeFunctionResult(functionFragment: "getScore", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "processScore",
+    functionFragment: "createScore",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getScore", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
@@ -99,9 +99,11 @@ export interface ScoreModuleInterface extends utils.Interface {
 
   events: {
     "OwnershipTransferred(address,address)": EventFragment;
+    "ScoreCreated(uint256,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "ScoreCreated"): EventFragment;
 }
 
 export interface OwnershipTransferredEventObject {
@@ -115,6 +117,17 @@ export type OwnershipTransferredEvent = TypedEvent<
 
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
+
+export interface ScoreCreatedEventObject {
+  profileId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type ScoreCreatedEvent = TypedEvent<
+  [BigNumber, BigNumber],
+  ScoreCreatedEventObject
+>;
+
+export type ScoreCreatedEventFilter = TypedEventFilter<ScoreCreatedEvent>;
 
 export interface ScoreModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -143,17 +156,17 @@ export interface ScoreModule extends BaseContract {
   removeListener: OnEvent<this>;
 
   functions: {
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<ContractTransaction>;
+
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<[IScoreModule.ScoreStructStructOutput[]]>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
-
-    processScore(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<ContractTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -170,17 +183,17 @@ export interface ScoreModule extends BaseContract {
     ): Promise<ContractTransaction>;
   };
 
+  createScore(
+    profileId: PromiseOrValue<BigNumberish>,
+    overrides?: Overrides & { from?: PromiseOrValue<string> }
+  ): Promise<ContractTransaction>;
+
   getScore(
     profileId: PromiseOrValue<BigNumberish>,
     overrides?: CallOverrides
   ): Promise<IScoreModule.ScoreStructStructOutput[]>;
 
   owner(overrides?: CallOverrides): Promise<string>;
-
-  processScore(
-    profileId: PromiseOrValue<BigNumberish>,
-    overrides?: Overrides & { from?: PromiseOrValue<string> }
-  ): Promise<ContractTransaction>;
 
   renounceOwnership(
     overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -197,17 +210,17 @@ export interface ScoreModule extends BaseContract {
   ): Promise<ContractTransaction>;
 
   callStatic: {
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<IScoreModule.ScoreStructStructOutput[]>;
 
     owner(overrides?: CallOverrides): Promise<string>;
-
-    processScore(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: CallOverrides
-    ): Promise<void>;
 
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
@@ -231,20 +244,29 @@ export interface ScoreModule extends BaseContract {
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
+
+    "ScoreCreated(uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): ScoreCreatedEventFilter;
+    ScoreCreated(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): ScoreCreatedEventFilter;
   };
 
   estimateGas: {
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<BigNumber>;
+
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
-
-    processScore(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<BigNumber>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }
@@ -262,17 +284,17 @@ export interface ScoreModule extends BaseContract {
   };
 
   populateTransaction: {
+    createScore(
+      profileId: PromiseOrValue<BigNumberish>,
+      overrides?: Overrides & { from?: PromiseOrValue<string> }
+    ): Promise<PopulatedTransaction>;
+
     getScore(
       profileId: PromiseOrValue<BigNumberish>,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    processScore(
-      profileId: PromiseOrValue<BigNumberish>,
-      overrides?: Overrides & { from?: PromiseOrValue<string> }
-    ): Promise<PopulatedTransaction>;
 
     renounceOwnership(
       overrides?: Overrides & { from?: PromiseOrValue<string> }

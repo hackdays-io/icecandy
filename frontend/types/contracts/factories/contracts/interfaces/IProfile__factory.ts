@@ -21,56 +21,6 @@ const _abi = [
       },
       {
         indexed: true,
-        internalType: "uint256",
-        name: "moduleId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "MirrorAdded",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "module",
-        type: "address",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "NFTCollectionCreated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
         internalType: "address",
         name: "owner",
         type: "address",
@@ -83,69 +33,6 @@ const _abi = [
       },
     ],
     name: "ProfileCreated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "SNSAccountCreated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "ScoreCreated",
-    type: "event",
-  },
-  {
-    anonymous: false,
-    inputs: [
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        indexed: true,
-        internalType: "uint256",
-        name: "moduleId",
-        type: "uint256",
-      },
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "blockNumber",
-        type: "uint256",
-      },
-    ],
-    name: "SkillAdded",
     type: "event",
   },
   {

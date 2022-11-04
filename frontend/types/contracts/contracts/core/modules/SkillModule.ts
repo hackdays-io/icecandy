@@ -98,9 +98,11 @@ export interface SkillModuleInterface extends utils.Interface {
 
   events: {
     "OwnershipTransferred(address,address)": EventFragment;
+    "SkillAdded(uint256,uint256,uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "SkillAdded"): EventFragment;
 }
 
 export interface OwnershipTransferredEventObject {
@@ -114,6 +116,18 @@ export type OwnershipTransferredEvent = TypedEvent<
 
 export type OwnershipTransferredEventFilter =
   TypedEventFilter<OwnershipTransferredEvent>;
+
+export interface SkillAddedEventObject {
+  profileId: BigNumber;
+  moduleId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type SkillAddedEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber],
+  SkillAddedEventObject
+>;
+
+export type SkillAddedEventFilter = TypedEventFilter<SkillAddedEvent>;
 
 export interface SkillModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -202,7 +216,7 @@ export interface SkillModule extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       skill: ISkillModule.SkillStructStruct,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<void>;
 
     getSkill(
       profileId: PromiseOrValue<BigNumberish>,
@@ -233,6 +247,17 @@ export interface SkillModule extends BaseContract {
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null
     ): OwnershipTransferredEventFilter;
+
+    "SkillAdded(uint256,uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): SkillAddedEventFilter;
+    SkillAdded(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): SkillAddedEventFilter;
   };
 
   estimateGas: {

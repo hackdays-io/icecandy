@@ -13,7 +13,11 @@ import type {
   Signer,
   utils,
 } from "ethers";
-import type { FunctionFragment, Result } from "@ethersproject/abi";
+import type {
+  FunctionFragment,
+  Result,
+  EventFragment,
+} from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -51,8 +55,24 @@ export interface IMirrorModuleInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "addMirror", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "getMirror", data: BytesLike): Result;
 
-  events: {};
+  events: {
+    "MirrorAdded(uint256,uint256,uint256)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "MirrorAdded"): EventFragment;
 }
+
+export interface MirrorAddedEventObject {
+  profileId: BigNumber;
+  moduleId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type MirrorAddedEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber],
+  MirrorAddedEventObject
+>;
+
+export type MirrorAddedEventFilter = TypedEventFilter<MirrorAddedEvent>;
 
 export interface IMirrorModule extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -109,7 +129,7 @@ export interface IMirrorModule extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       mirror: IMirrorModule.MirrorStructStruct,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<void>;
 
     getMirror(
       profileId: PromiseOrValue<BigNumberish>,
@@ -117,7 +137,18 @@ export interface IMirrorModule extends BaseContract {
     ): Promise<IMirrorModule.MirrorStructStructOutput[]>;
   };
 
-  filters: {};
+  filters: {
+    "MirrorAdded(uint256,uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): MirrorAddedEventFilter;
+    MirrorAdded(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): MirrorAddedEventFilter;
+  };
 
   estimateGas: {
     addMirror(

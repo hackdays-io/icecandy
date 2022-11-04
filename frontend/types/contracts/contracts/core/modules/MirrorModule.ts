@@ -89,11 +89,25 @@ export interface MirrorModuleInterface extends utils.Interface {
   ): Result;
 
   events: {
+    "MirrorAdded(uint256,uint256,uint256)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
+  getEvent(nameOrSignatureOrTopic: "MirrorAdded"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "OwnershipTransferred"): EventFragment;
 }
+
+export interface MirrorAddedEventObject {
+  profileId: BigNumber;
+  moduleId: BigNumber;
+  blockNumber: BigNumber;
+}
+export type MirrorAddedEvent = TypedEvent<
+  [BigNumber, BigNumber, BigNumber],
+  MirrorAddedEventObject
+>;
+
+export type MirrorAddedEventFilter = TypedEventFilter<MirrorAddedEvent>;
 
 export interface OwnershipTransferredEventObject {
   previousOwner: string;
@@ -194,7 +208,7 @@ export interface MirrorModule extends BaseContract {
       profileId: PromiseOrValue<BigNumberish>,
       mirror: IMirrorModule.MirrorStructStruct,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
+    ): Promise<void>;
 
     getMirror(
       profileId: PromiseOrValue<BigNumberish>,
@@ -217,6 +231,17 @@ export interface MirrorModule extends BaseContract {
   };
 
   filters: {
+    "MirrorAdded(uint256,uint256,uint256)"(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): MirrorAddedEventFilter;
+    MirrorAdded(
+      profileId?: PromiseOrValue<BigNumberish> | null,
+      moduleId?: PromiseOrValue<BigNumberish> | null,
+      blockNumber?: null
+    ): MirrorAddedEventFilter;
+
     "OwnershipTransferred(address,address)"(
       previousOwner?: PromiseOrValue<string> | null,
       newOwner?: PromiseOrValue<string> | null

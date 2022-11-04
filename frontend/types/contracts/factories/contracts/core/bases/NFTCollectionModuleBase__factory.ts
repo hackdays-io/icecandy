@@ -15,6 +15,31 @@ const _abi = [
     inputs: [
       {
         indexed: true,
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "module",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "blockNumber",
+        type: "uint256",
+      },
+    ],
+    name: "NFTCollectionCreated",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
         internalType: "address",
         name: "previousOwner",
         type: "address",
@@ -28,6 +53,51 @@ const _abi = [
     ],
     name: "OwnershipTransferred",
     type: "event",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "profileId",
+        type: "uint256",
+      },
+      {
+        components: [
+          {
+            internalType: "uint256",
+            name: "chainId",
+            type: "uint256",
+          },
+          {
+            internalType: "address",
+            name: "contractAddress",
+            type: "address",
+          },
+          {
+            internalType: "uint256",
+            name: "tokenId",
+            type: "uint256",
+          },
+          {
+            internalType: "string",
+            name: "tokenURI",
+            type: "string",
+          },
+          {
+            internalType: "address",
+            name: "owner",
+            type: "address",
+          },
+        ],
+        internalType: "struct INFTCollectionModule.NFTStruct[]",
+        name: "nfts",
+        type: "tuple[]",
+      },
+    ],
+    name: "createCollection",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
   },
   {
     inputs: [
@@ -86,51 +156,6 @@ const _abi = [
       },
     ],
     stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "profileId",
-        type: "uint256",
-      },
-      {
-        components: [
-          {
-            internalType: "uint256",
-            name: "chainId",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "contractAddress",
-            type: "address",
-          },
-          {
-            internalType: "uint256",
-            name: "tokenId",
-            type: "uint256",
-          },
-          {
-            internalType: "string",
-            name: "tokenURI",
-            type: "string",
-          },
-          {
-            internalType: "address",
-            name: "owner",
-            type: "address",
-          },
-        ],
-        internalType: "struct INFTCollectionModule.NFTStruct[]",
-        name: "nfts",
-        type: "tuple[]",
-      },
-    ],
-    name: "processCollect",
-    outputs: [],
-    stateMutability: "nonpayable",
     type: "function",
   },
   {
