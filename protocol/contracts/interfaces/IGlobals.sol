@@ -18,7 +18,7 @@ interface IGlobals {
 
     function setSkillModule(address skillModule) external;
 
-    function setColorExtension(address colorExtension) external;
+    function setFlavorExtension(address flavorExtension) external;
 
     function getIceCandy() external view returns (address);
 
@@ -36,5 +36,5 @@ interface IGlobals {
 
     function getSkillModule() external view returns (address);
 
-    function getColorExtension() external view returns (address);
+    function getFlavorExtension() external view returns (address);
 }

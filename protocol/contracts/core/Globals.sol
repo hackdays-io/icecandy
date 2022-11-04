@@ -51,7 +51,7 @@ contract Globals is IGlobals, Ownable {
         _snsAccountModule = snsAccountModule_;
     }
 
-    function setColorExtension(address colorExtension_) external override onlyOwner {
+    function setFlavorExtension(address colorExtension_) external override onlyOwner {
         _colorExtension = colorExtension_;
     }
 
@@ -87,7 +87,7 @@ contract Globals is IGlobals, Ownable {
         return _snsAccountModule;
     }
 
-    function getColorExtension() external view override returns (address) {
+    function getFlavorExtension() external view override returns (address) {
         return _colorExtension;
     }
 }
