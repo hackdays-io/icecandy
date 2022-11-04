@@ -10,7 +10,7 @@ contract SNSAccountModule is ISNSAccountModule, ModuleBase {
 
     constructor(address owner) ModuleBase(owner) {}
 
-    function processSNSAccount(uint256 profileId, SNSAccountStruct[] calldata sns) external override onlyProfile {
+    function createSNSAccount(uint256 profileId, SNSAccountStruct[] calldata sns) external override onlyProfile {
         // reset SNS
         for (uint256 i = 0; i < _snsCount[profileId]; i++) {
             delete _sns[profileId][i + 1];
@@ -20,6 +20,8 @@ contract SNSAccountModule is ISNSAccountModule, ModuleBase {
             _sns[profileId][i + 1] = sns[i];
         }
         _snsCount[profileId] = sns.length;
+
+        emit SNSAccountCreated(profileId, block.number);
     }
 
     function getSNSAccounts(uint256 profileId) external view override returns (SNSAccountStruct[] memory) {

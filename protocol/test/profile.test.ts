@@ -12,7 +12,10 @@ import {
   profile,
   nft,
   poap,
+  sns,
   score,
+  skill,
+  mirror,
   flavor,
 } from './helpers/__setup2.test'
 import { profileData, nftData, nftData2, nftData3, poapData, mirrorData, snsData, skillData } from './helpers/data'
@@ -27,9 +30,9 @@ describe('profile test', () => {
       .withArgs(1, alice.address, await ethers.provider.getBlockNumber())
       .to.emit(icecandy, 'Transfer')
       .withArgs(owner.address, alice.address, 1)
-      .to.emit(profile, 'NFTCollectionCreated')
+      .to.emit(nft, 'NFTCollectionCreated')
       .withArgs(1, nft.address, await ethers.provider.getBlockNumber())
-      .to.emit(profile, 'NFTCollectionCreated')
+      .to.emit(poap, 'NFTCollectionCreated')
       .withArgs(1, poap.address, await ethers.provider.getBlockNumber())
 
     // get profile
@@ -88,7 +91,7 @@ describe('profile test', () => {
     const _nfts = nftData(alice)
     const _tx = await profile.connect(alice).createNFTCollection(1, _nfts)
     await expect(_tx)
-      .to.emit(profile, 'NFTCollectionCreated')
+      .to.emit(nft, 'NFTCollectionCreated')
       .withArgs(1, nft.address, await ethers.provider.getBlockNumber())
 
     // get nfts
@@ -118,7 +121,7 @@ describe('profile test', () => {
     const _poaps = poapData(alice)
     const _tx = await profile.connect(alice).createPOAPCollection(1, _poaps)
     await expect(_tx)
-      .to.emit(profile, 'NFTCollectionCreated')
+      .to.emit(poap, 'NFTCollectionCreated')
       .withArgs(1, poap.address, await ethers.provider.getBlockNumber())
 
     // get poaps
@@ -148,7 +151,7 @@ describe('profile test', () => {
     const _mirror = mirrorData()
     const _tx = await profile.connect(alice).addMirror(1, _mirror)
     await expect(_tx)
-      .to.emit(profile, 'MirrorAdded')
+      .to.emit(mirror, 'MirrorAdded')
       .withArgs(1, 1, await ethers.provider.getBlockNumber())
 
     // get mirror
@@ -161,7 +164,7 @@ describe('profile test', () => {
     const _skill = skillData()
     const _tx = await profile.connect(alice).addSkill(1, _skill)
     await expect(_tx)
-      .to.emit(profile, 'SkillAdded')
+      .to.emit(skill, 'SkillAdded')
       .withArgs(1, 1, await ethers.provider.getBlockNumber())
 
     // get skill
@@ -212,7 +215,7 @@ describe('profile test', () => {
   it('createSNS()', async () => {
     // send transaction
     const _sns = snsData(alice)
-    await expect(profile.connect(alice).createSNSAccount(1, _sns)).to.emit(profile, 'SNSAccountCreated')
+    await expect(profile.connect(alice).createSNSAccount(1, _sns)).to.emit(sns, 'SNSAccountCreated')
 
     const sns_ = await profile.connect(alice).getSNSAccounts(1)
     expect(sns_[0]?.service).to.equal(_sns[0]?.service)
@@ -255,7 +258,7 @@ describe('profile test', () => {
       .withArgs(alice.address, bob.address, 1)
 
     // [after approval]createNFTCollection
-    await expect(profile.connect(bob).createNFTCollection(1, _nfts)).to.emit(profile, 'NFTCollectionCreated')
+    await expect(profile.connect(bob).createNFTCollection(1, _nfts)).to.emit(nft, 'NFTCollectionCreated')
     // [after approval]addWallet
     await expect(profile.connect(bob).addWallet(1, carol.address)).to.emit(profile, 'WalletAdded')
   })
@@ -278,7 +281,7 @@ describe('profile test', () => {
       .withArgs(alice.address, carol.address, true)
 
     // [after approval]createNFTCollection
-    await expect(profile.connect(carol).createNFTCollection(1, _nfts)).to.emit(profile, 'NFTCollectionCreated')
+    await expect(profile.connect(carol).createNFTCollection(1, _nfts)).to.emit(nft, 'NFTCollectionCreated')
     // [after approval]addWallet
     await expect(profile.connect(carol).addWallet(1, daniel.address)).to.emit(profile, 'WalletAdded')
   })
