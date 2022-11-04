@@ -8,7 +8,7 @@ import {INFTCollectionModule} from "../interfaces/INFTCollectionModule.sol";
 import {IScoreModule} from "../interfaces/IScoreModule.sol";
 import {IMirrorModule} from "../interfaces/IMirrorModule.sol";
 import {ISkillModule} from "../interfaces/ISkillModule.sol";
-import {IColorExtension} from "../interfaces/IColorExtension.sol";
+import {IFlavorExtension} from "../interfaces/IFlavorExtension.sol";
 import {ISNSAccountModule} from "../interfaces/ISNSAccountModule.sol";
 import {IIceCandy} from "../interfaces/IIceCandy.sol";
 import {IGlobals} from "../interfaces/IGlobals.sol";
@@ -78,22 +78,14 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         emit SkillAdded(profileId, moduleId, block.number);
     }
 
-    function addColor(uint256 profileId, string memory color) external override {
+    function activateFlavor(uint256 profileId, uint256 extensionId) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        uint256 extensionId = IColorExtension(IGlobals(_globals).getColorExtension()).addColor(profileId, color);
-        emit ColorAdded(profileId, extensionId, block.number);
+        IFlavorExtension(IGlobals(_globals).getFlavorExtension()).activate(profileId, extensionId);
     }
 
-    function activateColor(uint256 profileId, uint256 extensionId) external override {
+    function deactivateFlavor(uint256 profileId, uint256 extensionId) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        IColorExtension(IGlobals(_globals).getColorExtension()).activate(profileId, extensionId);
-        emit ColorActivated(profileId, extensionId, block.number);
-    }
-
-    function deactivateColor(uint256 profileId, uint256 extensionId) external override {
-        require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        IColorExtension(IGlobals(_globals).getColorExtension()).deactivate(profileId, extensionId);
-        emit ColorDeactivated(profileId, extensionId, block.number);
+        IFlavorExtension(IGlobals(_globals).getFlavorExtension()).deactivate(profileId, extensionId);
     }
 
     function createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts)
@@ -157,8 +149,8 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         return ISkillModule(IGlobals(_globals).getSkillModule()).getSkill(profileId);
     }
 
-    function getColor(uint256 profileId) external view override returns (IColorExtension.ColorStruct[] memory) {
-        return IColorExtension(IGlobals(_globals).getColorExtension()).getColor(profileId);
+    function getFlavor(uint256 profileId) external view override returns (IFlavorExtension.FlavorStruct[] memory) {
+        return IFlavorExtension(IGlobals(_globals).getFlavorExtension()).getFlavor(profileId);
     }
 
     function getProfileId(address wallet) external view returns (uint256) {

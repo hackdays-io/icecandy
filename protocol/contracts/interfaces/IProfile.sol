@@ -6,7 +6,7 @@ import {ISNSAccountModule} from "./ISNSAccountModule.sol";
 import {IScoreModule} from "./IScoreModule.sol";
 import {IMirrorModule} from "./IMirrorModule.sol";
 import {ISkillModule} from "./ISkillModule.sol";
-import {IColorExtension} from "./IColorExtension.sol";
+import {IFlavorExtension} from "./IFlavorExtension.sol";
 
 interface IProfile {
     struct ProfileStruct {
@@ -40,11 +40,9 @@ interface IProfile {
 
     function addSkill(uint256 profileId, ISkillModule.SkillStruct calldata skill) external;
 
-    function addColor(uint256 profileId, string memory color) external;
+    function activateFlavor(uint256 profileId, uint256 extensionId) external;
 
-    function activateColor(uint256 profileId, uint256 extensionId) external;
-
-    function deactivateColor(uint256 profileId, uint256 extensionId) external;
+    function deactivateFlavor(uint256 profileId, uint256 extensionId) external;
 
     function addWallet(uint256 profileId, address wallet) external;
 
@@ -62,7 +60,7 @@ interface IProfile {
 
     function getSkill(uint256 profileId) external view returns (ISkillModule.SkillStruct[] memory);
 
-    function getColor(uint256 profileId) external view returns (IColorExtension.ColorStruct[] memory);
+    function getFlavor(uint256 profileId) external view returns (IFlavorExtension.FlavorStruct[] memory);
 
     function getProfileId(address wallet) external view returns (uint256);
 
@@ -77,12 +75,6 @@ interface IProfile {
     event MirrorAdded(uint256 indexed profileId, uint256 indexed moduleId, uint256 blockNumber);
 
     event SkillAdded(uint256 indexed profileId, uint256 indexed moduleId, uint256 blockNumber);
-
-    event ColorAdded(uint256 indexed profileId, uint256 indexed extensionId, uint256 blockNumber);
-
-    event ColorActivated(uint256 indexed profileId, uint256 indexed extensionId, uint256 blockNumber);
-
-    event ColorDeactivated(uint256 indexed profileId, uint256 indexed extensionId, uint256 blockNumber);
 
     event WalletAdded(uint256 profileId, address wallet);
 }
