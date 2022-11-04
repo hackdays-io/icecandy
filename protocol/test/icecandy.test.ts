@@ -1,6 +1,6 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
-import { owner, alice, bob, carol, icecandy, profile, nft, score } from './helpers/__setup1.test'
+import { owner, alice, bob, carol, icecandy, profile, nft, score, flavor } from './helpers/__setup1.test'
 import { profileData, tokenURI } from './helpers/data'
 import { BigNumber } from 'ethers'
 
@@ -135,6 +135,18 @@ describe('icecandy test', () => {
     expect(score3[0]?.point).to.be.equals(BigNumber.from(0))
     expect(score3[1]?.point).to.be.equals(BigNumber.from(20))
     expect(score3[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check flavor of alice
+    const flavor1 = await flavor.connect(alice).getFlavor(1)
+    expect(flavor1.length).to.be.equals(0)
+
+    // check flavor of bob
+    const flavor2 = await flavor.connect(bob).getFlavor(2)
+    expect(flavor2.length).to.be.equals(0)
+
+    // check flavor of carol
+    const flavor3 = await flavor.connect(carol).getFlavor(3)
+    expect(flavor3.length).to.be.equals(0)
   })
 
   it('alice send icecandy to bob, and get lucky icecandy', async () => {
@@ -215,6 +227,16 @@ describe('icecandy test', () => {
     expect(score2[0]?.point).to.be.equals(BigNumber.from(110))
     expect(score2[1]?.point).to.be.equals(BigNumber.from(20))
     expect(score2[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check flavor of alice
+    const flavor1 = await flavor.connect(alice).getFlavor(1)
+    expect(flavor1.length).to.be.equals(1)
+    expect(flavor1[0]?.flavorType).to.be.equals(0)
+
+    // check flavor of bob
+    const flavor2 = await flavor.connect(bob).getFlavor(2)
+    expect(flavor2.length).to.be.equals(1)
+    expect(flavor2[0]?.flavorType).to.be.equals(0)
   })
 
   it('carol send icecandy to bob, and get unlucky icecandy', async () => {
@@ -299,6 +321,17 @@ describe('icecandy test', () => {
     expect(score3[0]?.point).to.be.equals(BigNumber.from(110))
     expect(score3[1]?.point).to.be.equals(BigNumber.from(20))
     expect(score3[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check flavor of bob
+    const flavor2 = await flavor.connect(bob).getFlavor(2)
+    expect(flavor2.length).to.be.equals(2)
+    expect(flavor2[0]?.flavorType).to.be.equals(0)
+    expect(flavor2[1]?.flavorType).to.be.equals(1)
+
+    // check flavor of carol
+    const flavor3 = await flavor.connect(carol).getFlavor(3)
+    expect(flavor3.length).to.be.equals(1)
+    expect(flavor3[0]?.flavorType).to.be.equals(0)
   })
 
   it('failed to send icecandy from carol, because carol has no active token', async () => {
@@ -341,6 +374,11 @@ describe('icecandy test', () => {
     expect(score1[0]?.point).to.be.equals(BigNumber.from(110))
     expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
     expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check flavor of alice
+    const flavor1 = await flavor.connect(alice).getFlavor(1)
+    expect(flavor1.length).to.be.equals(1)
+    expect(flavor1[0]?.flavorType).to.be.equals(0)
   })
 
   it('failed to airdrop icecandy to bob, because bob has active token', async () => {
@@ -411,6 +449,16 @@ describe('icecandy test', () => {
     expect(score3[0]?.point).to.be.equals(BigNumber.from(110))
     expect(score3[1]?.point).to.be.equals(BigNumber.from(20))
     expect(score3[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check flavor of alice
+    const flavor1 = await flavor.connect(alice).getFlavor(1)
+    expect(flavor1.length).to.be.equals(1)
+    expect(flavor1[0]?.flavorType).to.be.equals(0)
+
+    // check flavor of carol
+    const flavor3 = await flavor.connect(carol).getFlavor(3)
+    expect(flavor3.length).to.be.equals(1)
+    expect(flavor3[0]?.flavorType).to.be.equals(0)
   })
 
   it('carol transfer unlucky icecandy to alice', async () => {
@@ -476,6 +524,16 @@ describe('icecandy test', () => {
     expect(score3[0]?.point).to.be.equals(BigNumber.from(110))
     expect(score3[1]?.point).to.be.equals(BigNumber.from(20))
     expect(score3[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check flavor of alice
+    const flavor1 = await flavor.connect(alice).getFlavor(1)
+    expect(flavor1.length).to.be.equals(1)
+    expect(flavor1[0]?.flavorType).to.be.equals(0)
+
+    // check flavor of carol
+    const flavor3 = await flavor.connect(carol).getFlavor(3)
+    expect(flavor3.length).to.be.equals(1)
+    expect(flavor3[0]?.flavorType).to.be.equals(0)
   })
 
   it('bob transfer revealed icecandy to alice', async () => {
@@ -545,6 +603,17 @@ describe('icecandy test', () => {
     expect(score2[0]?.point).to.be.equals(BigNumber.from(220))
     expect(score2[1]?.point).to.be.equals(BigNumber.from(20))
     expect(score2[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check flavor of alice
+    const flavor1 = await flavor.connect(alice).getFlavor(1)
+    expect(flavor1.length).to.be.equals(1)
+    expect(flavor1[0]?.flavorType).to.be.equals(0)
+
+    // check flavor of bob
+    const flavor2 = await flavor.connect(bob).getFlavor(2)
+    expect(flavor2.length).to.be.equals(2)
+    expect(flavor2[0]?.flavorType).to.be.equals(0)
+    expect(flavor2[1]?.flavorType).to.be.equals(1)
   })
 
   it('failed to transfer not revealed icecandy, because only owner can use not revealed icecandy', async () => {
@@ -647,6 +716,17 @@ describe('icecandy test', () => {
     expect(score2[0]?.point).to.be.equals(BigNumber.from(230))
     expect(score2[1]?.point).to.be.equals(BigNumber.from(20))
     expect(score2[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check flavor of alice
+    const flavor1 = await flavor.connect(alice).getFlavor(1)
+    expect(flavor1.length).to.be.equals(1)
+    expect(flavor1[0]?.flavorType).to.be.equals(0)
+
+    // check flavor of bob
+    const flavor2 = await flavor.connect(bob).getFlavor(2)
+    expect(flavor2.length).to.be.equals(2)
+    expect(flavor2[0]?.flavorType).to.be.equals(0)
+    expect(flavor2[1]?.flavorType).to.be.equals(1)
   })
 
   it('owner mint icecandy to alice', async () => {
@@ -683,6 +763,11 @@ describe('icecandy test', () => {
     expect(score1[0]?.point).to.be.equals(BigNumber.from(120))
     expect(score1[1]?.point).to.be.equals(BigNumber.from(20))
     expect(score1[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check flavor of alice
+    const flavor1 = await flavor.connect(alice).getFlavor(1)
+    expect(flavor1.length).to.be.equals(1)
+    expect(flavor1[0]?.flavorType).to.be.equals(0)
   })
 
   it('alice send icecandy to carol', async () => {
@@ -767,5 +852,17 @@ describe('icecandy test', () => {
     expect(score3[0]?.point).to.be.equals(BigNumber.from(220))
     expect(score3[1]?.point).to.be.equals(BigNumber.from(20))
     expect(score3[2]?.point).to.be.equals(BigNumber.from(20))
+
+    // check flavor of alice
+    const flavor1 = await flavor.connect(alice).getFlavor(1)
+    expect(flavor1.length).to.be.equals(2)
+    expect(flavor1[0]?.flavorType).to.be.equals(0)
+    expect(flavor1[1]?.flavorType).to.be.equals(1)
+
+    // check flavor of carol
+    const flavor3 = await flavor.connect(carol).getFlavor(3)
+    expect(flavor3.length).to.be.equals(2)
+    expect(flavor3[0]?.flavorType).to.be.equals(0)
+    expect(flavor3[1]?.flavorType).to.be.equals(1)
   })
 })
