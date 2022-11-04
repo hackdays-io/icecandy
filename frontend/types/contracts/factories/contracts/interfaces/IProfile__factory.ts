@@ -806,9 +806,9 @@ const _abi = [
       {
         components: [
           {
-            internalType: "string",
-            name: "name",
-            type: "string",
+            internalType: "enum IScoreModule.ScoreType",
+            name: "scoreType",
+            type: "uint8",
           },
           {
             internalType: "uint256",

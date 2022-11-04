@@ -150,12 +150,12 @@ export declare namespace IFlavorExtension {
 
 export declare namespace IScoreModule {
   export type ScoreStructStruct = {
-    name: PromiseOrValue<string>;
+    scoreType: PromiseOrValue<BigNumberish>;
     point: PromiseOrValue<BigNumberish>;
   };
 
-  export type ScoreStructStructOutput = [string, BigNumber] & {
-    name: string;
+  export type ScoreStructStructOutput = [number, BigNumber] & {
+    scoreType: number;
     point: BigNumber;
   };
 }
