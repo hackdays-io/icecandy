@@ -1,7 +1,20 @@
 import { ethers } from 'hardhat'
 import { expect } from 'chai'
 import { BigNumber } from 'ethers'
-import { owner, alice, bob, carol, daniel, icecandy, profile, nft, poap, score } from './helpers/__setup2.test'
+import {
+  owner,
+  alice,
+  bob,
+  carol,
+  daniel,
+  eve,
+  icecandy,
+  profile,
+  nft,
+  poap,
+  score,
+  flavor,
+} from './helpers/__setup2.test'
 import { profileData, nftData, nftData2, nftData3, poapData, mirrorData, snsData, skillData } from './helpers/data'
 
 describe('profile test', () => {
@@ -158,41 +171,42 @@ describe('profile test', () => {
     expect(skill_[0]?.link).to.equal(_skill.link)
   })
 
-  it('addColor()', async () => {
-    // send transaction
-    const _tx = await profile.connect(alice).addColor(1, 'white')
+  it('activateFlavor()', async () => {
+    // create carol's profile
+    await profile.connect(eve).createProfile(profileData(eve))
+
+    // mint icecandy to alice
+    await icecandy.connect(owner).mint(alice.address)
+
+    // alice send icecandy to carol
+    await icecandy.connect(alice).send(2, ethers.constants.AddressZero, 0)
+
+    // check alice's flavor
+    const _flavor = await profile.connect(alice).getFlavor(1)
+    expect(_flavor.length).to.be.equals(1)
+    expect(_flavor[0].active).to.be.equals(false)
+
+    // activate flavor
+    const _tx = await profile.connect(alice).activateFlavor(1, 1)
     await expect(_tx)
-      .to.emit(profile, 'ColorAdded')
+      .to.emit(flavor, 'FlavorActivated')
       .withArgs(1, 1, await ethers.provider.getBlockNumber())
 
-    // get color
-    const mirror_ = await profile.connect(alice).getColor(1)
-    expect(mirror_[0]?.color).to.equal('white')
-    expect(mirror_[0]?.active).to.equal(false)
+    // check flavor
+    const flavor_ = await profile.connect(alice).getFlavor(1)
+    expect(flavor_[0].active).to.be.equals(true)
   })
 
-  it('activateColor()', async () => {
-    // send transaction
-    const _tx = await profile.connect(alice).activateColor(1, 1)
+  it('deactivateFlavor()', async () => {
+    // deactivate flavor
+    const _tx = await profile.connect(alice).deactivateFlavor(1, 1)
     await expect(_tx)
-      .to.emit(profile, 'ColorActivated')
+      .to.emit(flavor, 'FlavorDeactivated')
       .withArgs(1, 1, await ethers.provider.getBlockNumber())
 
     // get color
-    const mirror_ = await profile.connect(alice).getColor(1)
-    expect(mirror_[0]?.active).to.equal(true)
-  })
-
-  it('deactivateColor()', async () => {
-    // send transaction
-    const _tx = await profile.connect(alice).deactivateColor(1, 1)
-    await expect(_tx)
-      .to.emit(profile, 'ColorDeactivated')
-      .withArgs(1, 1, await ethers.provider.getBlockNumber())
-
-    // get color
-    const mirror_ = await profile.connect(alice).getColor(1)
-    expect(mirror_[0]?.active).to.equal(false)
+    const flavor_ = await profile.connect(alice).getFlavor(1)
+    expect(flavor_[0]?.active).to.equal(false)
   })
 
   it('createSNS()', async () => {

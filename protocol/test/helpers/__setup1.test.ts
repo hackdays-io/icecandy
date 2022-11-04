@@ -29,6 +29,7 @@ export let alice: SignerWithAddress
 export let bob: SignerWithAddress
 export let carol: SignerWithAddress
 export let daniel: SignerWithAddress
+export let eve: SignerWithAddress
 
 // contracts
 export let icecandy: IceCandy
@@ -50,6 +51,7 @@ before(async () => {
   bob = signers[2] as SignerWithAddress
   carol = signers[3] as SignerWithAddress
   daniel = signers[4] as SignerWithAddress
+  eve = signers[5] as SignerWithAddress
 
   // set contracts
   icecandy = await new IceCandy__factory(owner).deploy(owner.address)
