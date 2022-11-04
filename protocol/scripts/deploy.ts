@@ -54,9 +54,9 @@ async function main() {
   console.log('SkillModule address:', skill.address)
 
   // ColorExtension
-  const fColor = await ethers.getContractFactory('ColorExtension')
-  const color = await fColor.deploy(deployer.address)
-  console.log('ColorExtension address:', color.address)
+  const fFlavor = await ethers.getContractFactory('FlavorExtension')
+  const flavor = await fFlavor.deploy(deployer.address)
+  console.log('FlavorExtension address:', flavor.address)
 
   // setup Globals
   await globals.setIceCandy(icecandy.address)
@@ -67,7 +67,7 @@ async function main() {
   await globals.setScoreModule(score.address)
   await globals.setMirrorModule(mirror.address)
   await globals.setSkillModule(skill.address)
-  await globals.setColorExtension(color.address)
+  await globals.setFlavorExtension(flavor.address)
 
   // set globals to other contracts
   await icecandy.setGlobals(globals.address)
@@ -78,7 +78,7 @@ async function main() {
   await score.setGlobals(globals.address)
   await mirror.setGlobals(globals.address)
   await skill.setGlobals(globals.address)
-  await color.setGlobals(globals.address)
+  await flavor.setGlobals(globals.address)
 }
 
 main()

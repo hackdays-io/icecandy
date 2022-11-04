@@ -2,8 +2,14 @@
 pragma solidity ^0.8.10;
 
 interface IScoreModule {
+    enum ScoreType {
+        PROFILE,
+        NFT,
+        POAP
+    }
+
     struct ScoreStruct {
-        string name;
+        ScoreType scoreType;
         uint256 point;
     }
 

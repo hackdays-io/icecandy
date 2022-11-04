@@ -14,11 +14,11 @@ contract ScoreModule is IScoreModule, ModuleBase {
     constructor(address owner) ModuleBase(owner) {}
 
     function processScore(uint256 profileId) external override onlyProfileAndIceCandy {
-        _scores[profileId][address(0)].name = "PROFILE";
+        _scores[profileId][address(0)].scoreType = IScoreModule.ScoreType.PROFILE;
         _scores[profileId][address(0)].point = _getProfileScore(profileId);
-        _scores[profileId][IGlobals(_globals).getNFTCollectionModule()].name = "NFT";
+        _scores[profileId][IGlobals(_globals).getNFTCollectionModule()].scoreType = IScoreModule.ScoreType.NFT;
         _scores[profileId][IGlobals(_globals).getNFTCollectionModule()].point = _getNFTScore(profileId);
-        _scores[profileId][IGlobals(_globals).getPOAPCollectionModule()].name = "POAP";
+        _scores[profileId][IGlobals(_globals).getPOAPCollectionModule()].scoreType = IScoreModule.ScoreType.POAP;
         _scores[profileId][IGlobals(_globals).getPOAPCollectionModule()].point = _getPOAPScore(profileId);
     }
 
