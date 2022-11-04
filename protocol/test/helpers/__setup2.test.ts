@@ -18,8 +18,8 @@ import {
   MirrorModule__factory,
   SkillModule,
   SkillModule__factory,
-  ColorExtension,
-  ColorExtension__factory,
+  FlavorExtension,
+  FlavorExtension__factory,
 } from '../../typechain-types'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 
@@ -40,7 +40,7 @@ export let sns: SNSAccountModule
 export let score: ScoreModule
 export let mirror: MirrorModule
 export let skill: SkillModule
-export let color: ColorExtension
+export let flavor: FlavorExtension
 
 before(async () => {
   // set accounts
@@ -61,7 +61,7 @@ before(async () => {
   score = await new ScoreModule__factory(owner).deploy(owner.address)
   mirror = await new MirrorModule__factory(owner).deploy(owner.address)
   skill = await new SkillModule__factory(owner).deploy(owner.address)
-  color = await new ColorExtension__factory(owner).deploy(owner.address)
+  flavor = await new FlavorExtension__factory(owner).deploy(owner.address)
 
   // setup address
   await icecandy.setGlobals(globals.address)
@@ -72,7 +72,7 @@ before(async () => {
   await score.setGlobals(globals.address)
   await mirror.setGlobals(globals.address)
   await skill.setGlobals(globals.address)
-  await color.setGlobals(globals.address)
+  await flavor.setGlobals(globals.address)
   await globals.setIceCandy(icecandy.address)
   await globals.setProfile(profile.address)
   await globals.setNFTCollectionModule(nft.address)
@@ -81,5 +81,5 @@ before(async () => {
   await globals.setScoreModule(score.address)
   await globals.setMirrorModule(mirror.address)
   await globals.setSkillModule(skill.address)
-  await globals.setColorExtension(color.address)
+  await globals.setFlavorExtension(flavor.address)
 })
