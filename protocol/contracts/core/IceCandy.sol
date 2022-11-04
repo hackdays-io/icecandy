@@ -239,7 +239,7 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
     }
 
     function _createScore(uint256 profileId) internal {
-        IScoreModule(IGlobals(_globals).getScoreModule()).processScore(profileId);
+        IScoreModule(IGlobals(_globals).getScoreModule()).createScore(profileId);
     }
 
     function _addFlavor(uint256 profileId) internal {

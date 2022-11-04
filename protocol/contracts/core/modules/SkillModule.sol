@@ -10,10 +10,11 @@ contract SkillModule is ISkillModule, ModuleBase {
 
     constructor(address owner) ModuleBase(owner) {}
 
-    function addSkill(uint256 profileId, SkillStruct calldata skill) external override onlyProfile returns (uint256) {
-        uint256 moduleId = ++_skillCount[profileId];
+    function addSkill(uint256 profileId, SkillStruct calldata skill) external override onlyProfile {
+        ++_skillCount[profileId];
         _skills[profileId][_skillCount[profileId]] = skill;
-        return moduleId;
+        
+        emit SkillAdded(profileId, _skillCount[profileId], block.number);
     }
 
     function getSkill(uint256 profileId) external view override returns (SkillStruct[] memory) {

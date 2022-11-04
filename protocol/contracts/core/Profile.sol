@@ -68,14 +68,12 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
 
     function addMirror(uint256 profileId, IMirrorModule.MirrorStruct calldata mirror) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        uint256 moduleId = IMirrorModule(IGlobals(_globals).getMirrorModule()).addMirror(profileId, mirror);
-        emit MirrorAdded(profileId, moduleId, block.number);
+        IMirrorModule(IGlobals(_globals).getMirrorModule()).addMirror(profileId, mirror);
     }
 
     function addSkill(uint256 profileId, ISkillModule.SkillStruct calldata skill) external override {
         require(_isApprovedOrOwner(msg.sender, profileId), "Profile: caller is not owner or approved");
-        uint256 moduleId = ISkillModule(IGlobals(_globals).getSkillModule()).addSkill(profileId, skill);
-        emit SkillAdded(profileId, moduleId, block.number);
+        ISkillModule(IGlobals(_globals).getSkillModule()).addSkill(profileId, skill);
     }
 
     function activateFlavor(uint256 profileId, uint256 extensionId) external override {
@@ -179,18 +177,15 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
         address module,
         INFTCollectionModule.NFTStruct[] calldata nfts
     ) internal {
-        INFTCollectionModule(module).processCollect(profileId, nfts);
-        emit NFTCollectionCreated(profileId, module, block.number);
+        INFTCollectionModule(module).createCollection(profileId, nfts);
     }
 
     function _createScore(uint256 profileId) internal {
-        IScoreModule(IGlobals(_globals).getScoreModule()).processScore(profileId);
-        emit ScoreCreated(profileId, block.number);
+        IScoreModule(IGlobals(_globals).getScoreModule()).createScore(profileId);
     }
 
     function _createSNSAccount(uint256 profileId, ISNSAccountModule.SNSAccountStruct[] calldata snsAccounts) internal {
-        ISNSAccountModule(IGlobals(_globals).getSNSAccountModule()).processSNSAccount(profileId, snsAccounts);
-        emit SNSAccountCreated(profileId, block.number);
+        ISNSAccountModule(IGlobals(_globals).getSNSAccountModule()).createSNSAccount(profileId, snsAccounts);
     }
 
     function _getNFTCollection(uint256 profileId, address module)
