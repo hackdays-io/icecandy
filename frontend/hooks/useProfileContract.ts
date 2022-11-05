@@ -239,13 +239,13 @@ export const useProfileId = (address?: string) => {
   return { profileId, loading, errors }
 }
 
-export const useLookupProfileId = (address: string) => {
+export const useLookupProfileId = (address?: string) => {
   const [profileId, setProfileId] = useState<BigNumber>()
   const profileContract = useProfileNFTContractClient()
 
   useEffect(() => {
     const fetch = async () => {
-      if (!profileContract) return
+      if (!profileContract || !address) return
       try {
         const profileId = await profileContract?.getProfileId(address)
         setProfileId(profileId)
