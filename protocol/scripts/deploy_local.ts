@@ -2,6 +2,8 @@ import { ethers } from 'hardhat'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
 import { setBalance } from '@nomicfoundation/hardhat-network-helpers'
 import * as dotenv from 'dotenv'
+import fs from 'fs'
+
 const PATH_TO_HARDHAT_ENV = `${__dirname}/.env`
 dotenv.config({ path: PATH_TO_HARDHAT_ENV })
 
@@ -84,6 +86,7 @@ async function main() {
   await skill.setGlobals(globals.address)
   await flavor.setGlobals(globals.address)
 
+  // send ETH and IcCandy
   if (process.env.LOCAL_USER_ADDRESS) {
     await setBalance(process.env.LOCAL_USER_ADDRESS, 100n ** 9n)
     await icecandy.mint(process.env.LOCAL_USER_ADDRESS)
@@ -92,6 +95,22 @@ async function main() {
     await setBalance(process.env.LOCAL_USER_ADDRESS_2, 100n ** 9n)
     await icecandy.mint(process.env.LOCAL_USER_ADDRESS_2)
   }
+
+  // write contract address to .env
+  const path = '../frontend/.env.local'
+  const file = fs
+    .readFileSync(path)
+    .toString()
+    .split('\n')
+    .map((e) =>
+      e.startsWith('NEXT_PUBLIC_CONTRACT_PROFILENFT_ADDRESS=')
+        ? `NEXT_PUBLIC_CONTRACT_PROFILENFT_ADDRESS=${profile.address}`
+        : e.startsWith('NEXT_PUBLIC_CONTRACT_ICECANDY_ADDRESS=')
+        ? `NEXT_PUBLIC_CONTRACT_ICECANDY_ADDRESS=${icecandy.address}`
+        : e
+    )
+    .join('\n')
+  fs.writeFileSync(path, file)
 }
 
 main()

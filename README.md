@@ -21,8 +21,6 @@ $ docker-compose up -d
 $ yarn deploy:local
 ```
 
-デプロイ後表示される Profile address をフロントの環境変数 `NEXT_PUBLIC_CONTRACT_PROFILENFT_ADDRESS` に入力。
-
 ### フロントエンド立ち上げ
 
 環境変数は./frontend.env.example を参照しながら、./frontend/.env.local にいれる。
