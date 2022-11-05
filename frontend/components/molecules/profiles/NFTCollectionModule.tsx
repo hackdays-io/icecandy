@@ -36,8 +36,8 @@ const ProfileNFTCollectionModule: FC<Props> = ({
         gridAutoRows="1fr"
       >
         {nfts?.map((nft, index) => (
-          <Box textAlign="center">
-            <SingleNFT {...{ nft }} key={index} />
+          <Box textAlign="center" key={index}>
+            <SingleNFT {...{ nft }} />
             <Box fontSize="11px">
               アイスキャンディの数
               {
