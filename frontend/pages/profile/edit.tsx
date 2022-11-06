@@ -120,6 +120,10 @@ const ProfileNewPage: NextPage = () => {
                 type: 'poapCollection',
                 data: parseNFTsForm2Contract(watch('poaps')) as any,
               },
+              {
+                type: 'icecandies',
+                data: [],
+              },
             ]}
           />
         </GridItem>
