@@ -105,7 +105,9 @@ const ProfileMain: FC<Props> = ({
             <Heading size="md" mb={2}>
               {name}
             </Heading>
-            <Text mb={2}>{introduction}</Text>
+            <Text mb={2} wordBreak="break-all">
+              {introduction}
+            </Text>
           </VStack>
         </Flex>
         <VStack>
