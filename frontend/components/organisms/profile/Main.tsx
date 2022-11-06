@@ -1,4 +1,12 @@
-import { Box, Flex, Grid, Heading, Text } from '@chakra-ui/react'
+import {
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  Heading,
+  Text,
+  VStack,
+} from '@chakra-ui/react'
 import { useAddress } from '@thirdweb-dev/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
@@ -11,6 +19,28 @@ import ProfileNFTCollectionModule from '../../molecules/profiles/NFTCollectionMo
 import ProfilePOAPCollectionModule from '../../molecules/profiles/POAPCollectionModule'
 import ProfileSkillsModule from '../../molecules/profiles/SkillsModule'
 import ProfileSNSAccountsModule from '../../molecules/profiles/SNSAccountsModule'
+
+type CandyScoreProps = {
+  title: string
+  value: number
+}
+const CandyScoreItem: FC<CandyScoreProps> = ({ title, value }) => {
+  return (
+    <>
+      <GridItem
+        borderRadius={10}
+        borderColor="primary.300"
+        borderWidth={1}
+        textAlign="center"
+      >
+        {title}
+      </GridItem>
+      <GridItem>
+        <Text> {value}</Text>
+      </GridItem>
+    </>
+  )
+}
 
 type Props = {
   pfpURI?: string
@@ -51,31 +81,53 @@ const ProfileMain: FC<Props> = ({
 
   return (
     <Box>
-      <Grid gridTemplateColumns="1fr 300px">
+      <Grid
+        gridTemplateColumns="1fr 300px"
+        mt={4}
+        backgroundColor="profileback"
+        pb={4}
+        pt={4}
+        borderRadius={10}
+      >
         <Flex mb={3}>
           <PFP imgURI={pfpURI} />
-          <Box ml={5} mt={3}>
-            <Heading fontSize="24px" mb={2}>
+          <VStack align="left" ml={4}>
+            <Heading size="lg" mb={2}>
               {name}
             </Heading>
-            <Text mb={4}>{introduction}</Text>
-          </Box>
+            <Text mb={2}>{introduction}</Text>
+          </VStack>
         </Flex>
-        <Box borderRadius={10} backgroundColor="red.100" p={4}>
-          <Text fontWeight="bold" fontSize="24px">
+        <VStack>
+          <Text fontWeight="bold" size="lg">
             IceCandyScore: {iceCandyStats?.score || '0'}
           </Text>
-          <Text>IceCandyを送った回数: {iceCandyStats?.sentNum || '0'}</Text>
-          <Text>
-            IceCandyを送った人数: {iceCandyStats?.sentNumOfPeople || '0'}
-          </Text>
-          <Text>
-            IceCandyをもらった回数: {iceCandyStats?.receiveNum || '0'}
-          </Text>
-          <Text>
-            IceCandyをもらった人数: {iceCandyStats?.receiveNumOfPeople || '0'}
-          </Text>
-        </Box>
+          <Grid
+            templateColumns={'150px 20px'}
+            borderRadius={10}
+            backgroundColor="white"
+            p={4}
+            gap={2}
+          >
+            <CandyScoreItem
+              title="times sent"
+              value={iceCandyStats?.sentNum || 0}
+            ></CandyScoreItem>
+            <CandyScoreItem
+              title="people sent"
+              value={iceCandyStats?.sentNumOfPeople || 0}
+            ></CandyScoreItem>
+            <CandyScoreItem
+              title="times received"
+              value={iceCandyStats?.receiveNum || 0}
+            ></CandyScoreItem>
+
+            <CandyScoreItem
+              title="recipients"
+              value={iceCandyStats?.receiveNumOfPeople || 0}
+            ></CandyScoreItem>
+          </Grid>
+        </VStack>
       </Grid>
 
       {!isPreview && !wallets?.includes(String(address)) && (
