@@ -101,6 +101,7 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
               { type: 'skills', data: getValues().skills },
               { type: 'nftCollection', data: getValues().nfts },
               { type: 'poapCollection', data: getValues().poaps },
+              { type: 'icecandies', data: [] },
             ]}
           />
         )}
