@@ -23,8 +23,13 @@ const WalletConnectButton: FC = () => {
       onClick={() => handleClickButton()}
       isLoading={loading}
       disabled={loading}
+      backgroundColor="primary.300"
+      fontWeight="bold"
+      borderRadius="full"
+      color="white"
+      size="lg"
     >
-      {address ? 'ウォレット解除' : 'ウォレット接続'}
+      {address ? 'Logout' : 'Login'}
     </Button>
   )
 }
