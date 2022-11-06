@@ -149,8 +149,8 @@ const ProfileForm: FC<Props> = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <Grid gridTemplateColumns="1fr 400px" mb={3} width="50%">
-        <PFP imgURI={watch('imageURI')} />
+      <Grid gridTemplateColumns="1fr 400px" mb={4} width="50%">
+        <PFP imgURI={watch('imageURI')} size="2xl" />
         <Box ml={5} mt={3}>
           <Text>名前</Text>
           <Controller
@@ -175,9 +175,9 @@ const ProfileForm: FC<Props> = ({
         </Box>
       </Grid>
 
-      <Box my={4}>
+      {/* <Box my={4}>
         <AuthTwitter setAccountData={setSNSAccount} />
-      </Box>
+      </Box> */}
 
       <Box mb={5} backgroundColor="gray.200" p={3} borderRadius={10}>
         <Heading size="md" as="h3" mb={2}>
