@@ -1,4 +1,18 @@
-import { Box, Text } from '@chakra-ui/react'
+import { AddIcon } from '@chakra-ui/icons'
+import { FaReact } from 'react-icons/fa'
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  IconButton,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverTrigger,
+  Text,
+} from '@chakra-ui/react'
 import { FC } from 'react'
 import SendIceCandyButton from '../../atoms/profile/SendIceCandyButton'
 
@@ -23,25 +37,28 @@ const SkillBox: FC<Props> = ({
 }) => {
   return (
     <Box textAlign="center" key={key}>
-      <Box border="2px solid" borderColor="gray.300" textAlign="left" p={2}>
-        <Text fontWeight="bold" mb={2}>
-          {name}
-        </Text>
-        <Text mb={2}>{description}</Text>
-        <Text mb={2}>
-          <a href={href}>link</a>
-        </Text>
-      </Box>
-
-      {isAcceptCandy && (
-        <SendIceCandyButton
-          profileId={profileid}
-          module="skill"
-          moduleId={key + 1}
-          size="xs"
-          numOfIceCandy={numOfIceCandy}
-        />
-      )}
+      <Popover>
+        <PopoverTrigger>
+          <Button rightIcon={<FaReact />}>{name}</Button>
+        </PopoverTrigger>
+        <PopoverContent>
+          <PopoverArrow />
+          <PopoverCloseButton />
+          <PopoverBody>
+            <Text>{description}</Text>
+            <a href={href}>link</a>
+            {isAcceptCandy && (
+              <SendIceCandyButton
+                profileId={profileid}
+                module="skill"
+                moduleId={key + 1}
+                size="xs"
+                numOfIceCandy={numOfIceCandy}
+              />
+            )}
+          </PopoverBody>
+        </PopoverContent>
+      </Popover>
     </Box>
   )
 }
