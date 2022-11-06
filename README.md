@@ -71,6 +71,10 @@ We also plan to refine the customizability and functionality of the service as a
 
 - Polygon
 
+# deploy した Contract
+
+verify リンクのちほど
+
 # サービス URL
 
 https://icecandy.io
