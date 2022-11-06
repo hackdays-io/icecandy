@@ -24,7 +24,13 @@ const SingleIceCandy: FC<Props> = ({ tokenURI, tokenId }) => {
 
   return (
     <>
-      <Image src={metadata?.image as string} alt={metadata?.name} />
+      <Image
+        src={metadata?.image as string}
+        alt={metadata?.name}
+        width="120px"
+        height="150px"
+        objectFit="cover"
+      />
     </>
   )
 }

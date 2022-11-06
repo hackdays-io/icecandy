@@ -81,7 +81,7 @@ const MyPage: NextPage = () => {
           <Heading fontSize="18px">
             revealed icecandy: {holdingIceCandy?.revealed.length}
           </Heading>
-          <Grid gridTemplateColumns="repeat(5, 200px)" gap={3}>
+          <Grid gridTemplateColumns="repeat(5, 120px)" gap={3}>
             {holdingIceCandy?.revealed.map((e) => (
               <SingleIceCandy
                 tokenURI={e.tokenURI}
@@ -94,7 +94,7 @@ const MyPage: NextPage = () => {
           <Heading fontSize="18px" mt={10}>
             Not revealed icecandy: {holdingIceCandy?.notRevealed.length}
           </Heading>
-          <Grid gridTemplateColumns="repeat(5, 200px)" gap={3}>
+          <Grid gridTemplateColumns="repeat(5, 120px)" gap={3}>
             {holdingIceCandy?.notRevealed.map((e) => (
               <SingleIceCandy
                 tokenURI={e.tokenURI}
@@ -107,7 +107,7 @@ const MyPage: NextPage = () => {
           <Heading mt={10} fontSize="18px">
             lucky icecandy: {holdingIceCandy?.lucky.length}
           </Heading>
-          <Grid gridTemplateColumns="repeat(5, 200px)" gap={3}>
+          <Grid gridTemplateColumns="repeat(5, 120px)" gap={3}>
             {holdingIceCandy?.lucky.map((e) => (
               <SingleIceCandy
                 tokenURI={e.tokenURI}
