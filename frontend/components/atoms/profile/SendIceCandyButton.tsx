@@ -48,17 +48,22 @@ const SendIceCandyButton: FC<Props> = ({ profileId, module, moduleId }) => {
             p={5}
             backgroundImage={
               result?.iceCandyType === 2
-                ? "url('/images/sent_icecandy_effect.jpg')"
+                ? "url('/images/icecandy/sent_icecandy_effect.jpg')"
                 : ''
             }
+            backgroundPosition="center center"
           >
             <Text fontWeight="bold" fontSize="26px" textAlign="center" py={3}>
               {result?.iceCandyType === 2 ? 'あたり！' : 'はずれ...'}
             </Text>
             <Box width="80%" margin="0 auto">
-              <SingleIceCandy
-                tokenId={result?.tokenId.toNumber() || 0}
-                tokenURI={tokenURI || ''}
+              <img
+                src={
+                  result?.iceCandyType === 2
+                    ? '/images/icecandy/icecandy_lucky.png'
+                    : '/images/icecandy/icecandy_unlucky.png'
+                }
+                alt=""
               />
             </Box>
           </Box>

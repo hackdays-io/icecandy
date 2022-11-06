@@ -189,10 +189,10 @@ const snsData = (owner: SignerWithAddress) => [
 ]
 
 const tokenURI = {
-  revealed: 'ipfs://bafybeidz4y2gefriqjhssflnn7zxwi344gk7w2f3x46xdkw5zfiea4fqhu/revealed.json',
-  notRevealed: 'ipfs://bafybeiabmfgk77xiv3bhje5zgwgymk7vhfpimvkhqjo55qw44q43cj2fne/unrevealed.json',
-  lucky: 'ipfs://bafybeicokrwwzly5fcyidlmi6clabk3mnimvkcaoiywzzx75wyffxygoxm/lucky.json',
-  unlucky: 'ipfs://bafybeifdlahtcdtr67jvvnruu5oh6v3tihvftpbk22c7lo6jwqtxaqcgz4/uncky.json',
+  revealed: 'ipfs://bafybeifctlot4tutf5nhneplhfsxg3odmssthqdxkyd465mj6qmr2hdiju/revealed.json',
+  notRevealed: 'ipfs://bafybeiccuu3uekihc5p6sli3h7475tbe3vebqhivbdspkb66g53l4dd53q/unrevealed.json',
+  lucky: 'ipfs://bafybeiheoxsupdmgyzh7leeqvtxhy4b52w3htqulyyyjxzxnzneeinkre4/lucky.json',
+  unlucky: 'ipfs://bafybeieciejro4qj4c6b2unxor37truqmslinuxwn7fdlriipzzfsofd6y/unlucky.json',
 }
 
 export { profileData, nftData, nftData2, nftData3, poapData, mirrorData, skillData, snsData, tokenURI }

@@ -252,13 +252,13 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.REVEALED) {
-            return "ipfs://bafybeidz4y2gefriqjhssflnn7zxwi344gk7w2f3x46xdkw5zfiea4fqhu/revealed.json";
+            return "ipfs://bafybeifctlot4tutf5nhneplhfsxg3odmssthqdxkyd465mj6qmr2hdiju/revealed.json";
         } else if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.NOT_REVEALED) {
-            return "ipfs://bafybeiabmfgk77xiv3bhje5zgwgymk7vhfpimvkhqjo55qw44q43cj2fne/unrevealed.json";
+            return "ipfs://bafybeiccuu3uekihc5p6sli3h7475tbe3vebqhivbdspkb66g53l4dd53q/unrevealed.json";
         } else if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.LUCKY) {
-            return "ipfs://bafybeicokrwwzly5fcyidlmi6clabk3mnimvkcaoiywzzx75wyffxygoxm/lucky.json";
+            return "ipfs://bafybeiheoxsupdmgyzh7leeqvtxhy4b52w3htqulyyyjxzxnzneeinkre4/lucky.json";
         } else {
-            return "ipfs://bafybeifdlahtcdtr67jvvnruu5oh6v3tihvftpbk22c7lo6jwqtxaqcgz4/uncky.json";
+            return "ipfs://bafybeieciejro4qj4c6b2unxor37truqmslinuxwn7fdlriipzzfsofd6y/unlucky.json";
         }
     }
 }
