@@ -93,13 +93,9 @@ const ProfileMain: FC<Props> = ({
         <Flex mb={3}>
           <VStack p={4}>
             <PFP imgURI={pfpURI} />
-            <Button
-              colorScheme="pink"
-              bgGradient="linear(to-b, pinkbuttonlight, pinkbutton)"
-              borderRadius={12}
-            >
-              GIVE ICE CANDY
-            </Button>
+            {!isPreview && !wallets?.includes(String(address)) && (
+              <SendIceCandyButton profileId={Number(profileId)} />
+            )}
           </VStack>
           <VStack align="left" ml={4}>
             <Heading size="md" mb={2}>
@@ -140,15 +136,12 @@ const ProfileMain: FC<Props> = ({
         </VStack>
       </Grid>
 
-      {!isPreview && !wallets?.includes(String(address)) && (
-        <SendIceCandyButton profileId={Number(profileId)} />
-      )}
-
       {modules.map((module, index) => {
         switch (module.type) {
           case 'nftCollection':
             return (
               <ProfileNFTCollectionModule
+                isPreview={isPreview}
                 nfts={module.data}
                 key={index}
                 wallets={wallets}
@@ -160,6 +153,7 @@ const ProfileMain: FC<Props> = ({
           case 'poapCollection':
             return (
               <ProfilePOAPCollectionModule
+                isPreview={isPreview}
                 poaps={module.data}
                 key={index}
                 wallets={wallets}
@@ -171,6 +165,7 @@ const ProfileMain: FC<Props> = ({
           case 'skills':
             return (
               <ProfileSkillsModule
+                isPreview={isPreview}
                 skills={module.data}
                 key={index}
                 wallets={wallets}

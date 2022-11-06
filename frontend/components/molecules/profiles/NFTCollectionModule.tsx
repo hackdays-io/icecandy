@@ -53,6 +53,7 @@ const ProfileNFTCollectionModule: FC<Props> = ({
                 profileId={Number(profileId)}
                 module="nftCollection"
                 moduleId={index + 1}
+                size="sm"
               />
             )}
           </Box>

@@ -54,6 +54,7 @@ const ProfilePOAPCollectionModule: FC<Props> = ({
                 profileId={Number(profileId)}
                 module="poapCollection"
                 moduleId={index + 1}
+                size="sm"
               />
             )}
           </Box>

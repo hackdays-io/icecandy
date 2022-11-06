@@ -67,6 +67,7 @@ const ProfileSkillsModule: FC<Props> = ({
                   profileId={Number(profileId)}
                   module="skill"
                   moduleId={index + 1}
+                  size="sm"
                 />
               )}
             </Box>
