@@ -39,22 +39,19 @@ const ProfilePOAPCollectionModule: FC<Props> = ({
           {poaps?.map((poap, index) => (
             <Box textAlign="center" key={index}>
               <SinglePOAP key={index} {...{ poap }} />
-              <Box fontSize="11px">
-                アイスキャンディの数
-                {
-                  receivedIceCandies?.filter(
-                    (ic) =>
-                      ic.module === ModuleTypeAddress.poapCollection &&
-                      ic.moduleId === index + 1
-                  ).length
-                }
-              </Box>
               {!isPreview && !wallets?.includes(String(address)) && (
                 <SendIceCandyButton
                   profileId={Number(profileId)}
                   module="poapCollection"
                   moduleId={index + 1}
-                  size="sm"
+                  size="xs"
+                  numOfIceCandy={
+                    receivedIceCandies?.filter(
+                      (ic) =>
+                        ic.module === ModuleTypeAddress.poapCollection &&
+                        ic.moduleId === index + 1
+                    ).length
+                  }
                 />
               )}
             </Box>

@@ -39,22 +39,19 @@ const ProfileNFTCollectionModule: FC<Props> = ({
           {nfts?.map((nft, index) => (
             <Box textAlign="center" key={index}>
               <SingleNFT {...{ nft }} key={index} />
-              <Box fontSize="11px">
-                アイスキャンディの数
-                {
-                  receivedIceCandies?.filter(
-                    (ic) =>
-                      ic.module === ModuleTypeAddress.nftCollection &&
-                      ic.moduleId === index + 1
-                  ).length
-                }
-              </Box>
               {!isPreview && !wallets?.includes(String(address)) && (
                 <SendIceCandyButton
                   profileId={Number(profileId)}
                   module="nftCollection"
                   moduleId={index + 1}
-                  size="sm"
+                  size="xs"
+                  numOfIceCandy={
+                    receivedIceCandies?.filter(
+                      (ic) =>
+                        ic.module === ModuleTypeAddress.nftCollection &&
+                        ic.moduleId === index + 1
+                    ).length
+                  }
                 />
               )}
             </Box>

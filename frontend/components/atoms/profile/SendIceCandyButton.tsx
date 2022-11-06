@@ -15,7 +15,8 @@ type Props = {
   profileId: number
   module?: AppProfile.ModuleType
   moduleId?: number
-  size?: 'sm' | 'md' | 'lg' | 'xs'
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xs'
+  numOfIceCandy?: number
 }
 
 const SendIceCandyButton: FC<Props> = ({
@@ -23,6 +24,7 @@ const SendIceCandyButton: FC<Props> = ({
   module,
   moduleId,
   size = 'md',
+  numOfIceCandy,
 }) => {
   const { loading, send, errors, result } = useSendIceCandy()
   const tokenURI = useGetIceCandyTokenURI(result?.tokenId.toNumber())
@@ -50,6 +52,18 @@ const SendIceCandyButton: FC<Props> = ({
         size={size}
       >
         GIVE ICE CANDY
+        {!!numOfIceCandy && (
+          <Box
+            as="span"
+            background="white"
+            color="primary.500"
+            borderRadius="full"
+            px={1}
+            ml={1}
+          >
+            {numOfIceCandy}
+          </Box>
+        )}
       </Button>
       <ModalBase isOpen={isOpen} onClose={onClose}>
         {tokenURI && (

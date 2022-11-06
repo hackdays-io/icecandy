@@ -98,6 +98,7 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
             introduction={getValues()?.introduction}
             modules={[
               { type: 'snsAccounts', data: getValues().snsAccounts },
+              { type: 'icecandyFriends', data: [] },
               { type: 'skills', data: getValues().skills },
               { type: 'nftCollection', data: getValues().nfts },
               { type: 'poapCollection', data: getValues().poaps },

@@ -17,6 +17,7 @@ import { AppProfile } from '../../../types/profile'
 import PFP from '../../atoms/profile/PFP'
 import SendIceCandyButton from '../../atoms/profile/SendIceCandyButton'
 import IceCandiesModule from '../../molecules/profiles/IceCandiesModule'
+import IceCandyFriendsModule from '../../molecules/profiles/IceCandyFriendsModule'
 import ProfileNFTCollectionModule from '../../molecules/profiles/NFTCollectionModule'
 import ProfilePOAPCollectionModule from '../../molecules/profiles/POAPCollectionModule'
 import ProfileSkillsModule from '../../molecules/profiles/SkillsModule'
@@ -58,6 +59,7 @@ type Props = {
   }
   modules: [
     AppProfile.Module<'snsAccounts'>,
+    AppProfile.Module<'icecandyFriends'>,
     AppProfile.Module<'skills'>,
     AppProfile.Module<'nftCollection'>,
     AppProfile.Module<'poapCollection'>,
@@ -83,23 +85,23 @@ const ProfileMain: FC<Props> = ({
   )
 
   return (
-    <Box>
+    <Box py={10}>
       <Grid
         gridTemplateColumns="1fr 300px"
         mt={4}
         backgroundColor="profileback"
-        pb={4}
-        pt={4}
+        py={6}
+        px={4}
         borderRadius={10}
       >
         <Flex mb={3}>
-          <VStack p={4}>
-            <PFP imgURI={pfpURI} />
+          <VStack>
+            <PFP imgURI={pfpURI} size="2xl" />
             {!isPreview && !wallets?.includes(String(address)) && (
               <SendIceCandyButton profileId={Number(profileId)} />
             )}
           </VStack>
-          <VStack align="left" ml={4}>
+          <VStack align="left" ml={4} pt={3}>
             <Heading size="md" mb={2}>
               {name}
             </Heading>
@@ -140,6 +142,13 @@ const ProfileMain: FC<Props> = ({
 
       {modules.map((module, index) => {
         switch (module.type) {
+          case 'icecandyFriends':
+            return (
+              <IceCandyFriendsModule
+                iceCandyFriends={module.data}
+                key={index}
+              />
+            )
           case 'nftCollection':
             return (
               <ProfileNFTCollectionModule

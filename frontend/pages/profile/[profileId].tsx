@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import ProfileMain from '../../components/organisms/profile/Main'
 import { useRetrieveProfileNFTByTokenId } from '../../hooks/useProfileContract'
 import {
+  useIceCandyFriends,
   useReceivedIceCandiesByProfileId,
   useSentAndReceivedHistories,
 } from '../../hooks/useIceCandy'
@@ -29,6 +30,8 @@ const ProfilePage: NextPage = () => {
   const { receivedIceCandies } = useReceivedIceCandiesByProfileId(
     Number(profileId)
   )
+
+  const { friends } = useIceCandyFriends(Number(profileId))
 
   const stats = useMemo(() => {
     if (!score || !sentAndReceivedHistories) return
@@ -59,6 +62,7 @@ const ProfilePage: NextPage = () => {
             iceCandyStats={stats}
             modules={[
               { type: 'snsAccounts', data: snsAccounts || [] },
+              { type: 'icecandyFriends', data: friends || [] },
               { type: 'skills', data: skills || [] },
               { type: 'nftCollection', data: nftCollection || [] },
               { type: 'poapCollection', data: poapCollection || [] },
