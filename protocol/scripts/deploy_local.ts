@@ -111,6 +111,21 @@ async function main() {
     )
     .join('\n')
   fs.writeFileSync(path, file)
+
+  const path_ = '.env'
+  const file_ = fs
+    .readFileSync(path_)
+    .toString()
+    .split('\n')
+    .map((e) =>
+      e.startsWith('PROFILE_ADDRESS=')
+        ? `PROFILE_ADDRESS=${profile.address}`
+        : e.startsWith('ICECANDY_ADDRESS=')
+        ? `ICECANDY_ADDRESS=${icecandy.address}`
+        : e
+    )
+    .join('\n')
+  fs.writeFileSync(path_, file_)
 }
 
 main()
