@@ -16,6 +16,7 @@ import { useLookupProfileId } from '../../../hooks/useProfileContract'
 import { AppProfile } from '../../../types/profile'
 import PFP from '../../atoms/profile/PFP'
 import SendIceCandyButton from '../../atoms/profile/SendIceCandyButton'
+import IceCandiesModule from '../../molecules/profiles/IceCandiesModule'
 import ProfileNFTCollectionModule from '../../molecules/profiles/NFTCollectionModule'
 import ProfilePOAPCollectionModule from '../../molecules/profiles/POAPCollectionModule'
 import ProfileSkillsModule from '../../molecules/profiles/SkillsModule'
@@ -59,7 +60,8 @@ type Props = {
     AppProfile.Module<'snsAccounts'>,
     AppProfile.Module<'skills'>,
     AppProfile.Module<'nftCollection'>,
-    AppProfile.Module<'poapCollection'>
+    AppProfile.Module<'poapCollection'>,
+    AppProfile.Module<'icecandies'>
   ]
   isPreview?: boolean
 }
@@ -178,6 +180,8 @@ const ProfileMain: FC<Props> = ({
             return (
               <ProfileSNSAccountsModule snsAccounts={module.data} key={index} />
             )
+          case 'icecandies':
+            return <IceCandiesModule iceCandies={module.data} key={index} />
           default:
             return <></>
         }

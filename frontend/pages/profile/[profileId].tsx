@@ -4,7 +4,10 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import ProfileMain from '../../components/organisms/profile/Main'
 import { useRetrieveProfileNFTByTokenId } from '../../hooks/useProfileContract'
-import { useSentAndReceivedHistories } from '../../hooks/useIceCandy'
+import {
+  useReceivedIceCandiesByProfileId,
+  useSentAndReceivedHistories,
+} from '../../hooks/useIceCandy'
 
 const ProfilePage: NextPage = () => {
   const router = useRouter()
@@ -22,6 +25,10 @@ const ProfilePage: NextPage = () => {
     skills,
     score,
   } = useRetrieveProfileNFTByTokenId(profileId as string)
+
+  const { receivedIceCandies } = useReceivedIceCandiesByProfileId(
+    Number(profileId)
+  )
 
   const stats = useMemo(() => {
     if (!score || !sentAndReceivedHistories) return
@@ -55,6 +62,7 @@ const ProfilePage: NextPage = () => {
               { type: 'skills', data: skills || [] },
               { type: 'nftCollection', data: nftCollection || [] },
               { type: 'poapCollection', data: poapCollection || [] },
+              { type: 'icecandies', data: receivedIceCandies || [] },
             ]}
           />
         </Container>

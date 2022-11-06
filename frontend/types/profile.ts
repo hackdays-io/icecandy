@@ -1,4 +1,6 @@
+import { BigNumber } from 'ethers'
 import { INFTCollectionModule, ISkillModule } from './contracts'
+import { IIceCandy } from './contracts/contracts/core/IceCandy'
 import { ISNSAccountModule } from './contracts/contracts/core/Profile'
 
 export namespace AppProfile {
@@ -12,7 +14,13 @@ export namespace AppProfile {
     skills: ISkillModule.SkillStructStruct[]
   }
 
-  export type ModuleType = 'nftCollection' | 'poapCollection' | 'skill'
+  export type ModuleType =
+    | 'nftCollection'
+    | 'poapCollection'
+    | 'skill'
+    | 'icecandies'
+
+  export type IceCandyTokenInfo = { tokenId: BigNumber; tokenURI: string }
 
   export type Module<T> = T extends 'nftCollection' | 'poapCollection'
     ? {
@@ -30,6 +38,12 @@ export namespace AppProfile {
     ? {
         type: T
         data: ISkillModule.SkillStructStruct[]
+        loading?: boolean
+      }
+    : T extends 'icecandies'
+    ? {
+        type: T
+        data: IceCandyTokenInfo[]
         loading?: boolean
       }
     : any
