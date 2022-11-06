@@ -60,20 +60,40 @@ In addition, we will also refine the customizability and functionality as a serv
 We also plan to refine the customizability and functionality of the service as a service that allows you to create your own attractive profile.
 
 # 使用した TechStacks
-
-- Polygon Chain
-- Alchemy SDK&API
-- QuickNode
-- IPFS
-- ENS
-
+- frontend
+  - react / next.js
+  - typescript
+  - chakra-ui
+- backend
+  - solidity
+  - hardhat
+  - openzeppelin(ERC721, Ownable)
+- external services
+  - Polygon Chain
+  - Alchemy SDK&API
+  - QuickNode
+  - IPFS
+  - ENS
+- class diagram of protocol
+  - ![protocol class diagram](./protocol/classDiagram.svg)  
 # 使用した Blockchain
 
-- Polygon
+- Polygon mumbai
 
 # deploy した Contract
 
-verify リンクのちほど
+| name                 | address                                    | description                                                                                                                                                                                                                                                                                            |
+| :------------------- | :----------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| IceCandy             | 0x3A345Cef4a5d672BADa38f9f03fc09Eb67e70e39 | ERC721 IceCandy Token。send 関数を実行することでユーザー同士で IceCandy を送り合うことができる。IceCandy には not reveal,reveal,lucky,unlucky の 4 種類の token があり、IceCandy を送り合うことで token が変化する                                                                                     |
+| Profile              | 0x8dD8aC17f37cb9Def8DA49D3c2f7726254f8772e | ERC721 Profile Token。ユーザーの Profile 情報を NFT として表現することができる。ユーザーの情報を module として Profile に紐付けることによって Profile が充実していく。また、Profile Score によって extension が利用できるようになり、extension を使うことで自分らしい Profile を作成することができる。 |
+| NFTCollectionModule  | 0xB65Ce4CbD6d41450d2613fb6Ea6eA1C836eBb455 | Profile に登録する NFT のコレクション                                                                                                                                                                                                                                                                  |
+| POAPCollectionModule | 0xD00154F6FbfB8aFf378ff9c19c547EcA86dAE03b | Profile に登録する POAP をのコレクション                                                                                                                                                                                                                                                               |
+| SNSAccountModule     | 0x631132989cE99Ba2756aEC5949b12647d722Bc03 | Profile に登録する SNS Account                                                                                                                                                                                                                                                                         |
+| ScoreModule          | 0x3D1bB2399937FFBB4e0797B4A57DBd8e744DCccD | Profile のスコア。IceCandy を送り合うことでスコアが上がる。                                                                                                                                                                                                                                            |
+| MirrorModule         | 0x21A8a59b24eF895eC276aE4f51456E1C7c59fBab | TBD                                                                                                                                                                                                                                                                                                    |
+| SkillModule          | 0x21fa4ec52Cc2e1b99583E1EC7Ef595788beF5586 | Profile にトプ録するスキル                                                                                                                                                                                                                                                                             |
+| FlavorExtension      | 0x27CF00F8db84C858a7cF13b73aC73d11DD03b73f | スコアによって付与される extension。IceCandy のように Profile にフレーバーをトッピングすることができる                                                                                                                                                                                                 |
+| Globals              | 0xD839A705C651c5Ff4441D17D24c4523429b90013 | 各コントラクトのアドレスを管理するコントラクト。                                                                                                                                                                                                                                                       |
 
 # サービス URL
 
