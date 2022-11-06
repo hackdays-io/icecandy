@@ -1,49 +1,78 @@
-# icecandy
+# プロダクト概要
 
-## フロントエンド開発環境立ち上げ方法
+### プロダクト名
 
-### ローカルネット立ち上げ
+ICE CANDY
 
-```
-$ cd protocol
-$ docker-compose up -d
-```
+### 概要
 
-### ローカルネットの設定
+遊べる web3 プロフィール dApp「ICE CANDY」を開発した。
+オンチェーンデータを用いたアイデンティティサービスはすでに複数存在しているが、情報をシンプルに表現しつつ、なおかつ真贋機能を備えられながらも遊べるサービスは少なかった。
 
-[こちら](https://github.com/hackdays-io/mint-rally/blob/main/docs/localnode.md#2-setup-localnetwork-in-metamask-and-add-a-local-wallet-address)を参照しながら 2 と 3 をやる。もうすでにやってる場合は必要なし。
+そこで、オンチェーンデータやコミュニティ活動で得られたトークンや信頼を自分らしい形で表現し、コミュニケーションが促されることや健全なリアルイベント開催を目指せることにも繋がるプロダクトを開発した。デザインは世界共通で人気の「ICE CANDY」でわかりやすく表現。
 
-ローカルネットでテストする場合は、./protocol/.env に LOCAL_PRIVATE_KEY だけセットしておいたら大丈夫。
+### 主な機能
 
-### ローカルネットにコントラクトデプロイ
+・オンチェーン活動履歴の可視化  
+・プロジェクトオーガナイザーのための真贋機能  
+・独自の「ICE CANDY」トークンの実装  
+・相互に送り合うことでプロフィールが充実していくゲーム要素  
+・アイスの「あたり棒」を遊び要素として取り入れゲーム的楽しさを追求  
+・履歴をもとにスコアリングしプロフィールへの信頼を数値化
 
-```
-$ yarn deploy:local
-```
+### 今後の展開
 
-### フロントエンド立ち上げ
+今後は ICE CANDY 単独だけでなく、他とプロジェクトと連携して使えるアイデンティティプロトコルへと発展させていくことを考えている。
 
-環境変数は./frontend.env.example を参照しながら、./frontend/.env.local にいれる。
+# Product Overview (English)
 
-```
-$ cd frontend
-$ yarn dev
-```
+### Product Name
 
-### 環境変数説明
+ICE CANDY
 
-| 環境変数                                | 説明                                  | ローカルデフォルト値                                                                                 |
-| --------------------------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| NEXT_PUBLIC_PROVIDER_RPC                | RPC エンドポイント                    | http://127.0.0.1:8545                                                                                |
-| NEXT_PUBLIC_CHAIN_ID                    | チェーン ID                           | 31337                                                                                                |
-| NEXT_PUBLIC_ALCHEMY_API_KEY_ETH         | AlchemyAPIKey for ethereum            |                                                                                                      |
-| NEXT_PUBLIC_ALCHEMY_API_KEY_POLYGON     | AlchemyAPIKey for polygon             |                                                                                                      |
-| NEXT_PUBLIC_ALCHEMY_API_KEY_ARBITRUM    | AlchemyAPIKey for arbitrum            |                                                                                                      |
-| NEXT_PUBLIC_CONTRACT_PROFILENFT_ADDRESS | プロフィール NFT コントラクトアドレス |                                                                                                      |
-| NEXT_PUBLIC_CONTRACT_ICECANDY_ADDRESS   | IceCandy コントラクトアドレス         |                                                                                                      |
-| NEXT_PUBLIC_CONTRACT_NFTCOLLECTION      | NFT コレクションコントラクトアドレス  |                                                                                                      |
-| NEXT_PUBLIC_CONTRACT_POAPCOLLECTION     | POAP コレクションコントラクトアドレス |                                                                                                      |
-| NEXT_PUBLIC_CONTRACT_POAP               | POAP コントラクトアドレス（本家）     | 0x22c1f6050e56d2876009903609a2cc3fef83b415                                                           |
-| NEXT_PUBLIC_XDAI_PROVIDER_RPC           | xDAI チェーン RPC                     | https://thrumming-orbital-brook.xdai.discover.quiknode.pro/7ec7d424b29c0bf3f78e73af5bb41986efab5bb3/ |
-| TWITTER_CONSUMER_KEY                    | twitter API                           |                                                                                                      |
-| TWITTER_BEARER_TOKEN                    | twitter API                           |                                                                                                      |
+### Copy
+
+SWEET & TASTY PROTOCOL
+
+### Summary
+
+In this project, we developed "IceCandy," a playable web3 profile dApp.
+Although there are already several attractive identity services that use on-chain data. There are already several attractive identity services that use on-chain data, but there were few services that can express information simply and still provide authenticity and playability.
+
+Therefore, we developed a service that allows users to express on-chain data, tokens obtained through community activities, and trust in their own unique way, and to use them as a starting point to promote communication.
+This is the starting point for communication and we developed a product that would aim to hold healthy real events.
+
+Regardless of generation, they are a joy to receive and send. The product is expressed in a simple and easy-to-understand way using the globally popular "popsicle". The product also includes functions such as lottery and airdrop with the "lucky stick" element unique to ice cream.
+
+### Functions
+
+[1]Visualization of on-chain activity history
+[2]Authentication function for project and event organizers Implementation of proprietary "ICE CANDY" tokens
+[3]Game element in which profiles are enhanced by sending tokens to each other.
+[4]The game element is a fun element that incorporates the ice cream stick as a play element, and seeks fun beyond just expressing one's history.
+[5]Scoring based on the history of sending tokens to each other to quantify trust in the profile and prevent spoofing and forgery.
+
+### Future Work
+
+In the future, ICE CANDY will be used not only by itself, but also in conjunction with other projects.
+We are considering developing ICE CANDY into an identity protocol that can be used not only by ICE CANDY alone, but also in cooperation with other projects.
+In addition, we will also refine the customizability and functionality as a service that allows users to create their own unique and attractive profiles.
+We also plan to refine the customizability and functionality of the service as a service that allows you to create your own attractive profile.
+
+# 使用した TechStacks
+
+- Polygon Chain
+- Alchemy SDK&API
+- QuickNode
+- IPFS
+- ENS
+
+# 使用した Blockchain
+
+- Polygon
+
+# サービス URL
+
+https://icecandy.io
+
+[使い方](https://code4japan-community.notion.site/IceCandy-6a76fd525b434751929ee98b6c068c09)
