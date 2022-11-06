@@ -57,8 +57,11 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
   }
 
   return (
-    <>
-      <Box backgroundColor="primary.300" py={3} mb={5}>
+    <Box
+      backgroundImage="url('../../images/profile/header_bg.png')"
+      backgroundSize="cover"
+    >
+      <Box backgroundColor="primary.300" py={3}>
         <Container maxWidth="800px">
           <Flex alignItems="center">
             <Text fontWeight="bold" mr={5}>
@@ -124,7 +127,7 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
           <Confetti />
         </Box>
       </Container>
-    </>
+    </Box>
   )
 }
 

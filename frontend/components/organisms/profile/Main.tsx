@@ -1,10 +1,11 @@
 import {
   Box,
-  Button,
   Flex,
   Grid,
   GridItem,
   Heading,
+  HStack,
+  Image,
   Text,
   VStack,
 } from '@chakra-ui/react'
@@ -85,9 +86,9 @@ const ProfileMain: FC<Props> = ({
   )
 
   return (
-    <Box py={10}>
+    <Box py={6}>
       <Grid
-        gridTemplateColumns="1fr 300px"
+        gridTemplateColumns="1fr 350px"
         mt={4}
         backgroundColor="profileback"
         py={6}
@@ -97,6 +98,9 @@ const ProfileMain: FC<Props> = ({
         <Flex mb={3}>
           <VStack>
             <PFP imgURI={pfpURI} size="2xl" />
+            <HStack px={4} w="100%">
+              <Image src="/images/profile/twitter.png" w={8}></Image>
+            </HStack>
             {!isPreview && !wallets?.includes(String(address)) && (
               <SendIceCandyButton profileId={Number(profileId)} />
             )}
@@ -112,31 +116,32 @@ const ProfileMain: FC<Props> = ({
           <Text fontWeight="bold" size="lg">
             IceCandyScore: {iceCandyStats?.score || '0'}
           </Text>
-          <Grid
-            templateColumns={'150px 50px'}
-            borderRadius={10}
-            backgroundColor="white"
-            p={4}
-            gap={2}
-          >
-            <CandyScoreItem
-              title="times sent"
-              value={iceCandyStats?.sentNum || 0}
-            ></CandyScoreItem>
-            <CandyScoreItem
-              title="people sent"
-              value={iceCandyStats?.sentNumOfPeople || 0}
-            ></CandyScoreItem>
-            <CandyScoreItem
-              title="times received"
-              value={iceCandyStats?.receiveNum || 0}
-            ></CandyScoreItem>
+          <HStack borderRadius={10} backgroundColor="white" p={4}>
+            <Grid templateColumns={'150px 50px'} gap={2}>
+              <CandyScoreItem
+                title="times sent"
+                value={iceCandyStats?.sentNum || 0}
+              ></CandyScoreItem>
+              <CandyScoreItem
+                title="people sent"
+                value={iceCandyStats?.sentNumOfPeople || 0}
+              ></CandyScoreItem>
+              <CandyScoreItem
+                title="times received"
+                value={iceCandyStats?.receiveNum || 0}
+              ></CandyScoreItem>
 
-            <CandyScoreItem
-              title="recipients"
-              value={iceCandyStats?.receiveNumOfPeople || 0}
-            ></CandyScoreItem>
-          </Grid>
+              <CandyScoreItem
+                title="recipients"
+                value={iceCandyStats?.receiveNumOfPeople || 0}
+              ></CandyScoreItem>
+            </Grid>
+            <VStack w={14}>
+              <Image src="/images/profile/beginner.png"></Image>
+              <Text fontSize="sm">Beginner</Text>
+              <Image src="/images/profile/qrcode.png"></Image>
+            </VStack>
+          </HStack>
         </VStack>
       </Grid>
 

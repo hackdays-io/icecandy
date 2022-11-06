@@ -48,7 +48,7 @@ const ProfilePage: NextPage = () => {
     <Box
       backgroundColor="candyback"
       backgroundImage="url('../../images/profile/header_bg.png')"
-      backgroundRepeat="repeat-x"
+      backgroundSize="cover"
     >
       {loading ? (
         <Spinner />
