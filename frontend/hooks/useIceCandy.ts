@@ -6,17 +6,20 @@ import {
   SentEvent,
   SentEventObject,
 } from '../types/contracts/contracts/core/IceCandy'
-import { useIceCandyContractClient } from './useContractClient'
+import { IProfile } from '../types/contracts/contracts/core/Profile'
+import { AppProfile } from '../types/profile'
+import {
+  useIceCandyContractClient,
+  useProfileNFTContractClient,
+} from './useContractClient'
 import { useLookupProfileId } from './useProfileContract'
-
-export type tokenInfo = { tokenId: BigNumber; tokenURI: string }
 
 export type HoldingIceCandies = {
   totalBalance: number
-  notRevealed: tokenInfo[]
-  revealed: tokenInfo[]
-  lucky: tokenInfo[]
-  unlucky: tokenInfo[]
+  notRevealed: AppProfile.IceCandyTokenInfo[]
+  revealed: AppProfile.IceCandyTokenInfo[]
+  lucky: AppProfile.IceCandyTokenInfo[]
+  unlucky: AppProfile.IceCandyTokenInfo[]
 }
 
 export const useHoldingIceCandies = (address?: string) => {
@@ -33,10 +36,10 @@ export const useHoldingIceCandies = (address?: string) => {
       setLoading(true)
       try {
         const balances = await iceCandyContract.balanceOf(address)
-        const notRevealed: tokenInfo[] = []
-        const revealed: tokenInfo[] = []
-        const lucky: tokenInfo[] = []
-        const unlucky: tokenInfo[] = []
+        const notRevealed: AppProfile.IceCandyTokenInfo[] = []
+        const revealed: AppProfile.IceCandyTokenInfo[] = []
+        const lucky: AppProfile.IceCandyTokenInfo[] = []
+        const unlucky: AppProfile.IceCandyTokenInfo[] = []
         for (
           let index = 0;
           index < Array(balances.toNumber()).fill('').length;
@@ -73,6 +76,41 @@ export const useHoldingIceCandies = (address?: string) => {
   }, [address, iceCandyContract])
 
   return { holdingIceCandy, loading, errors }
+}
+
+export const useReceivedIceCandiesByProfileId = (profileId?: number) => {
+  const [loading, setLoading] = useState(true)
+  const [errors, setErrors] = useState<any>(null)
+  const [receivedIceCandies, setReceivedIceCandy] =
+    useState<AppProfile.IceCandyTokenInfo[]>()
+  const iceCandyContract = useIceCandyContractClient()
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!iceCandyContract || !profileId) return
+      setLoading(true)
+      try {
+        const iceCandies = await iceCandyContract.getReceivedIceCandies(
+          profileId
+        )
+        const receivedIceCandies: AppProfile.IceCandyTokenInfo[] = []
+        for (const iceCandy of iceCandies) {
+          const tokenURI = await iceCandyContract.tokenURI(iceCandy.tokenId)
+          receivedIceCandies.push({
+            tokenId: iceCandy.tokenId,
+            tokenURI: tokenURI,
+          })
+        }
+        setReceivedIceCandy(receivedIceCandies)
+      } catch (error) {
+        setErrors(error)
+      }
+      setLoading(false)
+    }
+    fetch()
+  }, [profileId, iceCandyContract])
+
+  return { receivedIceCandies, loading, errors }
 }
 
 export type SentIceCandy = {
@@ -214,4 +252,32 @@ export const useSendIceCandy = () => {
   }
 
   return { loading, send, errors, result }
+}
+
+export const useIceCandyFriends = (profileId?: number) => {
+  const [friends, setFriends] = useState<IProfile.ProfileStructStructOutput[]>()
+  const iceCandyContract = useIceCandyContractClient()
+  const profileNFTContract = useProfileNFTContractClient()
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (!iceCandyContract || !profileId || !profileNFTContract) return
+      const friends: IProfile.ProfileStructStructOutput[] = []
+      try {
+        const receivedIds = await iceCandyContract.getReceivedProfileIds(
+          profileId
+        )
+        for (const id of receivedIds) {
+          const profile = await profileNFTContract?.getProfile(id)
+          friends.push(profile)
+        }
+        setFriends(friends)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetch()
+  }, [iceCandyContract, profileNFTContract, profileId])
+
+  return { friends }
 }

@@ -149,35 +149,43 @@ const ProfileForm: FC<Props> = ({
 
   return (
     <form onSubmit={onSubmit}>
-      <Grid gridTemplateColumns="1fr 400px" mb={3} width="50%">
-        <PFP imgURI={watch('imageURI')} />
-        <Box ml={5} mt={3}>
-          <Text>名前</Text>
-          <Controller
-            render={({ field }) => (
-              <Input value={field.value} onChange={field.onChange} />
-            )}
-            control={control}
-            name="name"
-          />
-          <Text mt={3}>BIO</Text>
-          <Controller
-            render={({ field }) => (
-              <Textarea
-                rows={3}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-            control={control}
-            name="introduction"
-          />
-        </Box>
-      </Grid>
-
-      <Box my={4}>
-        <AuthTwitter setAccountData={setSNSAccount} />
+      <Box backgroundColor="gray.200" borderRadius={10} mt={6}>
+        <Grid gridTemplateColumns="1fr 400px" mb={4} w="50%">
+          <PFP imgURI={watch('imageURI')} size="2xl" />
+          <Box ml={5} my={3}>
+            <Text>名前</Text>
+            <Controller
+              render={({ field }) => (
+                <Input
+                  value={field.value}
+                  onChange={field.onChange}
+                  backgroundColor="white"
+                  borderColor="gray.400"
+                />
+              )}
+              control={control}
+              name="name"
+            />
+            <Text mt={3}>BIO</Text>
+            <Controller
+              render={({ field }) => (
+                <Textarea
+                  rows={3}
+                  value={field.value}
+                  onChange={field.onChange}
+                  backgroundColor="white"
+                  borderColor="gray.400"
+                />
+              )}
+              control={control}
+              name="introduction"
+            />
+          </Box>
+        </Grid>
       </Box>
+      {/* <Box my={4}>
+        <AuthTwitter setAccountData={setSNSAccount} />
+      </Box> */}
 
       <Box mb={5} backgroundColor="gray.200" p={3} borderRadius={10}>
         <Heading size="md" as="h3" mb={2}>

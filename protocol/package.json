@@ -13,6 +13,8 @@
     "coverage": "hardhat coverage",
     "deploy": "hardhat run scripts/deploy.ts --network mumbai",
     "deploy:local": "hardhat run scripts/deploy_local.ts --network local",
+    "demo": "hardhat run scripts/demo.ts --network mumbai",
+    "demo:local": "hardhat run scripts/demo_local.ts --network local",
     "mint:local": "hardhat run scripts/mint.ts --network local",
     "verify": "hardhat verify --network mumbai",
     "geninterface": "hardhat gen-interface",

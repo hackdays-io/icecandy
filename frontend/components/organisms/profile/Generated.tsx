@@ -57,23 +57,34 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
   }
 
   return (
-    <>
-      <Box backgroundColor="yellow.100" py={3} mb={5}>
+    <Box
+      backgroundImage="url('../../images/profile/header_bg.png')"
+      backgroundSize="cover"
+    >
+      <Box backgroundColor="primary.300" py={3}>
         <Container maxWidth="800px">
           <Flex alignItems="center">
             <Text fontWeight="bold" mr={5}>
-              オンチェーンデータからプロフィールが生成されました！
+              Your profile has been generated!
             </Text>
-            <Button mr={2} onClick={() => setEditMode(!editMode)}>
-              {editMode ? 'プレビュー' : '編集する'}
+            <Button
+              bgGradient="linear(to-l, #F8C1C4, #D9D8D8)"
+              mr={2}
+              onClick={() => setEditMode(!editMode)}
+              borderRadius="full"
+              minW="80px"
+            >
+              {editMode ? 'Preview' : 'Edit'}
             </Button>
             <Button
-              backgroundColor="blue.300"
+              bgGradient="linear(to-b, pinkbuttonlight, pinkbutton)"
+              colorScheme="pink"
               color="white"
               onClick={() => save()}
               isLoading={loading}
+              borderRadius="full"
             >
-              このまま保存する
+              Save Profile
             </Button>
           </Flex>
           {errors && JSON.stringify(errors)}
@@ -92,22 +103,31 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
           />
         ) : (
           <ProfileMain
-            isPreview
+            isPreview={true}
             pfpURI={getValues()?.imageURI}
             name={getValues()?.name}
             introduction={getValues()?.introduction}
             modules={[
               { type: 'snsAccounts', data: getValues().snsAccounts },
+              { type: 'icecandyFriends', data: [] },
               { type: 'skills', data: getValues().skills },
               { type: 'nftCollection', data: getValues().nfts },
               { type: 'poapCollection', data: getValues().poaps },
+              { type: 'icecandies', data: [] },
             ]}
           />
         )}
 
-        <Confetti />
+        <Box
+          position="fixed"
+          bottom={0}
+          left="50%"
+          transform="translate(0, -50%)"
+        >
+          <Confetti />
+        </Box>
       </Container>
-    </>
+    </Box>
   )
 }
 

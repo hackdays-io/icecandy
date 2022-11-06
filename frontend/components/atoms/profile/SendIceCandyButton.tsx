@@ -15,9 +15,17 @@ type Props = {
   profileId: number
   module?: AppProfile.ModuleType
   moduleId?: number
+  size?: 'xs' | 'sm' | 'md' | 'lg' | 'xs'
+  numOfIceCandy?: number
 }
 
-const SendIceCandyButton: FC<Props> = ({ profileId, module, moduleId }) => {
+const SendIceCandyButton: FC<Props> = ({
+  profileId,
+  module,
+  moduleId,
+  size = 'md',
+  numOfIceCandy,
+}) => {
   const { loading, send, errors, result } = useSendIceCandy()
   const tokenURI = useGetIceCandyTokenURI(result?.tokenId.toNumber())
   const { onClose, onOpen, isOpen } = useDisclosure()
@@ -29,6 +37,9 @@ const SendIceCandyButton: FC<Props> = ({ profileId, module, moduleId }) => {
   return (
     <>
       <Button
+        colorScheme="pink"
+        bgGradient="linear(to-b, pinkbuttonlight, pinkbutton)"
+        borderRadius={12}
         onClick={() =>
           send(
             profileId,
@@ -37,10 +48,22 @@ const SendIceCandyButton: FC<Props> = ({ profileId, module, moduleId }) => {
           )
         }
         isLoading={loading}
-        size="xs"
         my={2}
+        size={size}
       >
-        IceCandyを送る
+        GIVE ICE CANDY
+        {!!numOfIceCandy && (
+          <Box
+            as="span"
+            background="white"
+            color="primary.500"
+            borderRadius="full"
+            px={1}
+            ml={1}
+          >
+            {numOfIceCandy}
+          </Box>
+        )}
       </Button>
       <ModalBase isOpen={isOpen} onClose={onClose}>
         {tokenURI && (

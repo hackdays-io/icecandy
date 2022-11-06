@@ -109,6 +109,10 @@ const ProfileNewPage: NextPage = () => {
                 data: watch('snsAccounts') as any,
               },
               {
+                type: 'icecandyFriends',
+                data: [],
+              },
+              {
                 type: 'skills',
                 data: watch('nfts') as any,
               },
@@ -119,6 +123,10 @@ const ProfileNewPage: NextPage = () => {
               {
                 type: 'poapCollection',
                 data: parseNFTsForm2Contract(watch('poaps')) as any,
+              },
+              {
+                type: 'icecandies',
+                data: [],
               },
             ]}
           />

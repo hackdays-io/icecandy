@@ -6,4 +6,6 @@ export const ModuleTypeAddress: {
   poapCollection: String(process.env.NEXT_PUBLIC_CONTRACT_POAPCOLLECTION),
   nftCollection: String(process.env.NEXT_PUBLIC_CONTRACT_NFTCOLLECTION),
   skill: String(process.env.NEXT_PUBLIC_CONTRACT_SKILL),
+  icecandies: '',
+  icecandyFriends: '',
 }
