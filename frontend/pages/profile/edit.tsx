@@ -109,6 +109,10 @@ const ProfileNewPage: NextPage = () => {
                 data: watch('snsAccounts') as any,
               },
               {
+                type: 'icecandyFriends',
+                data: [],
+              },
+              {
                 type: 'skills',
                 data: watch('nfts') as any,
               },
