@@ -58,22 +58,30 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
 
   return (
     <>
-      <Box backgroundColor="yellow.100" py={3} mb={5}>
+      <Box backgroundColor="primary.300" py={3} mb={5}>
         <Container maxWidth="800px">
           <Flex alignItems="center">
             <Text fontWeight="bold" mr={5}>
-              オンチェーンデータからプロフィールが生成されました！
+              Your profile has been generated!
             </Text>
-            <Button mr={2} onClick={() => setEditMode(!editMode)}>
-              {editMode ? 'プレビュー' : '編集する'}
+            <Button
+              bgGradient="linear(to-l, #F8C1C4, #D9D8D8)"
+              mr={2}
+              onClick={() => setEditMode(!editMode)}
+              borderRadius="full"
+              minW="80px"
+            >
+              {editMode ? 'Preview' : 'Edit'}
             </Button>
             <Button
-              backgroundColor="blue.300"
+              bgGradient="linear(to-b, pinkbuttonlight, pinkbutton)"
+              colorScheme="pink"
               color="white"
               onClick={() => save()}
               isLoading={loading}
+              borderRadius="full"
             >
-              このまま保存する
+              Save Profile
             </Button>
           </Flex>
           {errors && JSON.stringify(errors)}
