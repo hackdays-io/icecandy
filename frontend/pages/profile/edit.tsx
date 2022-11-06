@@ -32,7 +32,9 @@ const ProfileNewPage: NextPage = () => {
         introduction: '',
         imageURI: 'https://bit.ly/dan-abramov',
         nfts: [],
+        poaps: [],
         snsAccounts: [],
+        skills: [],
       },
     })
 
@@ -41,17 +43,17 @@ const ProfileNewPage: NextPage = () => {
 
   const parseNFTsForm2Contract = (nfts: AppProfile.FormData['nfts']) => {
     const parsedNFTs: INFTCollectionModule.NFTStructStruct[] = nfts.map(
-      ({ chain, index }) => {
+      ({ chainId, tokenId }) => {
         let nft!: OwnedNft | undefined
-        switch (chain) {
+        switch (chainId) {
           case ChainId.Goerli:
-            nft = holdingNFTsOnEth?.ownedNfts[index]
+            nft = holdingNFTsOnEth?.ownedNfts[Number(tokenId)]
             break
           case ChainId.Mumbai:
-            nft = holdingNFTsOnPolygon?.ownedNfts[index]
+            nft = holdingNFTsOnPolygon?.ownedNfts[Number(tokenId)]
             break
           case ChainId.ArbitrumGoerli:
-            nft = holdingNFTsOnArb?.ownedNfts[index]
+            nft = holdingNFTsOnArb?.ownedNfts[Number(tokenId)]
             break
         }
 
@@ -74,7 +76,9 @@ const ProfileNewPage: NextPage = () => {
       data.introduction,
       data.imageURI,
       parseNFTsForm2Contract(data.nfts),
-      data.snsAccounts
+      parseNFTsForm2Contract(data.poaps),
+      data.snsAccounts,
+      data.skills
     )
   }
 
@@ -105,8 +109,16 @@ const ProfileNewPage: NextPage = () => {
                 data: watch('snsAccounts') as any,
               },
               {
+                type: 'skills',
+                data: watch('nfts') as any,
+              },
+              {
                 type: 'nftCollection',
                 data: parseNFTsForm2Contract(watch('nfts')) as any,
+              },
+              {
+                type: 'poapCollection',
+                data: parseNFTsForm2Contract(watch('poaps')) as any,
               },
             ]}
           />

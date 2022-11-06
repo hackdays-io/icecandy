@@ -37,7 +37,7 @@ const ProfilePOAPCollectionModule: FC<Props> = ({
         gridAutoRows="1fr"
       >
         {poaps?.map((poap, index) => (
-          <Box textAlign="center">
+          <Box textAlign="center" key={index}>
             <SinglePOAP key={index} {...{ poap }} />
             <Box fontSize="11px">
               アイスキャンディの数
