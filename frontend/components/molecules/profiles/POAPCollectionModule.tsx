@@ -1,4 +1,4 @@
-import { Box, Grid, Text } from '@chakra-ui/react'
+import { Box, Grid, Heading, Text } from '@chakra-ui/react'
 import { useAddress } from '@thirdweb-dev/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
@@ -26,40 +26,42 @@ const ProfilePOAPCollectionModule: FC<Props> = ({
   const address = useAddress()
 
   return (
-    <Box p={5} borderRadius={10} boxShadow="0 0 10px 10px #ecf3ff" my={8}>
-      <Text fontWeight="bold" fontSize="20px" mb={5}>
+    <>
+      <Heading as="h2" fontWeight="bold" fontSize="20px" mt={4}>
         POAPs
-      </Text>
-
-      <Grid
-        gridTemplateColumns="repeat(5, minmax(100px, 1fr))"
-        gridGap={4}
-        gridAutoRows="1fr"
-      >
-        {poaps?.map((poap, index) => (
-          <Box textAlign="center" key={index}>
-            <SinglePOAP key={index} {...{ poap }} />
-            <Box fontSize="11px">
-              アイスキャンディの数
-              {
-                receivedIceCandies?.filter(
-                  (ic) =>
-                    ic.module === ModuleTypeAddress.poapCollection &&
-                    ic.moduleId === index + 1
-                ).length
-              }
+      </Heading>
+      <Box p={5} borderRadius={10} my={2} backgroundColor="itemsback">
+        <Grid
+          gridTemplateColumns="repeat(5, minmax(100px, 1fr))"
+          gridGap={4}
+          gridAutoRows="1fr"
+        >
+          {poaps?.map((poap, index) => (
+            <Box textAlign="center" key={index}>
+              <SinglePOAP key={index} {...{ poap }} />
+              <Box fontSize="11px">
+                アイスキャンディの数
+                {
+                  receivedIceCandies?.filter(
+                    (ic) =>
+                      ic.module === ModuleTypeAddress.poapCollection &&
+                      ic.moduleId === index + 1
+                  ).length
+                }
+              </Box>
+              {!isPreview && !wallets?.includes(String(address)) && (
+                <SendIceCandyButton
+                  profileId={Number(profileId)}
+                  module="poapCollection"
+                  moduleId={index + 1}
+                  size="sm"
+                />
+              )}
             </Box>
-            {!isPreview && !wallets?.includes(String(address)) && (
-              <SendIceCandyButton
-                profileId={Number(profileId)}
-                module="poapCollection"
-                moduleId={index + 1}
-              />
-            )}
-          </Box>
-        ))}
-      </Grid>
-    </Box>
+          ))}
+        </Grid>
+      </Box>
+    </>
   )
 }
 

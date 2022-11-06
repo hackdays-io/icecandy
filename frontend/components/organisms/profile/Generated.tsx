@@ -92,7 +92,7 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
           />
         ) : (
           <ProfileMain
-            isPreview
+            isPreview={true}
             pfpURI={getValues()?.imageURI}
             name={getValues()?.name}
             introduction={getValues()?.introduction}
@@ -105,7 +105,14 @@ const ProfileGenerated: FC<Props> = ({ generatedData }) => {
           />
         )}
 
-        <Confetti />
+        <Box
+          position="fixed"
+          bottom={0}
+          left="50%"
+          transform="translate(0, -50%)"
+        >
+          <Confetti />
+        </Box>
       </Container>
     </>
   )
