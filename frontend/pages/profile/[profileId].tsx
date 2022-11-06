@@ -35,7 +35,11 @@ const ProfilePage: NextPage = () => {
   }, [score, sentAndReceivedHistories])
 
   return (
-    <Box>
+    <Box
+      backgroundColor="candyback"
+      backgroundImage="url('../../images/profile/header_bg.png')"
+      backgroundRepeat="repeat-x"
+    >
       {loading ? (
         <Spinner />
       ) : (

@@ -1,4 +1,4 @@
-import { Box, Spinner } from '@chakra-ui/react'
+import { Box, Flex, Spinner, Text } from '@chakra-ui/react'
 import { useAddress } from '@thirdweb-dev/react'
 import { NextPage } from 'next'
 import ProfileGenerated from '../../components/organisms/profile/Generated'
@@ -13,7 +13,19 @@ const ProfileNewPage: NextPage = () => {
       {!address ? (
         <Box>need to connect wallet</Box>
       ) : loading ? (
-        <Spinner />
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          backgroundImage="url('/images/top/main_bg.jpg')"
+          backgroundSize="cover"
+          height="100%"
+        >
+          <Text textAlign="center" fontSize="24px" color="primary.500">
+            Generating...
+            <br />
+            <Spinner mt={3} />
+          </Text>
+        </Flex>
       ) : generatedData ? (
         <ProfileGenerated generatedData={generatedData} />
       ) : (
