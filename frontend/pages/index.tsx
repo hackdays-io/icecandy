@@ -1,6 +1,7 @@
-import { Button, Flex } from '@chakra-ui/react'
+import { Box, Button, Flex } from '@chakra-ui/react'
 import { useAddress, useMetamask } from '@thirdweb-dev/react'
 import type { NextPage } from 'next'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useCallback, useState } from 'react'
 
@@ -24,17 +25,33 @@ const Home: NextPage = () => {
   }, [address])
 
   return (
-    <Flex justifyContent="center" alignItems="center">
-      <Button
-        backgroundColor="primary.400"
-        py={8}
-        px={20}
-        isLoading={loading}
-        disabled={loading}
-        onClick={() => connectAndGenerate()}
-      >
-        {address ? 'プロフィール生成' : 'ウォレットを接続してプロフィール作成'}
-      </Button>
+    <Flex
+      justifyContent="center"
+      alignItems="center"
+      backgroundImage="url('/images/top/main_bg.jpg')"
+      backgroundSize="cover"
+    >
+      <Box textAlign="center" mt="-100px">
+        <Image src="/images/logo/square.png" width="500px" height="500px" />
+        <br />
+        <Button
+          backgroundColor="#FE4E8B"
+          color="white"
+          size="lg"
+          fontSize="20px"
+          fontWeight="bold"
+          py={8}
+          px={12}
+          isLoading={loading}
+          disabled={loading}
+          borderRadius="full"
+          onClick={() => connectAndGenerate()}
+        >
+          {address
+            ? 'Generate Profile Page'
+            : 'Connect Wallet & Generate Profile'}
+        </Button>
+      </Box>
     </Flex>
   )
 }
