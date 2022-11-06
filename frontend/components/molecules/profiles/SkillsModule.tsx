@@ -29,7 +29,7 @@ const ProfileSkillsModule: FC<Props> = ({
       <Heading as="h2" fontWeight="bold" fontSize="20px" mt={4}>
         Skills
       </Heading>
-      <Box p={5} borderRadius={10} boxShadow="0 0 10px 10px #ecf3ff" my={8}>
+      <Box p={5} borderRadius={10} my={2} backgroundColor="itemsback">
         <Grid
           gridTemplateColumns="repeat(2, minmax(100px, 1fr))"
           gridGap={4}
