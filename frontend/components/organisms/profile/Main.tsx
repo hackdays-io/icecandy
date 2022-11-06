@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Flex,
   Grid,
   GridItem,
@@ -35,7 +36,7 @@ const CandyScoreItem: FC<CandyScoreProps> = ({ title, value }) => {
       >
         {title}
       </GridItem>
-      <GridItem>
+      <GridItem textAlign="center">
         <Text> {value}</Text>
       </GridItem>
     </>
@@ -90,9 +91,18 @@ const ProfileMain: FC<Props> = ({
         borderRadius={10}
       >
         <Flex mb={3}>
-          <PFP imgURI={pfpURI} />
+          <VStack p={4}>
+            <PFP imgURI={pfpURI} />
+            <Button
+              colorScheme="pink"
+              bgGradient="linear(to-b, pinkbuttonlight, pinkbutton)"
+              borderRadius={12}
+            >
+              GIVE ICE CANDY
+            </Button>
+          </VStack>
           <VStack align="left" ml={4}>
-            <Heading size="lg" mb={2}>
+            <Heading size="md" mb={2}>
               {name}
             </Heading>
             <Text mb={2}>{introduction}</Text>
@@ -103,7 +113,7 @@ const ProfileMain: FC<Props> = ({
             IceCandyScore: {iceCandyStats?.score || '0'}
           </Text>
           <Grid
-            templateColumns={'150px 20px'}
+            templateColumns={'150px 50px'}
             borderRadius={10}
             backgroundColor="white"
             p={4}

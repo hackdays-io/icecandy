@@ -19,7 +19,9 @@ export const chakraTheme = extendTheme({
       500: '#F4969A',
     },
     candyback: '#F7D5D5',
-    profileback: '#F4969A'
+    profileback: '#F7B6BB',
+    pinkbuttonlight: '#F7B6BB',
+    pinkbutton: '#F56A6A'
   },
 })
 export default chakraTheme
