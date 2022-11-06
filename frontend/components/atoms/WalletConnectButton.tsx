@@ -23,7 +23,7 @@ const WalletConnectButton: FC = () => {
       onClick={() => handleClickButton()}
       isLoading={loading}
       disabled={loading}
-      backgroundColor="primary.300"
+      backgroundColor="primary.500"
       fontWeight="bold"
       borderRadius="full"
       color="white"
