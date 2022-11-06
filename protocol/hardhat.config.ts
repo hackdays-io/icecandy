@@ -15,7 +15,13 @@ dotenv.config({ path: PATH_TO_HARDHAT_ENV })
 const ALCHEMY_API_KEY = process.env.ALCHEMY_API_KEY
 const PRIVATE_KEY = process.env.PRIVATE_KEY
 const LOCAL_PRIVATE_KEY = process.env.LOCAL_PRIVATE_KEY
-const LOCAL_PRIVATE_KEY_2 = process.env.LOCAL_PRIVATE_KEY_2
+/*
+const ALICE = process.env.ALICE_PRIVATE_KEY
+const BOB = process.env.BOB_PRIVATE_KEY
+const CAROL = process.env.CAROL_PRIVATE_KEY
+const DANIEL = process.env.DANIEL_PRIVATE_KEY
+const EVE = process.env.EVE_PRIVATE_KEY
+*/
 const ETHERSCAN_API_KEY = process.env.ETHERSCAN_API_KEY
 const COIN_MARKET_CAP_API_KEY = process.env.COIN_MARKET_CAP_API_KEY
 
@@ -37,10 +43,12 @@ module.exports = {
     mumbai: {
       url: `https://polygon-mumbai.g.alchemy.com/v2/${ALCHEMY_API_KEY}`,
       accounts: [`${PRIVATE_KEY}`],
+      // accounts: [`${PRIVATE_KEY}`, `${ALICE}`, `${BOB}`, `${CAROL}`, `${DANIEL}`, `${EVE}`],
     },
     local: {
       url: 'http://localhost:8545',
       accounts: [`${LOCAL_PRIVATE_KEY}`],
+      // accounts: [`${LOCAL_PRIVATE_KEY}`, `${ALICE}`, `${BOB}`, `${CAROL}`, `${DANIEL}`, `${EVE}`],
       allowUnlimitedContractSize: true,
     },
   },
