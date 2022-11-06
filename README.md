@@ -75,7 +75,7 @@ We also plan to refine the customizability and functionality of the service as a
   - IPFS
   - ENS
 - class diagram of protocol
-  - ![class diagram](./protocol/classDiagram.svg)  
+  - ![protocol class diagram](./protocol/classDiagram.svg)  
 # 使用した Blockchain
 
 - Polygon mumbai
