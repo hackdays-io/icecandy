@@ -36,7 +36,7 @@ const ProfileSkillsModule: FC<Props> = ({
         gridAutoRows="1fr"
       >
         {skills?.map((skill, index) => (
-          <Box textAlign="center">
+          <Box textAlign="center" key={index}>
             <Box
               border="2px solid"
               borderColor="gray.300"

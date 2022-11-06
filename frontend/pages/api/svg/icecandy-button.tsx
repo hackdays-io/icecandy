@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       rect
       <image width="50" height="50" href={`data:image/jpg;base64,${base64}`} />
       <text x="10" y="30" font-family="Verdana" font-size="35" fill="black">
-        {profile.handle}
+        {profile.name}
       </text>
     </svg>
   )
