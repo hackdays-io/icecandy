@@ -121,7 +121,7 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
         );
     }
 
-    function mint(address to) external override onlyOwner {
+    function mint(address to) external override {
         uint256 tokenId = ++_tokenCounter;
         require(_availableTokenId[to] == 0, "IceCandy: only one mint per address");
         _mint(to, tokenId, IIceCandy.IceCandyType.NOT_REVEALED);
