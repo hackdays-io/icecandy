@@ -264,17 +264,10 @@ export const useIceCandyFriends = (profileId?: number) => {
       if (!iceCandyContract || !profileId || !profileNFTContract) return
       const friends: IProfile.ProfileStructStructOutput[] = []
       try {
-        const sentIds = await iceCandyContract.getSentProfileIds(profileId)
         const receivedIds = await iceCandyContract.getReceivedProfileIds(
           profileId
         )
-        for (const id of sentIds) {
-          const profile = await profileNFTContract?.getProfile(id)
-          friends.push(profile)
-        }
         for (const id of receivedIds) {
-          if (sentIds.find((sentId) => sentId.toNumber() === id.toNumber()))
-            break
           const profile = await profileNFTContract?.getProfile(id)
           friends.push(profile)
         }
