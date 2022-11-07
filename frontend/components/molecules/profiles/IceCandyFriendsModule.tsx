@@ -1,10 +1,11 @@
-import { Box, Grid, Heading, Text } from '@chakra-ui/react'
+import { Box, Grid, Heading, Text, Link } from '@chakra-ui/react'
 import { FC } from 'react'
+import { ProfileStructWithId } from '../../../hooks/useIceCandy'
 import { IProfile } from '../../../types/contracts/contracts/core/Profile'
 import PFP from '../../atoms/profile/PFP'
 
 type Props = {
-  iceCandyFriends?: IProfile.ProfileStructStructOutput[]
+  iceCandyFriends?: ProfileStructWithId[]
 }
 
 const IceCandyFriendsModule: FC<Props> = ({ iceCandyFriends }) => {
@@ -21,10 +22,12 @@ const IceCandyFriendsModule: FC<Props> = ({ iceCandyFriends }) => {
         >
           {iceCandyFriends.map((friend, index) => (
             <Box textAlign="center" w={150} key={index}>
-              <PFP imgURI={friend.imageURI} size="xl" />
-              <Text mt={1} fontSize="14px" fontWeight="bold" color="black">
-                {friend.name}
-              </Text>
+              <Link href={friend.profileId.toString()} isExternal>
+                <PFP imgURI={friend.imageURI} size="xl" />
+                <Text mt={1} fontSize="14px" fontWeight="bold" color="black">
+                  {friend.name}
+                </Text>
+              </Link>
             </Box>
           ))}
         </Grid>

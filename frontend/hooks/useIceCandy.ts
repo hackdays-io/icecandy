@@ -254,24 +254,35 @@ export const useSendIceCandy = () => {
   return { loading, send, errors, result }
 }
 
+export type ProfileStructWithId = {
+  profileId: number
+  wallets: string[]
+  name: string
+  introduction: string
+  imageURI: string
+}
+
 export const useIceCandyFriends = (profileId?: number) => {
-  const [friends, setFriends] = useState<IProfile.ProfileStructStructOutput[]>()
+  const [friends, setFriends] = useState<ProfileStructWithId[]>()
   const iceCandyContract = useIceCandyContractClient()
   const profileNFTContract = useProfileNFTContractClient()
 
   useEffect(() => {
     const fetch = async () => {
       if (!iceCandyContract || !profileId || !profileNFTContract) return
-      const friends: IProfile.ProfileStructStructOutput[] = []
       try {
-        const receivedIds = await iceCandyContract.getReceivedProfileIds(
-          profileId
-        )
-        for (const id of receivedIds) {
-          const profile = await profileNFTContract?.getProfile(id)
-          friends.push(profile)
-        }
-        setFriends(friends)
+        const ids = await iceCandyContract.getReceivedProfileIds(profileId)
+        const promises = ids.map(async (e) => {
+          const profile = await profileNFTContract.getProfile(e.toNumber())
+          return {
+            profileId: e.toNumber(),
+            wallets: profile.wallets,
+            name: profile.name,
+            introduction: profile.introduction,
+            imageURI: profile.imageURI,
+          } as ProfileStructWithId
+        })
+        Promise.all(promises).then((e) => setFriends(e))
       } catch (error) {
         console.log(error)
       }
