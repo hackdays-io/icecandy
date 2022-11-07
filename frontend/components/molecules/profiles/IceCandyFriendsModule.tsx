@@ -20,7 +20,7 @@ const IceCandyFriendsModule: FC<Props> = ({ iceCandyFriends }) => {
           gridAutoRows="1fr"
         >
           {iceCandyFriends.map((friend, index) => (
-            <Box textAlign="center" key={index}>
+            <Box textAlign="center" w={150} key={index}>
               <PFP imgURI={friend.imageURI} size="xl" />
               <Text mt={1} fontSize="14px" fontWeight="bold" color="black">
                 {friend.name}
