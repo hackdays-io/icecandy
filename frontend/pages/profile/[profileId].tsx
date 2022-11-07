@@ -1,4 +1,4 @@
-import { Box, Container, Spinner } from '@chakra-ui/react'
+import { Box, Container, Spinner, Flex, Text } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
@@ -51,7 +51,13 @@ const ProfilePage: NextPage = () => {
       backgroundSize="cover"
     >
       {loading ? (
-        <Spinner />
+        <Flex justifyContent="center" alignItems="center" height="100%">
+          <Text textAlign="center" fontSize="24px" color="white">
+            Loading...
+            <br />
+            <Spinner mt={3} color="white" />
+          </Text>
+        </Flex>
       ) : (
         <Container maxW="800px">
           <ProfileMain
