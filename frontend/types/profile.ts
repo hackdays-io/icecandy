@@ -1,4 +1,5 @@
 import { BigNumber } from 'ethers'
+import { ProfileStructWithId } from '../hooks/useIceCandy'
 import { INFTCollectionModule, IProfile, ISkillModule } from './contracts'
 import { IIceCandy } from './contracts/contracts/core/IceCandy'
 import { ISNSAccountModule } from './contracts/contracts/core/Profile'
@@ -50,7 +51,7 @@ export namespace AppProfile {
     : T extends 'icecandyFriends'
     ? {
         type: T
-        data: IProfile.ProfileStructStructOutput[]
+        data: ProfileStructWithId[]
         loading?: boolean
       }
     : any
