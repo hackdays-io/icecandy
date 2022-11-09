@@ -1,4 +1,4 @@
-import { Box, Grid, Heading, Text } from '@chakra-ui/react'
+import { Box, Grid, Heading, Link } from '@chakra-ui/react'
 import { useAddress } from '@thirdweb-dev/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
@@ -38,7 +38,12 @@ const ProfilePOAPCollectionModule: FC<Props> = ({
         >
           {poaps?.map((poap, index) => (
             <Box textAlign="center" key={index}>
-              <SinglePOAP key={index} {...{ poap }} />
+              <Link
+                href={`https://opensea.io/assets/ethereum/${poap.contractAddress}/${poap.tokenId}`}
+                isExternal
+              >
+                <SinglePOAP key={index} {...{ poap }} />
+              </Link>
               {!isPreview && !wallets?.includes(String(address)) && (
                 <SendIceCandyButton
                   profileId={Number(profileId)}
