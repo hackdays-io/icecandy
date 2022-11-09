@@ -23,7 +23,12 @@ interface IFlavorExtension {
 
     function getFlavor(uint256 profileId) external view returns (FlavorStruct[] memory);
 
-    event FlavorAdded(uint256 indexed profileId, uint256 indexed extensionId, FlavorType flavorType, uint256 blockNumber);
+    event FlavorAdded(
+        uint256 indexed profileId,
+        uint256 indexed extensionId,
+        FlavorType flavorType,
+        uint256 blockNumber
+    );
 
     event FlavorActivated(uint256 indexed profileId, uint256 indexed extensionId, uint256 blockNumber);
 

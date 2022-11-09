@@ -190,7 +190,7 @@ contract Profile is ERC721Enumerable, IProfile, Ownable {
     }
 
     function _createSkill(uint256 profileId, ISkillModule.SkillStruct[] calldata skills) internal {
-        for (uint i = 0; i < skills.length; i++) {
+        for (uint256 i = 0; i < skills.length; i++) {
             ISkillModule(IGlobals(_globals).getSkillModule()).addSkill(profileId, skills[i]);
         }
     }
