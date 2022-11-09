@@ -167,7 +167,7 @@ describe('icecandy test', () => {
     expect(icecandy1_.sentModule).to.equal(nft.address)
     expect(icecandy1_.sentModuleId).to.equal(1)
     expect(await icecandy.connect(bob).ownerOf(1)).to.be.equals(bob.address)
-    expect(await icecandy.connect(bob).tokenURI(1)).to.be.equals(tokenURI.revealed)
+    expect(await icecandy.connect(bob).tokenURI(1)).to.be.equals(tokenURI.revealed.purple)
 
     // check icecandy 4
     const icecandy4_ = await icecandy.connect(alice).getIceCandy(4)
@@ -257,7 +257,7 @@ describe('icecandy test', () => {
     expect(icecandy3_.sentModule).to.equal(nft.address)
     expect(icecandy3_.sentModuleId).to.equal(1)
     expect(await icecandy.connect(bob).ownerOf(3)).to.be.equals(bob.address)
-    expect(await icecandy.connect(bob).tokenURI(3)).to.be.equals(tokenURI.revealed)
+    expect(await icecandy.connect(bob).tokenURI(3)).to.be.equals(tokenURI.revealed.pinapple)
 
     // check icecandy 5
     const icecandy5_ = await icecandy.connect(carol).getIceCandy(5)
@@ -548,7 +548,7 @@ describe('icecandy test', () => {
     expect(icecandy1_.sentModule).to.equal(nft.address)
     expect(icecandy1_.sentModuleId).to.equal(1)
     expect(await icecandy.connect(bob).ownerOf(1)).to.be.equals(alice.address)
-    expect(await icecandy.connect(bob).tokenURI(1)).to.be.equals(tokenURI.revealed)
+    expect(await icecandy.connect(bob).tokenURI(1)).to.be.equals(tokenURI.revealed.purple)
 
     // get balance of alice
     expect(await icecandy.connect(alice).balanceOf(alice.address)).to.be.equals(3)
@@ -650,7 +650,7 @@ describe('icecandy test', () => {
     expect(icecandy6_.sentModule).to.equal(nft.address)
     expect(icecandy6_.sentModuleId).to.equal(1)
     expect(await icecandy.connect(bob).ownerOf(6)).to.be.equals(bob.address)
-    expect(await icecandy.connect(bob).tokenURI(6)).to.be.equals(tokenURI.revealed)
+    expect(await icecandy.connect(bob).tokenURI(6)).to.be.equals(tokenURI.revealed.sushi)
 
     // check icecandy 7
     const icecandy7_ = await icecandy.connect(alice).getIceCandy(7)
@@ -788,7 +788,7 @@ describe('icecandy test', () => {
     expect(icecandy8_.sentModule).to.equal(nft.address)
     expect(icecandy8_.sentModuleId).to.equal(1)
     expect(await icecandy.connect(bob).ownerOf(8)).to.be.equals(carol.address)
-    expect(await icecandy.connect(bob).tokenURI(8)).to.be.equals(tokenURI.revealed)
+    expect(await icecandy.connect(bob).tokenURI(8)).to.be.equals(tokenURI.revealed.purple)
 
     // check icecandy 9
     const icecandy9_ = await icecandy.connect(alice).getIceCandy(9)
