@@ -1,4 +1,4 @@
-import { Box, Grid, Heading, Text } from '@chakra-ui/react'
+import { Box, Grid, Heading, Link } from '@chakra-ui/react'
 import { useAddress } from '@thirdweb-dev/react'
 import { useRouter } from 'next/router'
 import { FC } from 'react'
@@ -38,7 +38,20 @@ const ProfileNFTCollectionModule: FC<Props> = ({
         >
           {nfts?.map((nft, index) => (
             <Box textAlign="center" key={index}>
-              <SingleNFT {...{ nft }} key={index} />
+              <Link
+                href={
+                  Number(nft.chainId) === 1
+                    ? `https://opensea.io/assets/ethereum/${nft.contractAddress}/${nft.tokenId}`
+                    : Number(nft.chainId) === 137
+                    ? `https://opensea.io/assets/matic/${nft.contractAddress}/${nft.tokenId}`
+                    : Number(nft.chainId) === 42161
+                    ? `https://opensea.io/assets/arbitrum/${nft.contractAddress}/${nft.tokenId}`
+                    : ''
+                }
+                isExternal
+              >
+                <SingleNFT {...{ nft }} key={index} />
+              </Link>
               {!isPreview && !wallets?.includes(String(address)) && (
                 <SendIceCandyButton
                   profileId={Number(profileId)}
