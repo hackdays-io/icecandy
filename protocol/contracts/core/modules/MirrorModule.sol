@@ -10,14 +10,10 @@ contract MirrorModule is IMirrorModule, ModuleBase {
 
     constructor(address owner) ModuleBase(owner) {}
 
-    function addMirror(uint256 profileId, MirrorStruct calldata mirror)
-        external
-        override
-        onlyProfile
-    {
+    function addMirror(uint256 profileId, MirrorStruct calldata mirror) external override onlyProfile {
         ++_mirrorCount[profileId];
         _mirrors[profileId][_mirrorCount[profileId]] = mirror;
-        
+
         emit MirrorAdded(profileId, _mirrorCount[profileId], block.number);
     }
 

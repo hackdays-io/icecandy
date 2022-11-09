@@ -189,7 +189,15 @@ const snsData = (owner: SignerWithAddress) => [
 ]
 
 const tokenURI = {
-  revealed: 'ipfs://bafybeifctlot4tutf5nhneplhfsxg3odmssthqdxkyd465mj6qmr2hdiju/revealed.json',
+  revealed: {
+    default: 'ipfs://bafybeifctlot4tutf5nhneplhfsxg3odmssthqdxkyd465mj6qmr2hdiju/revealed.json',
+    purple: 'ipfs://bafybeicgbi7jyuh355ayx2kvjogklclszqwxdjkzfdq6ygfjbyzxiixr4u/purple.json',
+    rainbow: 'ipfs://bafybeibhzvsefytrccnjpw72qalwzgn7yudrx2gc77ctu7cycnyopx5pri/rainbow.json',
+    pinapple: 'ipfs://bafybeidrfnme2ajyafvsuuhwvrndk54pxwjpea6r3otdxm6vrpaomktwsm/pinapple.json',
+    yellowcream: 'ipfs://bafybeia23nmnnslgjp7mffpxmyjgqfp7acptxqk624njhvuaek7csj6soq/yellowcream.json',
+    binapple: 'ipfs://bafybeicnozrere3pjchmty3jz23zgikadkudmrpl6hcdyqsksfq5dfdsky/binapple.json',
+    sushi: 'ipfs://bafybeibvm7xbky6onx3lbytmo64j23xe36wy2rqd6chsd2hi334xkl55ia/sushi.json',
+  },
   notRevealed: 'ipfs://bafybeiccuu3uekihc5p6sli3h7475tbe3vebqhivbdspkb66g53l4dd53q/unrevealed.json',
   lucky: 'ipfs://bafybeiheoxsupdmgyzh7leeqvtxhy4b52w3htqulyyyjxzxnzneeinkre4/lucky.json',
   unlucky: 'ipfs://bafybeieciejro4qj4c6b2unxor37truqmslinuxwn7fdlriipzzfsofd6y/unlucky.json',

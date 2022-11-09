@@ -252,7 +252,20 @@ contract IceCandy is ERC721Enumerable, IIceCandy, Ownable {
 
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.REVEALED) {
-            return "ipfs://bafybeifctlot4tutf5nhneplhfsxg3odmssthqdxkyd465mj6qmr2hdiju/revealed.json";
+            return
+                (tokenId % 7 == 1)
+                    ? "ipfs://bafybeicgbi7jyuh355ayx2kvjogklclszqwxdjkzfdq6ygfjbyzxiixr4u/purple.json"
+                    : (tokenId % 7 == 2)
+                    ? "ipfs://bafybeibhzvsefytrccnjpw72qalwzgn7yudrx2gc77ctu7cycnyopx5pri/rainbow.json"
+                    : (tokenId % 7 == 3)
+                    ? "ipfs://bafybeidrfnme2ajyafvsuuhwvrndk54pxwjpea6r3otdxm6vrpaomktwsm/pinapple.json"
+                    : (tokenId % 7 == 4)
+                    ? "ipfs://bafybeia23nmnnslgjp7mffpxmyjgqfp7acptxqk624njhvuaek7csj6soq/yellowcream.json"
+                    : (tokenId % 7 == 5)
+                    ? "ipfs://bafybeicnozrere3pjchmty3jz23zgikadkudmrpl6hcdyqsksfq5dfdsky/binapple.json"
+                    : (tokenId % 7 == 6)
+                    ? "ipfs://bafybeibvm7xbky6onx3lbytmo64j23xe36wy2rqd6chsd2hi334xkl55ia/sushi.json"
+                    : "ipfs://bafybeifctlot4tutf5nhneplhfsxg3odmssthqdxkyd465mj6qmr2hdiju/revealed.json";
         } else if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.NOT_REVEALED) {
             return "ipfs://bafybeiccuu3uekihc5p6sli3h7475tbe3vebqhivbdspkb66g53l4dd53q/unrevealed.json";
         } else if (_iceCandy[tokenId].iceCandyType == IIceCandy.IceCandyType.LUCKY) {

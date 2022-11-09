@@ -1,6 +1,5 @@
 import { ethers } from 'hardhat'
 import { SignerWithAddress } from '@nomiclabs/hardhat-ethers/signers'
-import { setBalance } from '@nomicfoundation/hardhat-network-helpers'
 import { IceCandy__factory, Profile__factory } from '../typechain-types'
 import * as dotenv from 'dotenv'
 const PATH_TO_HARDHAT_ENV = `${__dirname}/.env`
@@ -539,17 +538,44 @@ async function main() {
     ],
   }
 
+  const profile = process.env.PROFILE_ADDRESS as string
+  const icecandy = process.env.ICECANDY_ADDRESS as string
+
   console.log('alice', alice.address, await alice.getBalance())
   console.log('bob', bob.address, await bob.getBalance())
   console.log('carol', carol.address, await carol.getBalance())
   console.log('daniel', daniel.address, await daniel.getBalance())
   console.log('eve', eve.address, await eve.getBalance())
 
-  await Profile__factory.connect(process.env.PROFILE_ADDRESS as string, alice).createProfile(aliceProfile)
-  await Profile__factory.connect(process.env.PROFILE_ADDRESS as string, bob).createProfile(bobProfile)
-  await Profile__factory.connect(process.env.PROFILE_ADDRESS as string, carol).createProfile(carolProfile)
-  await Profile__factory.connect(process.env.PROFILE_ADDRESS as string, daniel).createProfile(danielProfile)
-  await Profile__factory.connect(process.env.PROFILE_ADDRESS as string, eve).createProfile(eveProfile)
+  await Profile__factory.connect(profile, alice).createProfile(aliceProfile)
+  await Profile__factory.connect(profile, bob).createProfile(bobProfile)
+  await Profile__factory.connect(profile, carol).createProfile(carolProfile)
+  await Profile__factory.connect(profile, daniel).createProfile(danielProfile)
+  await Profile__factory.connect(profile, eve).createProfile(eveProfile)
+
+  await IceCandy__factory.connect(icecandy, alice).mint(alice.address)
+  await IceCandy__factory.connect(icecandy, bob).mint(bob.address)
+  await IceCandy__factory.connect(icecandy, carol).mint(carol.address)
+  await IceCandy__factory.connect(icecandy, daniel).mint(daniel.address)
+  await IceCandy__factory.connect(icecandy, eve).mint(eve.address)
+
+  await IceCandy__factory.connect(icecandy, alice).send(2, ethers.constants.AddressZero, 0)
+  await IceCandy__factory.connect(icecandy, bob).send(1, ethers.constants.AddressZero, 0)
+  await IceCandy__factory.connect(icecandy, carol).send(1, ethers.constants.AddressZero, 0)
+  await IceCandy__factory.connect(icecandy, daniel).send(1, ethers.constants.AddressZero, 0)
+  await IceCandy__factory.connect(icecandy, eve).send(1, ethers.constants.AddressZero, 0)
+
+  await IceCandy__factory.connect(icecandy, alice).mint(alice.address)
+  await IceCandy__factory.connect(icecandy, bob).mint(bob.address)
+  await IceCandy__factory.connect(icecandy, carol).mint(carol.address)
+  await IceCandy__factory.connect(icecandy, daniel).mint(daniel.address)
+  await IceCandy__factory.connect(icecandy, eve).mint(eve.address)
+
+  await IceCandy__factory.connect(icecandy, alice).send(3, ethers.constants.AddressZero, 0)
+  await IceCandy__factory.connect(icecandy, bob).send(4, ethers.constants.AddressZero, 0)
+  await IceCandy__factory.connect(icecandy, carol).send(1, ethers.constants.AddressZero, 0)
+  await IceCandy__factory.connect(icecandy, daniel).send(1, ethers.constants.AddressZero, 0)
+  await IceCandy__factory.connect(icecandy, eve).send(1, ethers.constants.AddressZero, 0)
 }
 
 main()

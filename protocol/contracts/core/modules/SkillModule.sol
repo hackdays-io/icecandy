@@ -13,7 +13,7 @@ contract SkillModule is ISkillModule, ModuleBase {
     function addSkill(uint256 profileId, SkillStruct calldata skill) external override onlyProfile {
         ++_skillCount[profileId];
         _skills[profileId][_skillCount[profileId]] = skill;
-        
+
         emit SkillAdded(profileId, _skillCount[profileId], block.number);
     }
 
